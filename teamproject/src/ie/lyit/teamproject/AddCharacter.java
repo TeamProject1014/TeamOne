@@ -42,7 +42,7 @@ public class AddCharacter extends JInternalFrame {
 	private static JComboBox jcboCounty;
 	
 	private JButton jbtSave;
-	private JButton jbtExit;
+	private JButton jbtCancel;
 	
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	
@@ -133,7 +133,7 @@ public class AddCharacter extends JInternalFrame {
 		jlblEmail.setBounds(10, 191, 100, 14);
 		contentPanel.add(jlblEmail);
 
-		jbtSave = new JButton("Save");
+		jbtSave = new JButton("Add");
 		jbtSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -163,15 +163,15 @@ public class AddCharacter extends JInternalFrame {
 		jbtSave.setBounds(108, 233, 85, 20);
 		contentPanel.add(jbtSave);
 		
-		jbtExit = new JButton("Cancel");
-		jbtExit.addActionListener(new ActionListener() {
+		jbtCancel = new JButton("Cancel");
+		jbtCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				resetValues();
 				setVisible(false);
 			}
 		});
-		jbtExit.setBounds(199, 233, 85, 20);
-		contentPanel.add(jbtExit);
+		jbtCancel.setBounds(199, 233, 85, 20);
+		contentPanel.add(jbtCancel);
 		
 		int ownX = 340;
 		int ownY = 315;

@@ -48,7 +48,7 @@ public class EditCharacter extends JInternalFrame {
 	private static JComboBox characterComboBox;
 
 	private JButton jbtSave;
-	private JButton jbtExit;
+	private JButton jbtCancel;
 	
 	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -198,14 +198,14 @@ public class EditCharacter extends JInternalFrame {
 		jbtSave.setBounds(108, 233, 85, 20);
 		contentPanel.add(jbtSave);
 
-		jbtExit = new JButton("Exit");
-		jbtExit.addActionListener(new ActionListener() {
+		jbtCancel = new JButton("Cancel");
+		jbtCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
 			}
 		});
-		jbtExit.setBounds(199, 233, 85, 20);
-		contentPanel.add(jbtExit);
+		jbtCancel.setBounds(199, 233, 85, 20);
+		contentPanel.add(jbtCancel);
 		
 		int ownX = 340;
 		int ownY = 315;
