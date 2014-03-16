@@ -43,9 +43,6 @@ public class MainScreen extends JFrame {
 	private JMenuItem addUser;
 	private JMenuItem addMaterial;
 	private JMenuItem addCategory;
-/*	private JMenuItem addArchitect;
-	private JMenuItem addEngineer;
-	private JMenuItem addBuilder;*/
 	
 	private JMenuItem viewUser;
 	private JMenuItem viewClient;
@@ -55,10 +52,9 @@ public class MainScreen extends JFrame {
 	private JMenuItem viewEngineer;
 	private JMenuItem viewBuilder;
 	
-	//public static String pageTitle;
 	private static String pageTitle;
 	
-	public static String getPageTitle() {
+	protected static String getPageTitle() {
 		return pageTitle;
 	}
 
