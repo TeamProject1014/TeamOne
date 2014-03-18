@@ -46,7 +46,7 @@ public class ProjectOverview extends JInternalFrame{
 	private JTextField jtfEng;
 	private JTextField jtfBuild;	
 	private JTextArea jtaDesc;	
-	private JTable table;
+	public static JTable table;
 	
 	private DecimalFormat df;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -55,7 +55,7 @@ public class ProjectOverview extends JInternalFrame{
 	private static Object[] columns = { "Material ID", "Description", "Price", "Quantity" };
 	private static ResultSet rs;
 	private DBConnectionClass dbc;
-	public static String pageTitle;
+	//public static String pageTitle;
 	
 	private static DefaultTableModel dTableModel = new DefaultTableModel(dbinfo, columns){
 		@SuppressWarnings({ "unchecked", "rawtypes" })
