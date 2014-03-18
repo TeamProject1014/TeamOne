@@ -18,7 +18,7 @@ import javax.swing.KeyStroke;
 @SuppressWarnings("serial")
 public class MainScreen extends JFrame {
 
-	private JDesktopPane desk;
+	static JDesktopPane desk;
 	private JFrame frame;
 	
 	private JMenuBar menubar;
@@ -29,16 +29,10 @@ public class MainScreen extends JFrame {
 	private JMenu helpMenu;
 	
 	private JMenuItem optionNew;
-	private JMenuItem optionSave;
-	private JMenuItem about;
 	
 	private JMenuItem editUser;
 	private JMenuItem editMaterial;
 	private JMenuItem editCategory;
-	private JMenuItem editClient;
-	private JMenuItem editArchitect;
-	private JMenuItem editEngineer;
-	private JMenuItem editBuilder;	
 	
 	private JMenuItem addUser;
 	private JMenuItem addMaterial;
@@ -52,17 +46,11 @@ public class MainScreen extends JFrame {
 	private JMenuItem viewEngineer;
 	private JMenuItem viewBuilder;
 	
-	private static String pageTitle;
+	private JMenuItem about;
 	
-	protected static String getPageTitle() {
-		return pageTitle;
-	}
+	private static String pageTitle;
 
-	public static void setPageTitle(String titleIn) {
-		pageTitle = titleIn;
-	}
-
-	protected static ProjectOverview projectOverview;
+	//protected static ProjectOverview projectOverview;
 	protected static OpenProject openProject;
 	protected static AddClient addClient;
 	protected static AddCharacter addCharacter;
@@ -71,7 +59,6 @@ public class MainScreen extends JFrame {
 	public MainScreen() {
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		//setBounds(0,0,screenSize.width, screenSize.height);
 		
 		frame = new JFrame("JDeskopPane");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,14 +68,11 @@ public class MainScreen extends JFrame {
 		desk.add(openProject);
 		openProject.setVisible(false);
 		
-		projectOverview = new ProjectOverview(1);
-		desk.add(projectOverview);
-		projectOverview.setVisible(false);
-		
-/*		addClient = new AddClient();
-		desk.add(addClient);
-		addClient.setVisible(false);*/
-		
+		//projectOverview = new ProjectOverview(1);
+//		projectOverview = new ProjectOverview(OpenProject.getProjectToOpen());
+//		desk.add(projectOverview);
+//		projectOverview.setVisible(false);
+				
 		addCharacter = new AddCharacter();
 		desk.add(addCharacter);
 		addCharacter.setVisible(false);
@@ -149,7 +133,7 @@ public class MainScreen extends JFrame {
 		Action editClientAction = new AbstractAction("Client", new ImageIcon("")){
 			public void actionPerformed(ActionEvent e){
 				MainScreen.setPageTitle("Client");
-				//EditCharacter.resetValues();
+				EditCharacter.resetValues();
 				
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
@@ -159,10 +143,8 @@ public class MainScreen extends JFrame {
 		Action editArchAction = new AbstractAction("Architect", new ImageIcon("")){
 			public void actionPerformed(ActionEvent e){
 				MainScreen.setPageTitle("Architect");
-				//EditCharacter.resetValues();
+				EditCharacter.resetValues();
 				
-				editCharacter.revalidate();
-				editCharacter.repaint();
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 			}
@@ -171,10 +153,8 @@ public class MainScreen extends JFrame {
 		Action editEngAction = new AbstractAction("Engineer", new ImageIcon("")){
 			public void actionPerformed(ActionEvent e){
 				MainScreen.setPageTitle("Engineer");
-				//EditCharacter.resetValues();
-				
-				editCharacter.revalidate();
-				editCharacter.repaint();
+				EditCharacter.resetValues();
+
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 			}
@@ -183,10 +163,8 @@ public class MainScreen extends JFrame {
 		Action editBuildAction = new AbstractAction("Builder", new ImageIcon("")){
 			public void actionPerformed(ActionEvent e){
 				MainScreen.setPageTitle("Builder");
-				//EditCharacter.resetValues();
+				EditCharacter.resetValues();
 				
-				editCharacter.revalidate();
-				editCharacter.repaint();
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 			}
@@ -213,7 +191,6 @@ public class MainScreen extends JFrame {
 		fileMenu.add(optionNew=new JMenuItem("New"));
 		
 		fileMenu.add(openAction);
-		fileMenu.add(optionSave=new JMenuItem("Save"));
 		fileMenu.addSeparator();
 		fileMenu.add(exitAction);
 		
@@ -227,11 +204,10 @@ public class MainScreen extends JFrame {
 		editMenu.add(editMaterial = new JMenuItem("Material"));
 		editMenu.add(editCategory = new JMenuItem("Category"));
 		editMenu.addSeparator();
-		editMenu.add(editClient = new JMenuItem("Client"));
-		editMenu.add(editArchitect = new JMenuItem("Architect"));
-		//editMenu.add(editEngineer = new JMenuItem("Engineer"));
+		editMenu.add(editClientAction);
+		editMenu.add(editArchAction);
 		editMenu.add(editEngAction);
-		editMenu.add(editBuilder = new JMenuItem("Builder"));	
+		editMenu.add(editBuildAction);
 		
 		// Add Menu
 		addMenu = new JMenu("Add");
@@ -270,6 +246,14 @@ public class MainScreen extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.setBounds(0, 0, screenSize.width, screenSize.height);
+	}
+	
+	protected static String getPageTitle() {
+		return pageTitle;
+	}
+
+	public static void setPageTitle(String titleIn) {
+		pageTitle = titleIn;
 	}
 		
 	@SuppressWarnings("unused")

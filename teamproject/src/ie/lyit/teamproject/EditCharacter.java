@@ -25,7 +25,6 @@ public class EditCharacter extends JInternalFrame {
 
 	private DBConnectionClass dbc = new DBConnectionClass();
 	private static ResultSet rs;
-	int count = 0;
 	public static int characterId = 0;
 
 	private JLabel jlblName;
@@ -64,6 +63,7 @@ public class EditCharacter extends JInternalFrame {
 		 * Add relevant information for each row to the array
 		 */
 		try {
+			int count = 0;
 
 			rs = dbc.retrieveEngineerDetails();
 			while (rs.next()) {
@@ -223,7 +223,7 @@ public class EditCharacter extends JInternalFrame {
 		setResizable(false);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
-		setTitle("Edit " + ProjectOverview.pageTitle);
+		//setTitle("Edit " + MainScreen.getPageTitle());
 	}
 	
 	/**

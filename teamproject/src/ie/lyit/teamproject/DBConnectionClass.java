@@ -513,7 +513,7 @@ public class DBConnectionClass {
 	
 	public ResultSet retrieveClientJobs() {
 		try {
-			String gdta = "SELECT client.name, job.description "
+			String gdta = "SELECT job_client.job_id, client.name, job.description "
 					+ "FROM client, job "
 					+ "INNER JOIN job_client "
 					+ "WHERE job.job_id = job_client.job_id "
