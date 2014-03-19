@@ -105,6 +105,7 @@ public class ProjectOverview extends JInternalFrame{
 		jtfArch.setColumns(10);
 		jtfArch.setBounds(259, 15, 105, 20);
 		jobPanel.add(jtfArch);
+		//jtfArch.setText();
 		
 		jlblEng = new JLabel("Engineer:");
 		jlblEng.setBounds(538, 21, 53, 14);
