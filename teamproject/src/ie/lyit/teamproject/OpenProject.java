@@ -2,10 +2,8 @@ package ie.lyit.teamproject;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
-
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -16,29 +14,22 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
+import java.awt.FlowLayout;
 
 @SuppressWarnings("serial")
 public class OpenProject extends JInternalFrame {
 
-	private JPanel contentPanel = new JPanel();
-
 	private DBConnectionClass dbc;
-
 	private ResultSet rs;
-	private JLabel jlblClient;
-
-	@SuppressWarnings("rawtypes")
-	private JComboBox jcboClient;
-
+	private JPanel contentPanel;
 	private JButton jbtOpen;
 	private JButton jbtCancel;
 	private JScrollPane scrollPane;
@@ -47,10 +38,10 @@ public class OpenProject extends JInternalFrame {
 	private static Object[] columns = { "Client Name", "Job Description" };
 	protected static JobScreen jobScreen;
 	private static int projectToOpen = -1;
-	private int[] idArray;
-	private String[] clientArray;
-	private String[] descriptionArray;
-	boolean instanceFlag = false;
+	private Object[][] jobArray;
+	private boolean instanceFlag = false;
+	private static Dimension screenSize = Toolkit.getDefaultToolkit()
+			.getScreenSize();
 
 	private static DefaultTableModel dTableModel = new DefaultTableModel(
 			dbinfo, columns) {
@@ -66,19 +57,17 @@ public class OpenProject extends JInternalFrame {
 			return returnValue;
 		}
 	};
+	private JPanel optionsPanel;
 
-	private static Dimension screenSize = Toolkit.getDefaultToolkit()
-			.getScreenSize();
-
-	/**
-	 * Create the JInternalFrame.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public OpenProject() {
 
+		// Instantiate variables
+		contentPanel = new JPanel();
 		dbc = new DBConnectionClass();
 		int count = 0;
 
+		// Retrieve the number of jobs that currently exist by iterating through
+		// jobs data and storing value in count variable
 		try {
 			count = 0;
 			rs = dbc.retrieveClientJobs();
@@ -89,41 +78,28 @@ public class OpenProject extends JInternalFrame {
 			System.out.println(ex.getMessage());
 		}
 
-		idArray = new int[count];
-		clientArray = new String[count];
-		descriptionArray = new String[count];
-
+		// Instantiate multidimensional jobArray with correct number of rows
+		jobArray = new Object[count][3];
 		try {
 			rs = dbc.retrieveClientJobs();
 
 			Object[] tempRow;
 
-			
-			/**
-			 * LW - fix/tidy this - multidimensional array????
-			 */
-			idArray = new int[count];
-			clientArray = new String[count];
-			descriptionArray = new String[count];
 			count = 0;
 
 			while (rs.next()) {
-				int nextId = rs.getInt(1);
-				String nextClient = rs.getString(2);
-				String nextDescription = rs.getString(3);
-				idArray[count] = nextId;
-				clientArray[count] = nextClient;
-				descriptionArray[count] = nextDescription;
+				jobArray[count][0] = rs.getInt(1);
+				jobArray[count][1] = rs.getString(2);
+				jobArray[count][2] = rs.getString(3);
 
-				tempRow = new Object[] { nextClient, nextDescription };
+				tempRow = new Object[] { jobArray[count][1], jobArray[count][2] };
 				dTableModel.addRow(tempRow);
 				count++;
 			}
 
 			getContentPane().setLayout(new BorderLayout());
-			contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+			contentPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Current Projects", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			getContentPane().add(contentPanel, BorderLayout.CENTER);
-			contentPanel.setLayout(null);
 
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
@@ -131,10 +107,8 @@ public class OpenProject extends JInternalFrame {
 
 		table = new JTable(dTableModel);
 		table.setAutoCreateRowSorter(true);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		table.setBounds(10, 25, 500, 200);
-
-		ListenerClass listener = new ListenerClass();
+		//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		//table.setBounds(10, 25, 200, 200);
 
 		table.addMouseListener(new MouseAdapter() {
 
@@ -143,10 +117,11 @@ public class OpenProject extends JInternalFrame {
 				Point p = me.getPoint();
 				int rowSelected = table.rowAtPoint(p);
 				if (me.getClickCount() == 2) {
-
 					setVisible(false);
-					setProjectToOpen(idArray[rowSelected]);
+					setProjectToOpen((int) jobArray[rowSelected][0]);
 
+					// Singleton pattern to ensure that one and only one
+					// JobScreen is launched
 					if (!instanceFlag) {
 						jobScreen = new JobScreen(OpenProject
 								.getProjectToOpen());
@@ -166,23 +141,30 @@ public class OpenProject extends JInternalFrame {
 
 		TableColumn col2 = table.getColumnModel().getColumn(1);
 		col2.setPreferredWidth(340);
+		contentPanel.setLayout(new BorderLayout(0, 0));
 
 		scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(15, 15, 500, 175);
+		scrollPane.setSize(150, 150);
 
-		contentPanel.add(scrollPane);
+		contentPanel.add(scrollPane, BorderLayout.CENTER);
+
+		optionsPanel = new JPanel();
+		optionsPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		contentPanel.add(optionsPanel, BorderLayout.SOUTH);
+		optionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		jbtOpen = new JButton("Open");
-		jbtOpen.setBounds(337, 214, 85, 20);
+		optionsPanel.add(jbtOpen);
 		jbtOpen.setToolTipText("Open Selected Job");
-		jbtOpen.addActionListener(listener);
-		contentPanel.add(jbtOpen);
 
 		jbtCancel = new JButton("Cancel");
-		jbtCancel.setBounds(428, 214, 85, 20);
+		optionsPanel.add(jbtCancel);
 		jbtCancel.setToolTipText("Cancel");
+
+		ListenerClass listener = new ListenerClass();
+
 		jbtCancel.addActionListener(listener);
-		contentPanel.add(jbtCancel);
+		jbtOpen.addActionListener(listener);
 
 		int ownX = 550;
 		int ownY = 275;
@@ -194,6 +176,7 @@ public class OpenProject extends JInternalFrame {
 		int yPos = (int) ((screenY / 2) - (ownY / 2));
 
 		this.setSize(ownX, ownY);
+		//this.pack();
 		this.setLocation(xPos, yPos);
 
 		this.setTitle("Open Project");
@@ -206,7 +189,6 @@ public class OpenProject extends JInternalFrame {
 	}
 
 	class ListenerClass implements ActionListener {
-		@SuppressWarnings("unchecked")
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Open")) {
 				int rowSelected = table.getSelectedRow();
@@ -215,11 +197,13 @@ public class OpenProject extends JInternalFrame {
 					JOptionPane.showConfirmDialog(null,
 							"Please Select a Job to Open", "No Job Selected",
 							JOptionPane.OK_CANCEL_OPTION,
-							JOptionPane.QUESTION_MESSAGE);
+							JOptionPane.WARNING_MESSAGE);
 				} else {
 					setVisible(false);
-					setProjectToOpen(idArray[rowSelected]);
+					setProjectToOpen((int) jobArray[rowSelected][0]);
 
+					// Singleton pattern to ensure that one and only one
+					// JobScreen is launched
 					if (!instanceFlag) {
 						jobScreen = new JobScreen(
 								OpenProject.getProjectToOpen());
@@ -231,8 +215,7 @@ public class OpenProject extends JInternalFrame {
 					jobScreen.setVisible(true);
 					jobScreen.toFront();
 				}
-			}
-			else if (e.getActionCommand().equals("Cancel")) {
+			} else if (e.getActionCommand().equals("Cancel")) {
 				setVisible(false);
 			}
 		}
