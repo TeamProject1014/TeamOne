@@ -187,7 +187,7 @@ public class AddCharacter extends JInternalFrame {
 		
 		this.setClosable(true);
 		this.setResizable(false);
-		this.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
 	}
 	

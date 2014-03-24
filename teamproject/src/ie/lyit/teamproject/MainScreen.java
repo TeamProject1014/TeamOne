@@ -51,6 +51,7 @@ public class MainScreen extends JFrame {
 	private static String pageTitle;
 
 	//protected static ProjectOverview projectOverview;
+	protected static AddJob addJob;
 	protected static OpenProject openProject;
 	protected static AddClient addClient;
 	protected static AddCharacter addCharacter;
@@ -63,6 +64,10 @@ public class MainScreen extends JFrame {
 		frame = new JFrame("JDeskopPane");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		desk = new JDesktopPane();
+		
+		addJob = new AddJob();
+		desk.add(addJob);
+		addJob.setVisible(false);;
 		
 		openProject = new OpenProject();
 		desk.add(openProject);
@@ -80,10 +85,18 @@ public class MainScreen extends JFrame {
 		editCharacter = new EditCharacter();
 		desk.add(editCharacter);
 		editCharacter.setVisible(false);
+		
+		Action newAction = new AbstractAction("New", new ImageIcon("Images/new.png")){
+			public void actionPerformed(ActionEvent e){
+				addJob.setVisible(true);
+				addJob.toFront();
+			}
+		};
 			
 		Action openAction = new AbstractAction("Open", new ImageIcon("Images/open.png")){
 			public void actionPerformed(ActionEvent e){
-				openProject.setVisible(true);				
+				openProject.setVisible(true);
+				openProject.toFront();
 			}
 		};
 		//openAction.putValue(Action.MNEMONIC_KEY,  new Integer(KeyEvent.VK_O));
@@ -97,6 +110,7 @@ public class MainScreen extends JFrame {
 				
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
+				addCharacter.toFront();
 			}
 		};
 		
@@ -107,6 +121,7 @@ public class MainScreen extends JFrame {
 				
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
+				addCharacter.toFront();
 			}
 		};
 		
@@ -117,6 +132,7 @@ public class MainScreen extends JFrame {
 				
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
+				addCharacter.toFront();
 			}
 		};
 		
@@ -127,6 +143,7 @@ public class MainScreen extends JFrame {
 
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
+				addCharacter.toFront();
 			}
 		};
 		
@@ -137,6 +154,7 @@ public class MainScreen extends JFrame {
 				
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
+				editCharacter.toFront();
 			}
 		};	
 		
@@ -147,6 +165,7 @@ public class MainScreen extends JFrame {
 				
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
+				editCharacter.toFront();
 			}
 		};	
 		
@@ -157,16 +176,18 @@ public class MainScreen extends JFrame {
 
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
+				editCharacter.toFront();
 			}
 		};	
 		
-		Action editBuildAction = new AbstractAction("Builder", new ImageIcon("")){
+		Action editBuildAction = new AbstractAction("Builder"){
 			public void actionPerformed(ActionEvent e){
 				MainScreen.setPageTitle("Builder");
 				EditCharacter.resetValues();
 				
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
+				editCharacter.toFront();
 			}
 		};	
 		
@@ -188,8 +209,8 @@ public class MainScreen extends JFrame {
 		fileMenu.setMnemonic('F');
 		menubar.add(fileMenu);
 		
-		fileMenu.add(optionNew=new JMenuItem("New"));
-		
+		//fileMenu.add(optionNew=new JMenuItem("New"));
+		fileMenu.add(newAction);
 		fileMenu.add(openAction);
 		fileMenu.addSeparator();
 		fileMenu.add(exitAction);

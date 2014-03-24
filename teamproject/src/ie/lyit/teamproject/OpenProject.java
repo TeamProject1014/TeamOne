@@ -3,10 +3,12 @@ package ie.lyit.teamproject;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -19,6 +21,8 @@ import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -36,14 +40,16 @@ public class OpenProject extends JInternalFrame {
 	private JComboBox jcboClient;
 
 	private JButton jbtOpen;
-	private JButton jbtExit;
+	private JButton jbtCancel;
 	private JScrollPane scrollPane;
 	private JTable table;
 	private static Object[][] dbinfo;
 	private static Object[] columns = { "Client Name", "Job Description" };
-	protected static ProjectOverview projectOverview;
+	protected static JobScreen jobScreen;
 	private static int projectToOpen = -1;
 	private int[] idArray;
+	private String[] clientArray;
+	private String[] descriptionArray;
 	boolean instanceFlag = false;
 
 	private static DefaultTableModel dTableModel = new DefaultTableModel(
@@ -71,29 +77,48 @@ public class OpenProject extends JInternalFrame {
 	public OpenProject() {
 
 		dbc = new DBConnectionClass();
+		int count = 0;
 
 		try {
-			int count = 0;
+			count = 0;
 			rs = dbc.retrieveClientJobs();
 			while (rs.next()) {
 				count++;
 			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+
+		idArray = new int[count];
+		clientArray = new String[count];
+		descriptionArray = new String[count];
+
+		try {
 			rs = dbc.retrieveClientJobs();
 
 			Object[] tempRow;
 
+			
+			/**
+			 * LW - fix/tidy this - multidimensional array????
+			 */
 			idArray = new int[count];
-
+			clientArray = new String[count];
+			descriptionArray = new String[count];
 			count = 0;
+
 			while (rs.next()) {
 				int nextId = rs.getInt(1);
+				String nextClient = rs.getString(2);
+				String nextDescription = rs.getString(3);
 				idArray[count] = nextId;
-				count++;
+				clientArray[count] = nextClient;
+				descriptionArray[count] = nextDescription;
 
-				tempRow = new Object[] { rs.getString(2), rs.getString(3) };
+				tempRow = new Object[] { nextClient, nextDescription };
 				dTableModel.addRow(tempRow);
+				count++;
 			}
-			// System.out.println(idArray[0] + ", " + idArray[1]);
 
 			getContentPane().setLayout(new BorderLayout());
 			contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -109,6 +134,33 @@ public class OpenProject extends JInternalFrame {
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setBounds(10, 25, 500, 200);
 
+		ListenerClass listener = new ListenerClass();
+
+		table.addMouseListener(new MouseAdapter() {
+
+			public void mousePressed(MouseEvent me) {
+				table = (JTable) me.getSource();
+				Point p = me.getPoint();
+				int rowSelected = table.rowAtPoint(p);
+				if (me.getClickCount() == 2) {
+
+					setVisible(false);
+					setProjectToOpen(idArray[rowSelected]);
+
+					if (!instanceFlag) {
+						jobScreen = new JobScreen(OpenProject
+								.getProjectToOpen());
+						MainScreen.desk.add(jobScreen);
+						instanceFlag = true;
+					}
+					JobScreen.updateTable();
+					JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
+					jobScreen.setVisible(true);
+					jobScreen.toFront();
+				}
+			}
+		});
+
 		TableColumn col1 = table.getColumnModel().getColumn(0);
 		col1.setPreferredWidth(150);
 
@@ -121,42 +173,19 @@ public class OpenProject extends JInternalFrame {
 		contentPanel.add(scrollPane);
 
 		jbtOpen = new JButton("Open");
-		jbtOpen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-				int temp = table.getSelectedRow();
-				setProjectToOpen(idArray[temp]);
-
-				/**
-				 * Liam - current edit
-				 * Still need to revalidate and repaint table properly if different job is chosen
-				 */
-				if (!instanceFlag) {
-					projectOverview = new ProjectOverview(OpenProject
-							.getProjectToOpen());
-					MainScreen.desk.add(projectOverview);
-					instanceFlag = true;
-				}
-				ProjectOverview.table.revalidate();
-				ProjectOverview.table.repaint();
-				projectOverview.setVisible(true);
-
-			}
-		});
 		jbtOpen.setBounds(337, 214, 85, 20);
+		jbtOpen.setToolTipText("Open Selected Job");
+		jbtOpen.addActionListener(listener);
 		contentPanel.add(jbtOpen);
 
-		jbtExit = new JButton("Exit");
-		jbtExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-			}
-		});
-		jbtExit.setBounds(428, 214, 85, 20);
-		contentPanel.add(jbtExit);
+		jbtCancel = new JButton("Cancel");
+		jbtCancel.setBounds(428, 214, 85, 20);
+		jbtCancel.setToolTipText("Cancel");
+		jbtCancel.addActionListener(listener);
+		contentPanel.add(jbtCancel);
 
-		int ownX = 340;
-		int ownY = 150;
+		int ownX = 550;
+		int ownY = 275;
 
 		int screenX = screenSize.width;
 		int screenY = screenSize.height;
@@ -164,15 +193,49 @@ public class OpenProject extends JInternalFrame {
 		int xPos = (int) ((screenX / 2) - (ownX / 2));
 		int yPos = (int) ((screenY / 2) - (ownY / 2));
 
-		this.setSize(550, 275);
+		this.setSize(ownX, ownY);
 		this.setLocation(xPos, yPos);
 
 		this.setTitle("Open Project");
 		this.setVisible(true);
+		this.setIconifiable(true);
 		this.setClosable(true);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
+	}
+
+	class ListenerClass implements ActionListener {
+		@SuppressWarnings("unchecked")
+		public void actionPerformed(ActionEvent e) {
+			if (e.getActionCommand().equals("Open")) {
+				int rowSelected = table.getSelectedRow();
+
+				if (rowSelected == -1) {
+					JOptionPane.showConfirmDialog(null,
+							"Please Select a Job to Open", "No Job Selected",
+							JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE);
+				} else {
+					setVisible(false);
+					setProjectToOpen(idArray[rowSelected]);
+
+					if (!instanceFlag) {
+						jobScreen = new JobScreen(
+								OpenProject.getProjectToOpen());
+						MainScreen.desk.add(jobScreen);
+						instanceFlag = true;
+					}
+					JobScreen.updateTable();
+					JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
+					jobScreen.setVisible(true);
+					jobScreen.toFront();
+				}
+			}
+			else if (e.getActionCommand().equals("Cancel")) {
+				setVisible(false);
+			}
+		}
 	}
 
 	public static int getProjectToOpen() {
