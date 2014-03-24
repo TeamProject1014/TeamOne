@@ -46,15 +46,16 @@ public class ProjectOverview extends JInternalFrame{
 	private JTextField jtfEng;
 	private JTextField jtfBuild;	
 	private JTextArea jtaDesc;	
-	public static JTable table;
+	private static JTable table;
 	
-	private DecimalFormat df;
+	private static DecimalFormat df;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	private static Object[][] dbinfo;	
+//	private static Object[] columns = { "Material ID", "Description", "Price", "Quantity", "Total" };
 	private static Object[] columns = { "Material ID", "Description", "Price", "Quantity" };
 	private static ResultSet rs;
-	private DBConnectionClass dbc;
+	private static DBConnectionClass dbc;
 	//public static String pageTitle;
 	
 	private static DefaultTableModel dTableModel = new DefaultTableModel(dbinfo, columns){
@@ -78,8 +79,7 @@ public class ProjectOverview extends JInternalFrame{
 		dbc = new DBConnectionClass();
 		
 		df = new DecimalFormat("###,###.00");
-			
-		setTitle("Project Overview");
+
 		getContentPane().setLayout(null);
 		
 		jobPanel = new JPanel();
@@ -162,26 +162,7 @@ public class ProjectOverview extends JInternalFrame{
 		panel_1.setLayout(null);
 		
 		/**
-		 * Retrieve all materials for the selected job from the ResultSet rs
-		 * Create new array and add relevant information for each row to the array 
-		 */
-		try {
-			//rs = dbc.retrieveAllJobDetails(client_id);
-			rs = dbc.retrieveAllJobDetails(jobId);
-
-			Object[] tempRow;
-						
-			while (rs.next()) {
-				tempRow = new Object[] { rs.getInt(1), rs.getString(2),
-						df.format(rs.getDouble(3)), rs.getInt(4) };
-				dTableModel.addRow(tempRow);
-			}
-		} catch (SQLException ex) {
-			System.out.println(ex.getMessage());
-		}
-		
-		/**
-		 * Create new JTable component and add the dTAbleModel to it
+		 * Create new JTable component and add the dTableModel to it
 		 * 
 		 */
 		table = new JTable(dTableModel);				
@@ -196,7 +177,7 @@ public class ProjectOverview extends JInternalFrame{
 		
 		TableColumn col2 = table.getColumnModel().getColumn(2); 
 		col2.setCellRenderer(currencyRenderer);		
-		
+				
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(15, 15, 672, 340);
 		
@@ -210,8 +191,8 @@ public class ProjectOverview extends JInternalFrame{
 		jtfTotal.setBounds(601, 360, 86, 20);
 		panel_1.add(jtfTotal);
 		jtfTotal.setColumns(10);
-		double total = dbc.retrieveJobTotal(jobId);
-		jtfTotal.setText("" + df.format(total));
+		//double total = dbc.retrieveJobTotal(jobId);
+		//jtfTotal.setText("" + df.format(total));
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(null, "Options", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
@@ -260,11 +241,44 @@ public class ProjectOverview extends JInternalFrame{
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setResizable(false);
 	}
-}
+	
+	public static JTable updateTable() {
+		
+		int jobId = OpenProject.getProjectToOpen();
 
-@SuppressWarnings("serial")
-class CurrencyTableCellRenderer extends DefaultTableCellRenderer {
-	public CurrencyTableCellRenderer() {
-		setHorizontalAlignment(JLabel.RIGHT);
+		/**
+		 * If table already has contents, clear the table contents
+		 */
+		if (dTableModel.getRowCount() > 0) {
+			while (dTableModel.getRowCount() > 0) {
+				dTableModel.removeRow(dTableModel.getRowCount() - 1);
+			}			
+		}
+		/**
+		 * Retrieve all materials for the selected job from the ResultSet rs
+		 * Create new array and add relevant information for each row to the array 
+		 */
+		try {
+			rs = dbc.retrieveAllJobDetails(jobId);
+
+			Object[] tempRow;
+						
+			while (rs.next()) {
+				tempRow = new Object[] { rs.getInt(1), rs.getString(2),
+						df.format(rs.getDouble(3)), rs.getInt(4) };
+				dTableModel.addRow(tempRow);
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		
+		return table;
 	}
 }
+
+//@SuppressWarnings("serial")
+//class CurrencyTableCellRenderer extends DefaultTableCellRenderer {
+//	public CurrencyTableCellRenderer() {
+//		setHorizontalAlignment(JLabel.RIGHT);
+//	}
+//}
