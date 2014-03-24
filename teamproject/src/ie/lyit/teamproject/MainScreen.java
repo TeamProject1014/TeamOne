@@ -18,7 +18,7 @@ import javax.swing.KeyStroke;
 @SuppressWarnings("serial")
 public class MainScreen extends JFrame {
 
-	private JDesktopPane desk;
+	static JDesktopPane desk;
 	private JFrame frame;
 	
 	private JMenuBar menubar;
@@ -29,23 +29,14 @@ public class MainScreen extends JFrame {
 	private JMenu helpMenu;
 	
 	private JMenuItem optionNew;
-	private JMenuItem optionSave;
-	private JMenuItem about;
 	
 	private JMenuItem editUser;
 	private JMenuItem editMaterial;
 	private JMenuItem editCategory;
-	private JMenuItem editClient;
-	private JMenuItem editArchitect;
-	private JMenuItem editEngineer;
-	private JMenuItem editBuilder;	
 	
 	private JMenuItem addUser;
 	private JMenuItem addMaterial;
 	private JMenuItem addCategory;
-/*	private JMenuItem addArchitect;
-	private JMenuItem addEngineer;
-	private JMenuItem addBuilder;*/
 	
 	private JMenuItem viewUser;
 	private JMenuItem viewClient;
@@ -55,18 +46,12 @@ public class MainScreen extends JFrame {
 	private JMenuItem viewEngineer;
 	private JMenuItem viewBuilder;
 	
-	//public static String pageTitle;
-	private static String pageTitle;
+	private JMenuItem about;
 	
-	public static String getPageTitle() {
-		return pageTitle;
-	}
+	private static String pageTitle;
 
-	public static void setPageTitle(String titleIn) {
-		pageTitle = titleIn;
-	}
-
-	protected static ProjectOverview projectOverview;
+	//protected static ProjectOverview projectOverview;
+	protected static AddJob addJob;
 	protected static OpenProject openProject;
 	protected static AddClient addClient;
 	protected static AddCharacter addCharacter;
@@ -75,24 +60,24 @@ public class MainScreen extends JFrame {
 	public MainScreen() {
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		//setBounds(0,0,screenSize.width, screenSize.height);
 		
 		frame = new JFrame("JDeskopPane");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		desk = new JDesktopPane();
 		
+		addJob = new AddJob();
+		desk.add(addJob);
+		addJob.setVisible(false);;
+		
 		openProject = new OpenProject();
 		desk.add(openProject);
 		openProject.setVisible(false);
 		
-		projectOverview = new ProjectOverview(1);
-		desk.add(projectOverview);
-		projectOverview.setVisible(false);
-		
-/*		addClient = new AddClient();
-		desk.add(addClient);
-		addClient.setVisible(false);*/
-		
+		//projectOverview = new ProjectOverview(1);
+//		projectOverview = new ProjectOverview(OpenProject.getProjectToOpen());
+//		desk.add(projectOverview);
+//		projectOverview.setVisible(false);
+				
 		addCharacter = new AddCharacter();
 		desk.add(addCharacter);
 		addCharacter.setVisible(false);
@@ -100,10 +85,18 @@ public class MainScreen extends JFrame {
 		editCharacter = new EditCharacter();
 		desk.add(editCharacter);
 		editCharacter.setVisible(false);
+		
+		Action newAction = new AbstractAction("New", new ImageIcon("Images/new.png")){
+			public void actionPerformed(ActionEvent e){
+				addJob.setVisible(true);
+				addJob.toFront();
+			}
+		};
 			
 		Action openAction = new AbstractAction("Open", new ImageIcon("Images/open.png")){
 			public void actionPerformed(ActionEvent e){
-				openProject.setVisible(true);				
+				openProject.setVisible(true);
+				openProject.toFront();
 			}
 		};
 		//openAction.putValue(Action.MNEMONIC_KEY,  new Integer(KeyEvent.VK_O));
@@ -117,6 +110,7 @@ public class MainScreen extends JFrame {
 				
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
+				addCharacter.toFront();
 			}
 		};
 		
@@ -127,6 +121,7 @@ public class MainScreen extends JFrame {
 				
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
+				addCharacter.toFront();
 			}
 		};
 		
@@ -137,6 +132,7 @@ public class MainScreen extends JFrame {
 				
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
+				addCharacter.toFront();
 			}
 		};
 		
@@ -147,52 +143,51 @@ public class MainScreen extends JFrame {
 
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
+				addCharacter.toFront();
 			}
 		};
 		
 		Action editClientAction = new AbstractAction("Client", new ImageIcon("")){
 			public void actionPerformed(ActionEvent e){
 				MainScreen.setPageTitle("Client");
-				//EditCharacter.resetValues();
+				EditCharacter.resetValues();
 				
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
+				editCharacter.toFront();
 			}
 		};	
 		
 		Action editArchAction = new AbstractAction("Architect", new ImageIcon("")){
 			public void actionPerformed(ActionEvent e){
 				MainScreen.setPageTitle("Architect");
-				//EditCharacter.resetValues();
+				EditCharacter.resetValues();
 				
-				editCharacter.revalidate();
-				editCharacter.repaint();
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
+				editCharacter.toFront();
 			}
 		};	
 		
 		Action editEngAction = new AbstractAction("Engineer", new ImageIcon("")){
 			public void actionPerformed(ActionEvent e){
 				MainScreen.setPageTitle("Engineer");
-				//EditCharacter.resetValues();
-				
-				editCharacter.revalidate();
-				editCharacter.repaint();
+				EditCharacter.resetValues();
+
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
+				editCharacter.toFront();
 			}
 		};	
 		
-		Action editBuildAction = new AbstractAction("Builder", new ImageIcon("")){
+		Action editBuildAction = new AbstractAction("Builder"){
 			public void actionPerformed(ActionEvent e){
 				MainScreen.setPageTitle("Builder");
-				//EditCharacter.resetValues();
+				EditCharacter.resetValues();
 				
-				editCharacter.revalidate();
-				editCharacter.repaint();
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
+				editCharacter.toFront();
 			}
 		};	
 		
@@ -214,10 +209,9 @@ public class MainScreen extends JFrame {
 		fileMenu.setMnemonic('F');
 		menubar.add(fileMenu);
 		
-		fileMenu.add(optionNew=new JMenuItem("New"));
-		
+		//fileMenu.add(optionNew=new JMenuItem("New"));
+		fileMenu.add(newAction);
 		fileMenu.add(openAction);
-		fileMenu.add(optionSave=new JMenuItem("Save"));
 		fileMenu.addSeparator();
 		fileMenu.add(exitAction);
 		
@@ -231,11 +225,10 @@ public class MainScreen extends JFrame {
 		editMenu.add(editMaterial = new JMenuItem("Material"));
 		editMenu.add(editCategory = new JMenuItem("Category"));
 		editMenu.addSeparator();
-		editMenu.add(editClient = new JMenuItem("Client"));
-		editMenu.add(editArchitect = new JMenuItem("Architect"));
-		//editMenu.add(editEngineer = new JMenuItem("Engineer"));
+		editMenu.add(editClientAction);
+		editMenu.add(editArchAction);
 		editMenu.add(editEngAction);
-		editMenu.add(editBuilder = new JMenuItem("Builder"));	
+		editMenu.add(editBuildAction);
 		
 		// Add Menu
 		addMenu = new JMenu("Add");
@@ -274,6 +267,14 @@ public class MainScreen extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.setBounds(0, 0, screenSize.width, screenSize.height);
+	}
+	
+	protected static String getPageTitle() {
+		return pageTitle;
+	}
+
+	public static void setPageTitle(String titleIn) {
+		pageTitle = titleIn;
 	}
 		
 	@SuppressWarnings("unused")
