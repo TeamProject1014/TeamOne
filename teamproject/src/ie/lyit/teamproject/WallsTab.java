@@ -1,16 +1,21 @@
 package ie.lyit.teamproject;
 
 import javax.swing.JPanel;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
+
 import javax.swing.JLabel;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.SwingConstants;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -26,10 +31,10 @@ public class WallsTab extends JPanel {
 	private JTextField jtfWallTies;
 	private JTextField jtfPrice;
 	private JTextField jtfTotal;
-	// float length, height, area, convert, outLeaf, ties, cement,
-	// sand;
-	private double length, height, area;
+
+	@SuppressWarnings("unused")
 	private int innerLeaf, outerleaf, ties, cement, sand;
+	private double length, height, area;
 	private final double BLOCK = 0.10125;
 	private final double TIES_PER_SQ_M = 2.2;
 	private final double SAND_PER_SQ_M = 40.8;
