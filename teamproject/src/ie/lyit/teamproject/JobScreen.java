@@ -122,6 +122,9 @@ public class JobScreen extends JInternalFrame {
 				deleteFromTable();
 			}
 		});
+		
+		JButton jbtEdit = new JButton("Edit");
+		optionsPanel.add(jbtEdit);
 		optionsPanel.add(jbtDelete);
 		optionsPanel.add(jbtExit);
 		entirePanel.add(tablePanel, BorderLayout.CENTER);

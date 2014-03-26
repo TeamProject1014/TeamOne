@@ -22,6 +22,7 @@ import java.sql.SQLException;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.FlowLayout;
+import javax.swing.ScrollPaneConstants;
 
 @SuppressWarnings("serial")
 public class OpenProject extends JInternalFrame {
@@ -143,6 +144,7 @@ public class OpenProject extends JInternalFrame {
 		contentPanel.setLayout(new BorderLayout(0, 0));
 
 		scrollPane = new JScrollPane(table);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setSize(150, 150);
 
 		contentPanel.add(scrollPane, BorderLayout.CENTER);
