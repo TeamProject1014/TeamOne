@@ -28,16 +28,20 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
-import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
+
 import java.awt.FlowLayout;
+
 import javax.swing.JTabbedPane;
+import javax.swing.ListSelectionModel;
 
 @SuppressWarnings("serial")
 public class JobScreen extends JInternalFrame {
@@ -55,8 +59,10 @@ public class JobScreen extends JInternalFrame {
 	private WallsTab walls;
 	private External external;
 	private Internal internal;
-	private Floor floor;
 	private Roof roof;
+	private EditStatus editStatus;
+	private boolean instanceFlag = false;
+	private JLabel jlblEditStatus;
 
 	private static DefaultTableModel dTableModel = new DefaultTableModel(
 			dbinfo, columns) {
@@ -74,16 +80,14 @@ public class JobScreen extends JInternalFrame {
 	};
 
 	private final JLabel jlblTotal = new JLabel("SubTotal: \u20AC");
-	private final JPanel renamePanel = new JPanel();
-	private Walls Walls;
+	private final JPanel optionsPanel = new JPanel();
 	private static JTextField jtfClientName;
 	private static JTextField jtfTotal;
 	private static JTextField jtfArchitect;
-	private static JTextArea jtfJobDescription;
+	private static JTextArea jtaJobDescription;
 	private static JTextField jtfEngineer;
-	private static JTextField jtfJobStatus;
+	protected static JTextField jtfJobStatus;
 	private static JTextField jtfBuilder;
-
 	/**
 	 * Create the frame.
 	 */
@@ -94,17 +98,13 @@ public class JobScreen extends JInternalFrame {
 		dbc = new DBConnectionClass();
 
 		df = new DecimalFormat("###,###.00");
-		
-		Border border = new EtchedBorder();
 
 		JPanel entirePanel = new JPanel();
 		getContentPane().add(entirePanel, BorderLayout.CENTER);
 		entirePanel.setLayout(new BorderLayout(0, 0));
-		entirePanel.add(renamePanel, BorderLayout.SOUTH);
+		entirePanel.add(optionsPanel, BorderLayout.SOUTH);
 
-		// JScrollPane scrollPane = new JScrollPane();
-		// tablePanel.add(scrollPane, BorderLayout.NORTH);
-		renamePanel.setBorder(new TitledBorder(new EtchedBorder(
+		optionsPanel.setBorder(new TitledBorder(new EtchedBorder(
 				EtchedBorder.LOWERED, null, null), "Options",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -114,20 +114,32 @@ public class JobScreen extends JInternalFrame {
 				setVisible(false);
 			}
 		});
-		renamePanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-		renamePanel.add(jbtExit);
+		optionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		
+		JButton jbtDelete = new JButton("Delete");
+		jbtDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteFromTable();
+			}
+		});
+		
+		JButton jbtEdit = new JButton("Edit");
+		optionsPanel.add(jbtEdit);
+		optionsPanel.add(jbtDelete);
+		optionsPanel.add(jbtExit);
 		entirePanel.add(tablePanel, BorderLayout.CENTER);
 		tablePanel.setBorder(new TitledBorder(new EtchedBorder(
 				EtchedBorder.LOWERED, null, null), "Project Overview",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		table = new JTable(dTableModel);
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setAutoCreateRowSorter(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setBounds(10, 24, 677, 328);
 
 		TableColumn col0 = table.getColumnModel().getColumn(0);
-		TableColumn col1 = table.getColumnModel().getColumn(1);		
+		TableColumn col1 = table.getColumnModel().getColumn(1);
 		TableColumn col3 = table.getColumnModel().getColumn(3);
 
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -152,10 +164,11 @@ public class JobScreen extends JInternalFrame {
 				EtchedBorder.LOWERED, null, null), "Project Details",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagLayout gbl_jobDescriptionPanel = new GridBagLayout();
-		gbl_jobDescriptionPanel.columnWidths = new int[] { 100, 225, 100, 225 };
+		gbl_jobDescriptionPanel.columnWidths = new int[] { 100, 150, 75, 100,
+				225 };
 		gbl_jobDescriptionPanel.rowHeights = new int[] { 0, 0, 0, 0 };
-		gbl_jobDescriptionPanel.columnWeights = new double[] { 0.0, 1.0, 0.0,
-				1.0 };
+		gbl_jobDescriptionPanel.columnWeights = new double[] { 0.0, 0.0, 1.0,
+				0.0, 1.0 };
 		gbl_jobDescriptionPanel.rowWeights = new double[] { 0.0, 1.0, 0.0,
 				Double.MIN_VALUE };
 		jobDescriptionPanel.setLayout(gbl_jobDescriptionPanel);
@@ -172,6 +185,7 @@ public class JobScreen extends JInternalFrame {
 		jtfClientName = new JTextField("");
 		jtfClientName.setEditable(false);
 		GridBagConstraints gbc_jtfClientName = new GridBagConstraints();
+		gbc_jtfClientName.gridwidth = 2;
 		gbc_jtfClientName.fill = GridBagConstraints.HORIZONTAL;
 		gbc_jtfClientName.insets = new Insets(0, 0, 5, 5);
 		gbc_jtfClientName.gridx = 1;
@@ -182,7 +196,7 @@ public class JobScreen extends JInternalFrame {
 		GridBagConstraints gbc_jlblArchDescr = new GridBagConstraints();
 		gbc_jlblArchDescr.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblArchDescr.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblArchDescr.gridx = 2;
+		gbc_jlblArchDescr.gridx = 3;
 		gbc_jlblArchDescr.gridy = 0;
 		jobDescriptionPanel.add(jlblArchDescr, gbc_jlblArchDescr);
 
@@ -192,7 +206,7 @@ public class JobScreen extends JInternalFrame {
 		gbc_jtfArchitect.anchor = GridBagConstraints.NORTH;
 		gbc_jtfArchitect.fill = GridBagConstraints.HORIZONTAL;
 		gbc_jtfArchitect.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfArchitect.gridx = 3;
+		gbc_jtfArchitect.gridx = 4;
 		gbc_jtfArchitect.gridy = 0;
 		jobDescriptionPanel.add(jtfArchitect, gbc_jtfArchitect);
 
@@ -205,27 +219,29 @@ public class JobScreen extends JInternalFrame {
 		jobDescriptionPanel.add(jlblDescr, gbc_jlblDescr);
 		jlblDescr.setHorizontalAlignment(SwingConstants.TRAILING);
 
-		jtfJobDescription = new JTextArea("");
-		jtfJobDescription.setLineWrap(true);
-		jtfJobDescription.setWrapStyleWord(true);
-		jtfJobDescription
+		jtaJobDescription = new JTextArea("");
+		jtaJobDescription.setLineWrap(true);
+		jtaJobDescription.setWrapStyleWord(true);
+		jtaJobDescription
 				.setBackground(UIManager.getColor("Button.background"));
-		jtfJobDescription.setEditable(false);
+		jtaJobDescription.setEditable(false);
 
-		jtfJobDescription.setBorder(border);
-		GridBagConstraints gbc_jtfJobDescription = new GridBagConstraints();
-		gbc_jtfJobDescription.anchor = GridBagConstraints.SOUTH;
-		gbc_jtfJobDescription.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfJobDescription.insets = new Insets(0, 0, 5, 5);
-		gbc_jtfJobDescription.gridx = 1;
-		gbc_jtfJobDescription.gridy = 1;
-		jobDescriptionPanel.add(jtfJobDescription, gbc_jtfJobDescription);
+		jtaJobDescription.setBorder(new EtchedBorder(EtchedBorder.LOWERED,
+				null, null));
+		GridBagConstraints gbc_jtaJobDescription = new GridBagConstraints();
+		gbc_jtaJobDescription.gridwidth = 2;
+		gbc_jtaJobDescription.anchor = GridBagConstraints.SOUTH;
+		gbc_jtaJobDescription.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jtaJobDescription.insets = new Insets(0, 0, 5, 5);
+		gbc_jtaJobDescription.gridx = 1;
+		gbc_jtaJobDescription.gridy = 1;
+		jobDescriptionPanel.add(jtaJobDescription, gbc_jtaJobDescription);
 
 		JLabel jlblEngDescr = new JLabel("Engineer:");
 		GridBagConstraints gbc_jlblEngDescr = new GridBagConstraints();
 		gbc_jlblEngDescr.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblEngDescr.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblEngDescr.gridx = 2;
+		gbc_jlblEngDescr.gridx = 3;
 		gbc_jlblEngDescr.gridy = 1;
 		jobDescriptionPanel.add(jlblEngDescr, gbc_jlblEngDescr);
 
@@ -235,7 +251,7 @@ public class JobScreen extends JInternalFrame {
 		gbc_jtfEngineer.anchor = GridBagConstraints.NORTH;
 		gbc_jtfEngineer.fill = GridBagConstraints.HORIZONTAL;
 		gbc_jtfEngineer.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfEngineer.gridx = 3;
+		gbc_jtfEngineer.gridx = 4;
 		gbc_jtfEngineer.gridy = 1;
 		jobDescriptionPanel.add(jtfEngineer, gbc_jtfEngineer);
 
@@ -256,11 +272,41 @@ public class JobScreen extends JInternalFrame {
 		gbc_jtfJobStatus.gridy = 2;
 		jobDescriptionPanel.add(jtfJobStatus, gbc_jtfJobStatus);
 
+		jlblEditStatus = new JLabel(new ImageIcon(
+				"Images/edit.png"));
+		jlblEditStatus.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null,
+				null));
+		jlblEditStatus.setToolTipText("Ammend Job Status");
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton.gridx = 2;
+		gbc_btnNewButton.gridy = 2;
+		jobDescriptionPanel.add(jlblEditStatus, gbc_btnNewButton);
+
+		jlblEditStatus.addMouseListener(new MouseAdapter() {
+
+			public void mouseClicked(MouseEvent me) {
+				jlblEditStatus = (JLabel) me.getSource();
+				int jobId = OpenProject.getProjectToOpen();
+
+				// Singleton pattern to ensure that one and only one
+				// editStatus Screen is launched
+				if (!instanceFlag) {
+					editStatus = new EditStatus(jobId);
+					MainScreen.desk.add(editStatus);
+					instanceFlag = true;
+				}
+				EditStatus.setJobDetails(jobId);
+				editStatus.setVisible(true);
+				editStatus.toFront();
+			}
+		});
+
 		JLabel jlblBuildDescr = new JLabel("Builder:");
 		GridBagConstraints gbc_jlblBuildDescr = new GridBagConstraints();
 		gbc_jlblBuildDescr.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblBuildDescr.insets = new Insets(0, 0, 0, 5);
-		gbc_jlblBuildDescr.gridx = 2;
+		gbc_jlblBuildDescr.gridx = 3;
 		gbc_jlblBuildDescr.gridy = 2;
 		jobDescriptionPanel.add(jlblBuildDescr, gbc_jlblBuildDescr);
 		jlblBuildDescr.setHorizontalAlignment(SwingConstants.TRAILING);
@@ -270,25 +316,24 @@ public class JobScreen extends JInternalFrame {
 		GridBagConstraints gbc_jtfBuilder = new GridBagConstraints();
 		gbc_jtfBuilder.anchor = GridBagConstraints.NORTH;
 		gbc_jtfBuilder.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfBuilder.gridx = 3;
+		gbc_jtfBuilder.gridx = 4;
 		gbc_jtfBuilder.gridy = 2;
 		jobDescriptionPanel.add(jtfBuilder, gbc_jtfBuilder);
 
 		JPanel calcPanel = new JPanel();
 		getContentPane().add(calcPanel, BorderLayout.EAST);
-		
-		// Liam
+
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		
+
 		external = new External();
 		tabbedPane.add(external, "External");
-		
+
 		internal = new Internal();
 		tabbedPane.add(internal, "Internal");
-		
+
 		walls = new WallsTab();
 		tabbedPane.add(walls, "Walls");
-		
+
 		roof = new Roof();
 		tabbedPane.add(roof, "Roof");
 		calcPanel.add(tabbedPane);
@@ -303,7 +348,7 @@ public class JobScreen extends JInternalFrame {
 		col1.setCellRenderer(currencyRenderer);
 		col3.setCellRenderer(currencyRenderer);
 
-		table = new JTable();
+		//table = new JTable();
 
 		int ownX = 1048;
 		int ownY = 600;
@@ -322,7 +367,6 @@ public class JobScreen extends JInternalFrame {
 		this.setVisible(true);
 		this.setIconifiable(true);
 		this.setMaximizable(true);
-		//this.setResizable(true);		
 		this.setClosable(true);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
@@ -336,9 +380,10 @@ public class JobScreen extends JInternalFrame {
 		 * If table already has contents, clear the table contents
 		 */
 		if (dTableModel.getRowCount() > 0) {
-			while (dTableModel.getRowCount() > 0) {
-				dTableModel.removeRow(dTableModel.getRowCount() - 1);
-			}
+			dTableModel.setRowCount(0);
+			// while (dTableModel.getRowCount() > 0) {
+			// dTableModel.removeRow(dTableModel.getRowCount() - 1);
+			// }
 		}
 		/**
 		 * Retrieve all materials for the selected job from the ResultSet rs
@@ -351,16 +396,23 @@ public class JobScreen extends JInternalFrame {
 			Object[] tempRow;
 
 			while (rs.next()) {
-				tempRow = new Object[] { rs.getString(1),
-						df.format(rs.getDouble(2)), rs.getInt(3),
-						df.format(rs.getDouble(4)) };
+//				tempRow = new Object[] { rs.getString(1),
+//						df.format(rs.getDouble(2)), rs.getInt(3),
+//						df.format(rs.getDouble(4)) };
+//				dTableModel.addRow(tempRow);
+				tempRow = new Object[] { rs.getString(3),
+						df.format(rs.getDouble(4)), rs.getInt(5),
+						df.format(rs.getDouble(6)) };
 				dTableModel.addRow(tempRow);
 			}
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
-
 		return table;
+	}
+
+	public void deleteFromTable() {
+		//System.out.println(dTableModel.);//dTableModel.get
 	}
 
 	public static void setHeaderDetails(int jobId) {
@@ -369,7 +421,7 @@ public class JobScreen extends JInternalFrame {
 
 			while (rs.next()) {
 				jtfClientName.setText(rs.getString(1));
-				jtfJobDescription.setText(rs.getString(2));
+				jtaJobDescription.setText(rs.getString(2));
 				jtfJobStatus.setText(rs.getString(3));
 				jtfTotal.setText("" + df.format(rs.getDouble(4)));
 				jtfArchitect.setText(rs.getString(5));

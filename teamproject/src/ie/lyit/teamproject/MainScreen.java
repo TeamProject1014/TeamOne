@@ -27,9 +27,7 @@ public class MainScreen extends JFrame {
 	private JMenu addMenu;
 	private JMenu viewMenu;
 	private JMenu helpMenu;
-	
-	private JMenuItem optionNew;
-	
+		
 	private JMenuItem editUser;
 	private JMenuItem editMaterial;
 	private JMenuItem editCategory;
@@ -50,7 +48,6 @@ public class MainScreen extends JFrame {
 	
 	private static String pageTitle;
 
-	//protected static ProjectOverview projectOverview;
 	protected static AddJob addJob;
 	protected static OpenProject openProject;
 	protected static AddClient addClient;
@@ -63,6 +60,7 @@ public class MainScreen extends JFrame {
 		
 		frame = new JFrame("JDeskopPane");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setIconImage(new ImageIcon("Images/measure.png").getImage());
 		desk = new JDesktopPane();
 		
 		addJob = new AddJob();
@@ -72,11 +70,6 @@ public class MainScreen extends JFrame {
 		openProject = new OpenProject();
 		desk.add(openProject);
 		openProject.setVisible(false);
-		
-		//projectOverview = new ProjectOverview(1);
-//		projectOverview = new ProjectOverview(OpenProject.getProjectToOpen());
-//		desk.add(projectOverview);
-//		projectOverview.setVisible(false);
 				
 		addCharacter = new AddCharacter();
 		desk.add(addCharacter);
@@ -92,6 +85,9 @@ public class MainScreen extends JFrame {
 				addJob.toFront();
 			}
 		};
+		newAction.putValue(Action.MNEMONIC_KEY,  new Integer(KeyEvent.VK_N));
+		newAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control N"));
+		newAction.putValue(Action.SHORT_DESCRIPTION,  "New");
 			
 		Action openAction = new AbstractAction("Open", new ImageIcon("Images/open.png")){
 			public void actionPerformed(ActionEvent e){
@@ -99,7 +95,7 @@ public class MainScreen extends JFrame {
 				openProject.toFront();
 			}
 		};
-		//openAction.putValue(Action.MNEMONIC_KEY,  new Integer(KeyEvent.VK_O));
+		openAction.putValue(Action.MNEMONIC_KEY,  new Integer(KeyEvent.VK_O));
 		openAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control O"));
 		openAction.putValue(Action.SHORT_DESCRIPTION,  "Open");
 		
@@ -209,7 +205,7 @@ public class MainScreen extends JFrame {
 		fileMenu.setMnemonic('F');
 		menubar.add(fileMenu);
 		
-		//fileMenu.add(optionNew=new JMenuItem("New"));
+		// File Menu
 		fileMenu.add(newAction);
 		fileMenu.add(openAction);
 		fileMenu.addSeparator();
