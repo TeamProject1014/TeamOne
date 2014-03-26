@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.event.ActionListener;
@@ -30,6 +29,7 @@ public class OpenProject extends JInternalFrame {
 	private DBConnectionClass dbc;
 	private ResultSet rs;
 	private JPanel contentPanel;
+	private JPanel optionsPanel;
 	private JButton jbtOpen;
 	private JButton jbtCancel;
 	private JScrollPane scrollPane;
@@ -57,8 +57,7 @@ public class OpenProject extends JInternalFrame {
 			return returnValue;
 		}
 	};
-	private JPanel optionsPanel;
-
+	
 	public OpenProject() {
 
 		// Instantiate variables
@@ -176,7 +175,6 @@ public class OpenProject extends JInternalFrame {
 		int yPos = (int) ((screenY / 2) - (ownY / 2));
 
 		this.setSize(ownX, ownY);
-		//this.pack();
 		this.setLocation(xPos, yPos);
 
 		this.setTitle("Open Project");
