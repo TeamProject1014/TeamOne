@@ -1,7 +1,5 @@
 package ie.lyit.teamproject;
 
-import java.awt.EventQueue;
-
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -10,7 +8,6 @@ import javax.swing.UIManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 
 import javax.swing.JLabel;
@@ -31,6 +28,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JTextArea;
 
+@SuppressWarnings("serial")
 public class EditStatus extends JInternalFrame {
 	private static JTextField jtfClientName;
 	private static JTextArea jtaDescription;
@@ -128,7 +126,7 @@ public class EditStatus extends JInternalFrame {
 				int jobId = OpenProject.getProjectToOpen();
 				String status = jcboStatus.getSelectedItem().toString();
 				dbc.editJobStatus(jobId, status);
-				jobScreen.jtfJobStatus.setText(status);
+				JobScreen.jtfJobStatus.setText(status);
 				setVisible(false);
 			}
 		});
@@ -161,7 +159,6 @@ public class EditStatus extends JInternalFrame {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
-
 	}
 
 	public static void setJobDetails(int jobId) {
