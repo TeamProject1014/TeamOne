@@ -21,16 +21,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class WallsTab extends JPanel {
-	private JTextField jtfLength;
-	private JTextField jtfHeight;
-	private JTextField jtfSqM;
-	private JTextField jtfBlocksInner;
-	private JTextField jtfBlocksOuter;
-	private JTextField jtfCement;
-	private JTextField jtfSand;
-	private JTextField jtfWallTies;
-	private JTextField jtfPrice;
-	private JTextField jtfTotal;
 
 	@SuppressWarnings("unused")
 	private int innerLeaf, outerleaf, ties, cement, sand;
@@ -40,257 +30,89 @@ public class WallsTab extends JPanel {
 	private final double SAND_PER_SQ_M = 40.8;
 	private final double CEMENT_PER_SQ_M = 11.7;
 
-	/**
-	 * Create the panel.
-	 */
 	public WallsTab() {
 		setLayout(new BorderLayout(0, 0));
 
-		JPanel dimensionPanel = new JPanel();
-		dimensionPanel.setBorder(new TitledBorder(new EtchedBorder(
-				EtchedBorder.LOWERED, null, null), "Dimensions",
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		add(dimensionPanel, BorderLayout.WEST);
-		GridBagLayout gbl_dimensionPanel = new GridBagLayout();
-		gbl_dimensionPanel.columnWidths = new int[] { 0, 0, 0 };
-		gbl_dimensionPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_dimensionPanel.columnWeights = new double[] { 0.0, 0.0,
+		JPanel wallPanel = new JPanel();
+		wallPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Walls Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		add(wallPanel, BorderLayout.WEST);
+		GridBagLayout gbl_wallPanel = new GridBagLayout();
+		gbl_wallPanel.columnWidths = new int[] { 200, 200, 0 };
+		gbl_wallPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_wallPanel.columnWeights = new double[] { 0.0, 0.0,
 				Double.MIN_VALUE };
-		gbl_dimensionPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
+		gbl_wallPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, 0.0, Double.MIN_VALUE };
-		dimensionPanel.setLayout(gbl_dimensionPanel);
-
-		JLabel jlblLength = new JLabel("Length:");
-		GridBagConstraints gbc_jlblLength = new GridBagConstraints();
-		gbc_jlblLength.anchor = GridBagConstraints.EAST;
-		gbc_jlblLength.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblLength.gridx = 0;
-		gbc_jlblLength.gridy = 0;
-		dimensionPanel.add(jlblLength, gbc_jlblLength);
-
-		jtfLength = new JTextField();
-		GridBagConstraints gbc_jtfLength = new GridBagConstraints();
-		gbc_jtfLength.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfLength.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfLength.gridx = 1;
-		gbc_jtfLength.gridy = 0;
-		dimensionPanel.add(jtfLength, gbc_jtfLength);
-		jtfLength.setColumns(10);
-
-		JLabel jlblHeight = new JLabel("Height:");
-		GridBagConstraints gbc_jlblHeight = new GridBagConstraints();
-		gbc_jlblHeight.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblHeight.anchor = GridBagConstraints.EAST;
-		gbc_jlblHeight.gridx = 0;
-		gbc_jlblHeight.gridy = 1;
-		dimensionPanel.add(jlblHeight, gbc_jlblHeight);
-
-		jtfHeight = new JTextField();
-		GridBagConstraints gbc_jtfHeight = new GridBagConstraints();
-		gbc_jtfHeight.anchor = GridBagConstraints.NORTH;
-		gbc_jtfHeight.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfHeight.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfHeight.gridx = 1;
-		gbc_jtfHeight.gridy = 1;
-		dimensionPanel.add(jtfHeight, gbc_jtfHeight);
-		jtfHeight.setColumns(10);
-
-		JLabel jlblTotSize = new JLabel("Total Size m2:");
-		GridBagConstraints gbc_jlblTotSize = new GridBagConstraints();
-		gbc_jlblTotSize.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblTotSize.anchor = GridBagConstraints.EAST;
-		gbc_jlblTotSize.gridx = 0;
-		gbc_jlblTotSize.gridy = 2;
-		dimensionPanel.add(jlblTotSize, gbc_jlblTotSize);
-
-		jtfSqM = new JTextField();
-		jtfSqM.setEditable(false);
-		GridBagConstraints gbc_jtfSqM = new GridBagConstraints();
-		gbc_jtfSqM.anchor = GridBagConstraints.NORTH;
-		gbc_jtfSqM.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfSqM.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfSqM.gridx = 1;
-		gbc_jtfSqM.gridy = 2;
-		dimensionPanel.add(jtfSqM, gbc_jtfSqM);
-		jtfSqM.setColumns(10);
-
-		JButton jbtCalculate = new JButton("Calculate");
-		jbtCalculate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				// Execute when button is pressed
-				try {
-					// Get total size of wall in square meters
-					length = Double.parseDouble(jtfLength.getText());
-					height = Double.parseDouble(jtfHeight.getText());
-					area = (int) length * height;
-
-					// Divide area of a block into area of the wall
-					
-					innerLeaf = outerleaf = (int) Math.round(area / BLOCK);
-
-					// Calculate number of wall ties required
-					ties = (int) Math.round(area * TIES_PER_SQ_M);
-
-					// Calculate cement required in kgs
-					cement = (int) Math.round(area * CEMENT_PER_SQ_M);
-
-					// Calculate sand required in kgs
-					sand = (int) Math.round(area * SAND_PER_SQ_M);
-
-					// Set textfields
-					jtfSqM.setText(" " + area);
-					jtfBlocksInner.setText(" " + innerLeaf);
-					jtfBlocksOuter.setText(" " + innerLeaf);
-					jtfWallTies.setText(" " + ties);
-					jtfCement.setText(" " + cement);
-					jtfSand.setText(" " + sand);
-				} catch (NumberFormatException nfe) {
-					jtfLength.setText("0");
-					jtfHeight.setText("0");
-					jtfTotal.setText("0");
-				}
-			}
-		});
-
-		GridBagConstraints gbc_jbtCalculate = new GridBagConstraints();
-		gbc_jbtCalculate.anchor = GridBagConstraints.WEST;
-		gbc_jbtCalculate.gridx = 1;
-		gbc_jbtCalculate.gridy = 6;
-		dimensionPanel.add(jbtCalculate, gbc_jbtCalculate);
-
-		JPanel materialRqdPanel = new JPanel();
-		materialRqdPanel.setBorder(new TitledBorder(new EtchedBorder(
-				EtchedBorder.LOWERED, null, null), "Materials Required",
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		add(materialRqdPanel, BorderLayout.EAST);
-		GridBagLayout gbl_materialRqdPanel = new GridBagLayout();
-		gbl_materialRqdPanel.columnWidths = new int[] { 0, 0, 0 };
-		gbl_materialRqdPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0 };
-		gbl_materialRqdPanel.columnWeights = new double[] { 0.0, 1.0,
-				Double.MIN_VALUE };
-		gbl_materialRqdPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, Double.MIN_VALUE };
-		materialRqdPanel.setLayout(gbl_materialRqdPanel);
-
-		JLabel jlblInner = new JLabel("Blocks - Inner Leaf:");
-		GridBagConstraints gbc_jlblInner = new GridBagConstraints();
-		gbc_jlblInner.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblInner.anchor = GridBagConstraints.EAST;
-		gbc_jlblInner.gridx = 0;
-		gbc_jlblInner.gridy = 0;
-		materialRqdPanel.add(jlblInner, gbc_jlblInner);
-
-		jtfBlocksInner = new JTextField();
-		jtfBlocksInner.setEditable(false);
-		GridBagConstraints gbc_jtfBlocksInner = new GridBagConstraints();
-		gbc_jtfBlocksInner.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfBlocksInner.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfBlocksInner.gridx = 1;
-		gbc_jtfBlocksInner.gridy = 0;
-		materialRqdPanel.add(jtfBlocksInner, gbc_jtfBlocksInner);
-		jtfBlocksInner.setColumns(10);
-
-		JLabel jlblOuter = new JLabel("Blocks - Outer Lef:");
-		GridBagConstraints gbc_jlblOuter = new GridBagConstraints();
-		gbc_jlblOuter.anchor = GridBagConstraints.EAST;
-		gbc_jlblOuter.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblOuter.gridx = 0;
-		gbc_jlblOuter.gridy = 1;
-		materialRqdPanel.add(jlblOuter, gbc_jlblOuter);
-
-		jtfBlocksOuter = new JTextField();
-		jtfBlocksOuter.setEditable(false);
-		GridBagConstraints gbc_jtfBlocksOuter = new GridBagConstraints();
-		gbc_jtfBlocksOuter.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfBlocksOuter.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfBlocksOuter.gridx = 1;
-		gbc_jtfBlocksOuter.gridy = 1;
-		materialRqdPanel.add(jtfBlocksOuter, gbc_jtfBlocksOuter);
-		jtfBlocksOuter.setColumns(10);
-
-		JLabel lblNewLabel_2 = new JLabel("Cement in kg's:");
+		wallPanel.setLayout(gbl_wallPanel);
+		
+		JLabel lblNewLabel = new JLabel("Mortar Calculator");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 1;
+		wallPanel.add(lblNewLabel, gbc_lblNewLabel);
+		
+		JButton btnNewButton = new JButton("Select");
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.anchor = GridBagConstraints.WEST;
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton.gridx = 1;
+		gbc_btnNewButton.gridy = 1;
+		wallPanel.add(btnNewButton, gbc_btnNewButton);
+		
+		JLabel lblNewLabel_1 = new JLabel("Brick, Block & Mortar Quantities");
+		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_1.gridx = 0;
+		gbc_lblNewLabel_1.gridy = 2;
+		wallPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
+		
+		JButton btnNewButton_1 = new JButton("Select");
+		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
+		gbc_btnNewButton_1.anchor = GridBagConstraints.WEST;
+		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton_1.gridx = 1;
+		gbc_btnNewButton_1.gridy = 2;
+		wallPanel.add(btnNewButton_1, gbc_btnNewButton_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Cavity Wall Calculator");
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
-		gbc_lblNewLabel_2.anchor = GridBagConstraints.NORTHEAST;
+		gbc_lblNewLabel_2.anchor = GridBagConstraints.WEST;
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_2.gridx = 0;
-		gbc_lblNewLabel_2.gridy = 2;
-		materialRqdPanel.add(lblNewLabel_2, gbc_lblNewLabel_2);
-
-		jtfCement = new JTextField();
-		jtfCement.setEditable(false);
-		GridBagConstraints gbc_jtfCement = new GridBagConstraints();
-		gbc_jtfCement.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfCement.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfCement.gridx = 1;
-		gbc_jtfCement.gridy = 2;
-		materialRqdPanel.add(jtfCement, gbc_jtfCement);
-		jtfCement.setColumns(10);
-
-		JLabel jlblSand = new JLabel("Sand in kg's:");
-		GridBagConstraints gbc_jlblSand = new GridBagConstraints();
-		gbc_jlblSand.anchor = GridBagConstraints.EAST;
-		gbc_jlblSand.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblSand.gridx = 0;
-		gbc_jlblSand.gridy = 3;
-		materialRqdPanel.add(jlblSand, gbc_jlblSand);
-
-		jtfSand = new JTextField();
-		jtfSand.setEditable(false);
-		GridBagConstraints gbc_jtfSand = new GridBagConstraints();
-		gbc_jtfSand.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfSand.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfSand.gridx = 1;
-		gbc_jtfSand.gridy = 3;
-		materialRqdPanel.add(jtfSand, gbc_jtfSand);
-		jtfSand.setColumns(10);
-
-		JLabel jlblWallTies = new JLabel("Wall Ties:");
-		GridBagConstraints gbc_jlblWallTies = new GridBagConstraints();
-		gbc_jlblWallTies.anchor = GridBagConstraints.EAST;
-		gbc_jlblWallTies.insets = new Insets(0, 0, 5, 5);
-		gbc_jlblWallTies.gridx = 0;
-		gbc_jlblWallTies.gridy = 4;
-		materialRqdPanel.add(jlblWallTies, gbc_jlblWallTies);
-
-		jtfWallTies = new JTextField();
-		jtfWallTies.setEditable(false);
-		GridBagConstraints gbc_jtfWallTies = new GridBagConstraints();
-		gbc_jtfWallTies.insets = new Insets(0, 0, 5, 0);
-		gbc_jtfWallTies.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfWallTies.gridx = 1;
-		gbc_jtfWallTies.gridy = 4;
-		materialRqdPanel.add(jtfWallTies, gbc_jtfWallTies);
-		jtfWallTies.setColumns(10);
-
-		JLabel jlblPrice = new JLabel("Price:");
-		GridBagConstraints gbc_jlblPrice = new GridBagConstraints();
-		gbc_jlblPrice.anchor = GridBagConstraints.EAST;
-		gbc_jlblPrice.insets = new Insets(0, 0, 0, 5);
-		gbc_jlblPrice.gridx = 0;
-		gbc_jlblPrice.gridy = 5;
-		materialRqdPanel.add(jlblPrice, gbc_jlblPrice);
-
-		jtfPrice = new JTextField();
-		jtfPrice.setEditable(false);
-		GridBagConstraints gbc_jtfPrice = new GridBagConstraints();
-		gbc_jtfPrice.fill = GridBagConstraints.HORIZONTAL;
-		gbc_jtfPrice.gridx = 1;
-		gbc_jtfPrice.gridy = 5;
-		materialRqdPanel.add(jtfPrice, gbc_jtfPrice);
-		jtfPrice.setColumns(10);
-
-		JPanel totalPanel = new JPanel();
-		add(totalPanel, BorderLayout.SOUTH);
-		totalPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-
-		JLabel jlblTotalPrice = new JLabel("TotalPrice:");
-		jlblTotalPrice.setHorizontalAlignment(SwingConstants.RIGHT);
-		totalPanel.add(jlblTotalPrice);
-
-		jtfTotal = new JTextField();
-		jtfTotal.setEditable(false);
-		totalPanel.add(jtfTotal);
-		jtfTotal.setColumns(10);
+		gbc_lblNewLabel_2.gridy = 3;
+		wallPanel.add(lblNewLabel_2, gbc_lblNewLabel_2);
+		
+		JButton btnNewButton_2 = new JButton("Select");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JobScreen.wallCalc.setVisible(true);
+			}
+		});
+		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
+		gbc_btnNewButton_2.anchor = GridBagConstraints.WEST;
+		gbc_btnNewButton_2.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton_2.gridx = 1;
+		gbc_btnNewButton_2.gridy = 3;
+		wallPanel.add(btnNewButton_2, gbc_btnNewButton_2);
+		
+		JLabel lblRenderQuantities = new JLabel("Render Quantities");
+		GridBagConstraints gbc_lblRenderQuantities = new GridBagConstraints();
+		gbc_lblRenderQuantities.anchor = GridBagConstraints.WEST;
+		gbc_lblRenderQuantities.insets = new Insets(0, 0, 5, 5);
+		gbc_lblRenderQuantities.gridx = 0;
+		gbc_lblRenderQuantities.gridy = 4;
+		wallPanel.add(lblRenderQuantities, gbc_lblRenderQuantities);
+		
+		JButton btnNewButton_3 = new JButton("Select");
+		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
+		gbc_btnNewButton_3.anchor = GridBagConstraints.WEST;
+		gbc_btnNewButton_3.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton_3.gridx = 1;
+		gbc_btnNewButton_3.gridy = 4;
+		wallPanel.add(btnNewButton_3, gbc_btnNewButton_3);
 
 	}
 }

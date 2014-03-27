@@ -28,6 +28,7 @@ public class MainScreen extends JFrame {
 	private JMenu viewMenu;
 	private JMenu helpMenu;
 		
+	
 	private JMenuItem editUser;
 	private JMenuItem editMaterial;
 	private JMenuItem editCategory;
@@ -263,6 +264,7 @@ public class MainScreen extends JFrame {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.setBounds(0, 0, screenSize.width, screenSize.height);
+		frame.setTitle("Building Materials Calculator");
 	}
 	
 	protected static String getPageTitle() {

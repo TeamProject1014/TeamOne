@@ -1,9 +1,11 @@
 package ie.lyit.teamproject;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -11,17 +13,18 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
-import java.awt.FlowLayout;
 import javax.swing.ScrollPaneConstants;
 
 @SuppressWarnings("serial")
@@ -35,39 +38,26 @@ public class OpenProject extends JInternalFrame {
 	private JButton jbtCancel;
 	private JScrollPane scrollPane;
 	private JTable table;
-	private static Object[][] dbinfo;
-	private static Object[] columns = { "Client Name", "Job Description" };
 	protected static JobScreen jobScreen;
 	private static int projectToOpen = -1;
 	private Object[][] jobArray;
+	private Object[][] displayArray;
 	private boolean instanceFlag = false;
 	private static Dimension screenSize = Toolkit.getDefaultToolkit()
 			.getScreenSize();
-
-	private static DefaultTableModel dTableModel = new DefaultTableModel(
-			dbinfo, columns) {
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		public Class getColumnClass(int column) {
-			Class returnValue;
-
-			if ((column >= 0) && (column < getColumnCount())) {
-				returnValue = getValueAt(0, column).getClass();
-			} else {
-				returnValue = Object.class;
-			}
-			return returnValue;
-		}
-	};
-	
-	public OpenProject() {
-
-		// Instantiate variables
-		contentPanel = new JPanel();
+		
+	public OpenProject() {		
+		
+		/**
+		 * Instantiate variables 
+		 */
 		dbc = new DBConnectionClass();
 		int count = 0;
 
-		// Retrieve the number of jobs that currently exist by iterating through
-		// jobs data and storing value in count variable
+		/**
+		 * Retrieve the number of jobs that currently exist by iterating through
+		 * jobs data and storing value in count variable 
+		 */
 		try {
 			count = 0;
 			rs = dbc.retrieveClientJobs();
@@ -78,37 +68,44 @@ public class OpenProject extends JInternalFrame {
 			System.out.println(ex.getMessage());
 		}
 
-		// Instantiate multidimensional jobArray with correct number of rows
+		/**
+		 * Instantiate multidimensional jobArray & displayArray with correct number of rows, obtained from count variable
+		 */
+		displayArray = new Object[count][2];
 		jobArray = new Object[count][3];
 		try {
 			rs = dbc.retrieveClientJobs();
-
-			Object[] tempRow;
-
 			count = 0;
 
 			while (rs.next()) {
 				jobArray[count][0] = rs.getInt(1);
-				jobArray[count][1] = rs.getString(2);
-				jobArray[count][2] = rs.getString(3);
-
-				tempRow = new Object[] { jobArray[count][1], jobArray[count][2] };
-				dTableModel.addRow(tempRow);
+				jobArray[count][1] = displayArray[count][0] = rs.getString(2);
+				jobArray[count][2] = displayArray[count][1] = rs.getString(3);
 				count++;
 			}
-
-			getContentPane().setLayout(new BorderLayout());
-			contentPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Current Projects", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			getContentPane().add(contentPanel, BorderLayout.CENTER);
 
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
+		
+		contentPanel = new JPanel();
+		contentPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Current Projects", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		
+		ClientJobTableModel clientModel = new ClientJobTableModel();
+		clientModel.data = displayArray;
+		table = new JTable(clientModel);
+		
+		/**
+		 * Set table column widths
+		 */
+		TableColumn col1 = table.getColumnModel().getColumn(0);
+		col1.setPreferredWidth(150);
 
-		table = new JTable(dTableModel);
-		table.setAutoCreateRowSorter(true);
-		//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		//table.setBounds(10, 25, 200, 200);
+		TableColumn col2 = table.getColumnModel().getColumn(1);
+		col2.setPreferredWidth(340);
 
 		table.addMouseListener(new MouseAdapter() {
 
@@ -120,11 +117,12 @@ public class OpenProject extends JInternalFrame {
 					setVisible(false);
 					setProjectToOpen((int) jobArray[rowSelected][0]);
 
-					// Singleton pattern to ensure that one and only one
-					// JobScreen is launched
+					/**
+					 * Singleton pattern to ensure that one and only one
+					 * JobScreen is launched 
+					 */
 					if (!instanceFlag) {
-						jobScreen = new JobScreen(OpenProject
-								.getProjectToOpen());
+						jobScreen = new JobScreen(OpenProject.getProjectToOpen());
 						MainScreen.desk.add(jobScreen);
 						instanceFlag = true;
 					}
@@ -136,11 +134,6 @@ public class OpenProject extends JInternalFrame {
 			}
 		});
 
-		TableColumn col1 = table.getColumnModel().getColumn(0);
-		col1.setPreferredWidth(150);
-
-		TableColumn col2 = table.getColumnModel().getColumn(1);
-		col2.setPreferredWidth(340);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 
 		scrollPane = new JScrollPane(table);
@@ -187,6 +180,50 @@ public class OpenProject extends JInternalFrame {
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
 	}
+	
+	class ClientJobTableModel extends AbstractTableModel {
+			
+		private String[] columnNames = { "Client Name", "Job Description" };
+
+		private Object[][] data;
+		
+		@Override
+		public int getColumnCount() {
+			return columnNames.length;
+		}
+
+		@Override
+		public int getRowCount() {
+			return data.length;
+		}
+		
+		@Override
+		public String getColumnName(int col) {
+			return columnNames[col];
+		}
+
+		@Override
+		public Object getValueAt(int rowIndex, int columnIndex) {
+			return data[rowIndex][columnIndex];
+		}
+		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override
+		public Class getColumnClass(int c) {
+			return getValueAt(0, c).getClass();
+		}
+		
+		@Override
+		public boolean isCellEditable (int row, int col) {
+			return false;
+		}
+		
+		@Override
+		public void setValueAt(Object value, int row, int col) {
+			data[row][col] = value;
+			fireTableCellUpdated(row, col);
+		}
+	}
 
 	class ListenerClass implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -202,11 +239,12 @@ public class OpenProject extends JInternalFrame {
 					setVisible(false);
 					setProjectToOpen((int) jobArray[rowSelected][0]);
 
-					// Singleton pattern to ensure that one and only one
-					// JobScreen is launched
+					/**
+					 * Singleton pattern to ensure that one and only one
+					 * JobScreen is launched 
+					 */
 					if (!instanceFlag) {
-						jobScreen = new JobScreen(
-								OpenProject.getProjectToOpen());
+						jobScreen = new JobScreen(OpenProject.getProjectToOpen());
 						MainScreen.desk.add(jobScreen);
 						instanceFlag = true;
 					}
