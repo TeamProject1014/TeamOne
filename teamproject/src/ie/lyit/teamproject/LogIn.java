@@ -1,23 +1,23 @@
 package ie.lyit.teamproject;
 
-import java.awt.CardLayout;
-import java.awt.Toolkit;
+//import java.awt.CardLayout;
+//import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+//import java.io.File;
+//import java.io.IOException;
+//import java.sql.DriverManager;
+//import java.sql.ResultSet;
+//
+//import javax.imageio.ImageIO;
+//import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
+//import com.mysql.jdbc.Connection;
+//import com.mysql.jdbc.Statement;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -49,7 +49,7 @@ public class LogIn extends JFrame {
 		BufferedImage img = null;
 		/**
 		 * LW - I commented out the code below as I don't have a copy of the image -
-		 * make sure images in future are stored in the Images folder and not some random place on an individual machine
+		 * make sure images in future are stored in the Images folder and not on an individual machine
 		 */
 		// try {
 		// // img = ImageIO.read(new File("E:\\Team Project\\New\\teamproject\\teamproject\\images.PNG"));

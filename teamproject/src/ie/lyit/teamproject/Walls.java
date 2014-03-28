@@ -156,6 +156,9 @@ public class Walls extends JPanel {
 					block = 99000;
 					innerLeaf = convert / block;
 					innerLeaf = (float) Math.round(innerLeaf);
+					
+//					float num1, num2, total, convert, block, innerLeaf, outLeaf, ties, cement,
+//					sand;
 
 					// Calculate number of wall ties required
 					// Convert floats to double

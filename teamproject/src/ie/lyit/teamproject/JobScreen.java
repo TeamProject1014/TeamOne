@@ -42,6 +42,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
+import java.awt.CardLayout;
 
 @SuppressWarnings("serial")
 public class JobScreen extends JInternalFrame {
@@ -57,12 +58,19 @@ public class JobScreen extends JInternalFrame {
 	private static ResultSet rs;
 	private static DBConnectionClass dbc;
 	private WallsTab walls;
-	private External external;
+	public static WallCalc wallCalc;
+	
+	private ExternalTab externalTab;
+	public static ExternalAdd externalAdd;
+	private InternalTab internalTab;
+	private RoofTab roofTab;
+	//private ExternalTab externalTab;
 	private Internal internal;
 	private Roof roof;
 	private EditStatus editStatus;
 	private boolean instanceFlag = false;
 	private JLabel jlblEditStatus;
+	private static int categoryToOpen;
 
 	private static DefaultTableModel dTableModel = new DefaultTableModel(
 			dbinfo, columns) {
@@ -144,10 +152,10 @@ public class JobScreen extends JInternalFrame {
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(15, 15, 672, 340);
-		tablePanel.add(scrollPane, BorderLayout.CENTER);
+		tablePanel.add(scrollPane, BorderLayout.NORTH);
 
 		JPanel totalPanel = new JPanel();
-		tablePanel.add(totalPanel, BorderLayout.SOUTH);
+		tablePanel.add(totalPanel, BorderLayout.CENTER);
 		totalPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		totalPanel.add(jlblTotal);
 		jlblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -322,21 +330,45 @@ public class JobScreen extends JInternalFrame {
 
 		JPanel calcPanel = new JPanel();
 		getContentPane().add(calcPanel, BorderLayout.EAST);
+		calcPanel.setLayout(new BorderLayout(0, 0));
+		
+//		walls = new WallsTab();
+//		//tabbedPane.add(walls, "Walls");
+//		calculatePanel.add(walls);
+		
+		//externalTab = new ExternalTab();
+		//calculatePanel.add(externalTab);
+		
+		JPanel calcTopPanel = new JPanel();
+		calcPanel.add(calcTopPanel, BorderLayout.CENTER);
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		calcTopPanel.add(tabbedPane);
 
-		external = new External();
-		tabbedPane.add(external, "External");
+		externalTab = new ExternalTab();
+		tabbedPane.add(externalTab, "External");
 
-		internal = new Internal();
-		tabbedPane.add(internal, "Internal");
-
+		internalTab = new InternalTab();
+		tabbedPane.add(internalTab, "Internal");
+		
 		walls = new WallsTab();
 		tabbedPane.add(walls, "Walls");
-
-		roof = new Roof();
-		tabbedPane.add(roof, "Roof");
-		calcPanel.add(tabbedPane);
+		
+		roofTab = new RoofTab();
+		tabbedPane.add(roofTab, "Roof");
+		
+		JPanel calcLowerPanel = new JPanel();
+		calcPanel.add(calcLowerPanel, BorderLayout.SOUTH);
+		calcLowerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		
+		externalAdd = new ExternalAdd();
+		calcLowerPanel.add(externalAdd);
+		externalAdd.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		externalAdd.setVisible(false);
+		
+		wallCalc = new WallCalc();
+		calcLowerPanel.add(wallCalc);
+		wallCalc.setVisible(false);
 
 		/**
 		 * Create new JTable component and add the dTableModel to it
@@ -348,10 +380,8 @@ public class JobScreen extends JInternalFrame {
 		col1.setCellRenderer(currencyRenderer);
 		col3.setCellRenderer(currencyRenderer);
 
-		//table = new JTable();
-
-		int ownX = 1048;
-		int ownY = 600;
+		int ownX = 1250;
+		int ownY = 800;
 
 		int screenX = screenSize.width;
 		int screenY = screenSize.height;
@@ -431,6 +461,19 @@ public class JobScreen extends JInternalFrame {
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
+	}
+	
+	public static int getCategoryToOpen() {
+		return categoryToOpen;
+	}
+
+	public static void setCategoryToOpen(int categoryToOpen) {
+		categoryToOpen = categoryToOpen;
+	}
+	
+	public static void resetLowerPanes() {
+		externalAdd.setVisible(false);
+		wallCalc.setVisible(false);
 	}
 }
 
