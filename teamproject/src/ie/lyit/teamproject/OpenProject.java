@@ -95,7 +95,7 @@ public class OpenProject extends JInternalFrame {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		
 		ClientJobTableModel clientModel = new ClientJobTableModel();
-		clientModel.data = displayArray;
+		clientModel.data = updateClientJobTable();//displayArray;
 		table = new JTable(clientModel);
 		
 		/**
@@ -179,6 +179,46 @@ public class OpenProject extends JInternalFrame {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
+	}
+	
+	public static Object[][] updateClientJobTable() {
+		int count = 0;
+		ResultSet rs;
+		DBConnectionClass dbc = new DBConnectionClass();
+		Object[][] displayArray;
+		Object[][] jobArray;
+		
+		try {
+			count = 0;
+			rs = dbc.retrieveClientJobs();
+			while (rs.next()) {
+				count++;
+			}
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+
+		/**
+		 * Instantiate multidimensional jobArray & displayArray with correct number of rows, obtained from count variable
+		 */
+		displayArray = new Object[count][2];
+		jobArray = new Object[count][3];
+		try {
+			rs = dbc.retrieveClientJobs();
+			count = 0;
+
+			while (rs.next()) {
+				jobArray[count][0] = rs.getInt(1);
+				jobArray[count][1] = displayArray[count][0] = rs.getString(2);
+				jobArray[count][2] = displayArray[count][1] = rs.getString(3);
+				count++;
+			}
+
+		} catch (SQLException ex) {
+			System.out.println(ex.getMessage());
+		}
+		
+		return displayArray;
 	}
 	
 	class ClientJobTableModel extends AbstractTableModel {

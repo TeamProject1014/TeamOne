@@ -1,6 +1,9 @@
 package ie.lyit.teamproject;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -13,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
 @SuppressWarnings("serial")
@@ -21,22 +25,23 @@ public class MainScreen extends JFrame {
 	static JDesktopPane desk;
 	private JFrame frame;
 	
+	private JToolBar toolbar;
+
 	private JMenuBar menubar;
 	private JMenu fileMenu;
 	private JMenu editMenu;
 	private JMenu addMenu;
 	private JMenu viewMenu;
 	private JMenu helpMenu;
-		
-	
+
 	private JMenuItem editUser;
 	private JMenuItem editMaterial;
 	private JMenuItem editCategory;
-	
+
 	private JMenuItem addUser;
 	private JMenuItem addMaterial;
 	private JMenuItem addCategory;
-	
+
 	private JMenuItem viewUser;
 	private JMenuItem viewClient;
 	private JMenuItem viewMaterial;
@@ -44,97 +49,117 @@ public class MainScreen extends JFrame {
 	private JMenuItem viewArchitect;
 	private JMenuItem viewEngineer;
 	private JMenuItem viewBuilder;
-	
-	private JMenuItem about;
-	
-	private static String pageTitle;
 
-	protected static AddJob addJob;
+	private JMenuItem about;
+
+	private static String pageTitle;
+	static boolean instanceFlag;
+
+	protected static NewJob newJob;
 	protected static OpenProject openProject;
 	protected static AddClient addClient;
 	protected static AddCharacter addCharacter;
 	protected static EditCharacter editCharacter;
-	
+
 	public MainScreen() {
 		
+		setLayout (new BorderLayout());
+
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		
+
 		frame = new JFrame("JDeskopPane");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setIconImage(new ImageIcon("Images/measure.png").getImage());
 		desk = new JDesktopPane();
 		
-		addJob = new AddJob();
-		desk.add(addJob);
-		addJob.setVisible(false);;
+		toolbar = new JToolBar();
 		
+		ImageIcon icon = new ImageIcon("Images/building1.jpg");
+		Image image = icon.getImage();
+		Image newimage = image.getScaledInstance(1700, 1100, Image.SCALE_SMOOTH);
+		
+//		protected void paintComponent(Graphics g) {
+//			super.paintComponent(g);
+//			g.drawImage(newimage, 0, 0, this);
+//		}
+
+		newJob = new NewJob();
+		desk.add(newJob);
+		newJob.setVisible(false);
+		;
+
 		openProject = new OpenProject();
 		desk.add(openProject);
 		openProject.setVisible(false);
-				
+
 		addCharacter = new AddCharacter();
 		desk.add(addCharacter);
 		addCharacter.setVisible(false);
-		
+
 		editCharacter = new EditCharacter();
 		desk.add(editCharacter);
 		editCharacter.setVisible(false);
-		
-		Action newAction = new AbstractAction("New", new ImageIcon("Images/new.png")){
-			public void actionPerformed(ActionEvent e){
-				addJob.setVisible(true);
-				addJob.toFront();
+
+		Action newAction = new AbstractAction("New", new ImageIcon(
+				"Images/new.png")) {
+			public void actionPerformed(ActionEvent e) {
+				newJob.setVisible(true);
+				newJob.toFront();
 			}
 		};
-		newAction.putValue(Action.MNEMONIC_KEY,  new Integer(KeyEvent.VK_N));
-		newAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control N"));
-		newAction.putValue(Action.SHORT_DESCRIPTION,  "New");
-			
-		Action openAction = new AbstractAction("Open", new ImageIcon("Images/open.png")){
-			public void actionPerformed(ActionEvent e){
+		newAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_N));
+		newAction.putValue(Action.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke("control N"));
+		newAction.putValue(Action.SHORT_DESCRIPTION, "New");
+
+		Action openAction = new AbstractAction("Open", new ImageIcon(
+				"Images/open.png")) {
+			public void actionPerformed(ActionEvent e) {
 				openProject.setVisible(true);
 				openProject.toFront();
 			}
 		};
-		openAction.putValue(Action.MNEMONIC_KEY,  new Integer(KeyEvent.VK_O));
-		openAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control O"));
-		openAction.putValue(Action.SHORT_DESCRIPTION,  "Open");
-		
-		Action addClientAction = new AbstractAction("Client", new ImageIcon("")){
-			public void actionPerformed(ActionEvent e){
+		openAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_O));
+		openAction.putValue(Action.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke("control O"));
+		openAction.putValue(Action.SHORT_DESCRIPTION, "Open");
+
+		Action addClientAction = new AbstractAction("Client", new ImageIcon("")) {
+			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Client");
 				AddCharacter.resetValues();
-				
+
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
 				addCharacter.toFront();
 			}
 		};
-		
-		Action addArchAction = new AbstractAction("Architect", new ImageIcon("")){
-			public void actionPerformed(ActionEvent e){
+
+		Action addArchAction = new AbstractAction("Architect",
+				new ImageIcon("")) {
+			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Architect");
 				AddCharacter.resetValues();
-				
+
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
 				addCharacter.toFront();
 			}
 		};
-		
-		Action addEngAction = new AbstractAction("Engineer", new ImageIcon("")){
-			public void actionPerformed(ActionEvent e){
+
+		Action addEngAction = new AbstractAction("Engineer", new ImageIcon("")) {
+			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Engineer");
 				AddCharacter.resetValues();
-				
+
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
 				addCharacter.toFront();
 			}
 		};
-		
-		Action addBuildAction = new AbstractAction("Builder", new ImageIcon("")){
-			public void actionPerformed(ActionEvent e){
+
+		Action addBuildAction = new AbstractAction("Builder", new ImageIcon("")) {
+			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Builder");
 				AddCharacter.resetValues();
 
@@ -143,31 +168,33 @@ public class MainScreen extends JFrame {
 				addCharacter.toFront();
 			}
 		};
-		
-		Action editClientAction = new AbstractAction("Client", new ImageIcon("")){
-			public void actionPerformed(ActionEvent e){
+
+		Action editClientAction = new AbstractAction("Client",
+				new ImageIcon("")) {
+			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Client");
 				EditCharacter.resetValues();
-				
+
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 				editCharacter.toFront();
 			}
-		};	
-		
-		Action editArchAction = new AbstractAction("Architect", new ImageIcon("")){
-			public void actionPerformed(ActionEvent e){
+		};
+
+		Action editArchAction = new AbstractAction("Architect", new ImageIcon(
+				"")) {
+			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Architect");
 				EditCharacter.resetValues();
-				
+
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 				editCharacter.toFront();
 			}
-		};	
-		
-		Action editEngAction = new AbstractAction("Engineer", new ImageIcon("")){
-			public void actionPerformed(ActionEvent e){
+		};
+
+		Action editEngAction = new AbstractAction("Engineer", new ImageIcon("")) {
+			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Engineer");
 				EditCharacter.resetValues();
 
@@ -175,50 +202,54 @@ public class MainScreen extends JFrame {
 				editCharacter.setTitle("Edit " + pageTitle);
 				editCharacter.toFront();
 			}
-		};	
-		
-		Action editBuildAction = new AbstractAction("Builder"){
-			public void actionPerformed(ActionEvent e){
+		};
+
+		Action editBuildAction = new AbstractAction("Builder") {
+			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Builder");
 				EditCharacter.resetValues();
-				
+
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 				editCharacter.toFront();
 			}
-		};	
-		
+		};
+
 		/**
 		 * Exit action implemented. Will be added to menubar and toolbar.
-		 * Mnemonic, tooltiptext and shortcuts added. 
+		 * Mnemonic, tooltiptext and shortcuts added.
 		 */
-		Action exitAction = new AbstractAction("Exit", new ImageIcon("Images/exit.png")){
-			public void actionPerformed(ActionEvent e){
+		Action exitAction = new AbstractAction("Exit", new ImageIcon(
+				"Images/exit.png")) {
+			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		};
-		exitAction.putValue(Action.MNEMONIC_KEY,  new Integer(KeyEvent.VK_X));
-		exitAction.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control X"));
-		exitAction.putValue(Action.SHORT_DESCRIPTION,  "Exit");
-				
+		exitAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_X));
+		exitAction.putValue(Action.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke("control X"));
+		exitAction.putValue(Action.SHORT_DESCRIPTION, "Exit");
+		
+		
+
 		menubar = new JMenuBar();
 		fileMenu = new JMenu("File");
 		fileMenu.setMnemonic('F');
 		menubar.add(fileMenu);
-		
+
 		// File Menu
 		fileMenu.add(newAction);
 		fileMenu.add(openAction);
 		fileMenu.addSeparator();
 		fileMenu.add(exitAction);
-		
+
 		// Edit Menu
 		editMenu = new JMenu("Edit");
-		editMenu.setMnemonic('E');	
+		editMenu.setMnemonic('E');
 		menubar.add(fileMenu);
 		menubar.add(editMenu);
 		editUser = new JMenuItem("User");
-		editMenu.add(editUser);		
+		editMenu.add(editUser);
 		editMenu.add(editMaterial = new JMenuItem("Material"));
 		editMenu.add(editCategory = new JMenuItem("Category"));
 		editMenu.addSeparator();
@@ -226,7 +257,7 @@ public class MainScreen extends JFrame {
 		editMenu.add(editArchAction);
 		editMenu.add(editEngAction);
 		editMenu.add(editBuildAction);
-		
+
 		// Add Menu
 		addMenu = new JMenu("Add");
 		addMenu.setMnemonic('A');
@@ -239,7 +270,7 @@ public class MainScreen extends JFrame {
 		addMenu.add(addArchAction);
 		addMenu.add(addEngAction);
 		addMenu.add(addBuildAction);
-		
+
 		// View Menu
 		viewMenu = new JMenu("View");
 		viewMenu.setMnemonic('V');
@@ -252,21 +283,25 @@ public class MainScreen extends JFrame {
 		viewMenu.add(viewArchitect = new JMenuItem("Architect"));
 		viewMenu.add(viewEngineer = new JMenuItem("Engineer"));
 		viewMenu.add(viewBuilder = new JMenuItem("Builder"));
-		
+
 		helpMenu = new JMenu("Help");
 		helpMenu.setMnemonic('H');
 		menubar.add(helpMenu);
-		helpMenu.add(about=new JMenuItem("About"));
+		helpMenu.add(about = new JMenuItem("About"));
 		
+		add(toolbar, BorderLayout.NORTH);
+		toolbar.setVisible(true);
+		toolbar.add(newAction);
+
 		frame.setJMenuBar(menubar);
-		frame.add(desk);		
-		
+		frame.add(desk);
+
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.setBounds(0, 0, screenSize.width, screenSize.height);
 		frame.setTitle("Building Materials Calculator");
 	}
-	
+
 	protected static String getPageTitle() {
 		return pageTitle;
 	}
@@ -274,9 +309,9 @@ public class MainScreen extends JFrame {
 	public static void setPageTitle(String titleIn) {
 		pageTitle = titleIn;
 	}
-		
+
 	@SuppressWarnings("unused")
-	public static void main(String[] args) {		
+	public static void main(String[] args) {
 		MainScreen init = new MainScreen();
 	}
 }

@@ -88,6 +88,7 @@ public class WallsTab extends JPanel {
 		JButton btnNewButton_2 = new JButton("Select");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				JobScreen.resetLowerPanes();
 				JobScreen.wallCalc.setVisible(true);
 			}
 		});
@@ -113,6 +114,30 @@ public class WallsTab extends JPanel {
 		gbc_btnNewButton_3.gridx = 1;
 		gbc_btnNewButton_3.gridy = 4;
 		wallPanel.add(btnNewButton_3, gbc_btnNewButton_3);
+		
+		JLabel lblNotLisetd = new JLabel("Not Listed");
+		GridBagConstraints gbc_lblNotLisetd = new GridBagConstraints();
+		gbc_lblNotLisetd.anchor = GridBagConstraints.WEST;
+		gbc_lblNotLisetd.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNotLisetd.gridx = 0;
+		gbc_lblNotLisetd.gridy = 5;
+		wallPanel.add(lblNotLisetd, gbc_lblNotLisetd);
+		
+		JButton btnNewButton_4 = new JButton("Select");
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JobScreen.resetLowerPanes();
+				JobScreen.setCategoryToOpen(1);
+				//ExternalAdd.updateTable();
+				JobScreen.externalAdd.setVisible(true);
+			}
+		});
+		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
+		gbc_btnNewButton_4.anchor = GridBagConstraints.WEST;
+		gbc_btnNewButton_4.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton_4.gridx = 1;
+		gbc_btnNewButton_4.gridy = 5;
+		wallPanel.add(btnNewButton_4, gbc_btnNewButton_4);
 
 	}
 }

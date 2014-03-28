@@ -291,6 +291,7 @@ public class WallCalc extends JPanel {
 		jtfTotal.setEditable(false);
 		totalPanel.add(jtfTotal);
 		jtfTotal.setColumns(10);
-
+		
+		//getRootPane().setDefaultButton(jbtCalculate);
 	}
 }
