@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import java.awt.GridBagConstraints;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -42,6 +43,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
+
 import java.awt.CardLayout;
 
 @SuppressWarnings("serial")
@@ -400,6 +402,15 @@ public class JobScreen extends JInternalFrame {
 		this.setClosable(true);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
+		
+//		JFileChooser chooser = new JFileChooser();
+//	    //FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
+//	    //chooser.setFileFilter(filter);
+//	    int returnVal = chooser.showSaveDialog(init);
+//	    if(returnVal == JFileChooser.APPROVE_OPTION) {
+//	       System.out.println("You chose to open this file: " +
+//	            chooser.getSelectedFile().getName());
+//	    }
 	}
 
 	public static JTable updateTable() {

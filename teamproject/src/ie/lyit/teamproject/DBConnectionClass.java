@@ -30,6 +30,8 @@ public class DBConnectionClass {
 	static PreparedStatement updateJob;
 	static PreparedStatement updateJobClient;
 	static PreparedStatement addMatToJob;
+	static PreparedStatement addMaterial;
+	static PreparedStatement addCategoryMaterial;
 	static ResultSet rs;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -569,11 +571,10 @@ public class DBConnectionClass {
 			updateJob = con.prepareStatement(insertString);
 			updateJob.executeUpdate();
 
-			int tempJobId = retrieveJobID(description);
+			int tempJobId = retrieveJobID();
 			String insertJobClientString = "INSERT INTO job_client VALUES ("
 					+ tempJobId + ", " + client_id + ")";
 			updateJobClient = con.prepareStatement(insertJobClientString);
-
 			
 			updateJobClient.executeUpdate();
 
@@ -583,16 +584,12 @@ public class DBConnectionClass {
 							+ ex.getMessage());
 		}
 	}
-
-	public int retrieveJobID(String description) {
+	
+	public int retrieveJobID() {
 		int job_id = 0;
 		try {
-
-			String gdta = "SELECT job_id " + "FROM job "
-					+ "WHERE description = '" + description + "'";
-
+			String gdta = "SELECT MAX(job_id) FROM job";
 			rs = stmt.executeQuery(gdta);
-
 			while (rs.next()) {
 				job_id = rs.getInt(1);
 			}
@@ -625,6 +622,40 @@ public class DBConnectionClass {
 							+ ex.getMessage());
 		}
 	}
+	
+	public void addMaterial(String description, int cat_id) {
+		try {
+			String insertString = "INSERT INTO material VALUES ('" + description + "')";
+			addMaterial = con.prepareStatement(insertString);
+			addMaterial.executeUpdate();
+			
+			int mat_id = retrieveMaterial_id();
+			
+			String insertIntoCatMat = "INSERT INTO category_material VALUES (" + cat_id + ", " + mat_id + ")";
+			addCategoryMaterial = con.prepareStatement(insertIntoCatMat);
+			addCategoryMaterial.executeUpdate();
+			
+			
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting new material data: " + ex.getMessage());
+		}
+	}
+	
+	public int retrieveMaterial_id() {
+		int material_id = 0;
+		try {
+			String gdta = "SELECT MAX(material_id) FROM material";
+			rs = stmt.executeQuery(gdta);
+			while (rs.next()) {
+				material_id = rs.getInt(1);
+			}
+			return material_id;
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve material_id : "
+					+ ex.getMessage());
+			return material_id;
+		}
+	}	
 
 	/**
 	 * Edit an Engineer entity based on parameters inputed by the user
