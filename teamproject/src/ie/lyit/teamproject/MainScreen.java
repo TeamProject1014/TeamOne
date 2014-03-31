@@ -24,7 +24,7 @@ public class MainScreen extends JFrame {
 
 	static JDesktopPane desk;
 	private JFrame frame;
-	
+
 	private JToolBar toolbar;
 
 	private JMenuBar menubar;
@@ -62,26 +62,28 @@ public class MainScreen extends JFrame {
 	protected static EditCharacter editCharacter;
 
 	public MainScreen() {
-		
-		setLayout (new BorderLayout());
 
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		getContentPane().setLayout(new BorderLayout());
+
+		final Dimension screenSize = Toolkit.getDefaultToolkit()
+				.getScreenSize();
 
 		frame = new JFrame("JDeskopPane");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setIconImage(new ImageIcon("Images/measure.png").getImage());
-		desk = new JDesktopPane();
-		
-		toolbar = new JToolBar();
-		
-		ImageIcon icon = new ImageIcon("Images/building1.jpg");
-		Image image = icon.getImage();
-		Image newimage = image.getScaledInstance(1700, 1100, Image.SCALE_SMOOTH);
-		
-//		protected void paintComponent(Graphics g) {
-//			super.paintComponent(g);
-//			g.drawImage(newimage, 0, 0, this);
-//		}
+		desk = new JDesktopPane() {
+
+			ImageIcon icon = new ImageIcon("Images/building.png");
+			Image image = icon.getImage();
+			Image newimage = image.getScaledInstance(screenSize.width,
+					screenSize.height, Image.SCALE_SMOOTH);
+
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				g.drawImage(newimage, 0, 0, this);
+			}
+		};
 
 		newJob = new NewJob();
 		desk.add(newJob);
@@ -110,7 +112,7 @@ public class MainScreen extends JFrame {
 		newAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_N));
 		newAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control N"));
-		newAction.putValue(Action.SHORT_DESCRIPTION, "New");
+		newAction.putValue(Action.SHORT_DESCRIPTION, "Create a New Job");
 
 		Action openAction = new AbstractAction("Open", new ImageIcon(
 				"Images/open.png")) {
@@ -122,9 +124,10 @@ public class MainScreen extends JFrame {
 		openAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_O));
 		openAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control O"));
-		openAction.putValue(Action.SHORT_DESCRIPTION, "Open");
+		openAction.putValue(Action.SHORT_DESCRIPTION, "Open an Existing Job");
 
-		Action addClientAction = new AbstractAction("Client", new ImageIcon("")) {
+		Action addClientAction = new AbstractAction("Client", new ImageIcon(
+				"Images/add.png")) {
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Client");
 				AddCharacter.resetValues();
@@ -134,9 +137,10 @@ public class MainScreen extends JFrame {
 				addCharacter.toFront();
 			}
 		};
+		addClientAction.putValue(Action.SHORT_DESCRIPTION, "Enter a New Client to the System");
 
-		Action addArchAction = new AbstractAction("Architect",
-				new ImageIcon("")) {
+		Action addArchAction = new AbstractAction("Architect", new ImageIcon(
+				"Images/add.png")) {
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Architect");
 				AddCharacter.resetValues();
@@ -146,8 +150,10 @@ public class MainScreen extends JFrame {
 				addCharacter.toFront();
 			}
 		};
+		addArchAction.putValue(Action.SHORT_DESCRIPTION, "Enter a New Architect to the System");
 
-		Action addEngAction = new AbstractAction("Engineer", new ImageIcon("")) {
+		Action addEngAction = new AbstractAction("Engineer", new ImageIcon(
+				"Images/add.png")) {
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Engineer");
 				AddCharacter.resetValues();
@@ -157,8 +163,10 @@ public class MainScreen extends JFrame {
 				addCharacter.toFront();
 			}
 		};
+		addEngAction.putValue(Action.SHORT_DESCRIPTION, "Enter a New Engineer to the System");
 
-		Action addBuildAction = new AbstractAction("Builder", new ImageIcon("")) {
+		Action addBuildAction = new AbstractAction("Builder", new ImageIcon(
+				"Images/add.png")) {
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Builder");
 				AddCharacter.resetValues();
@@ -168,9 +176,10 @@ public class MainScreen extends JFrame {
 				addCharacter.toFront();
 			}
 		};
+		addBuildAction.putValue(Action.SHORT_DESCRIPTION, "Enter a New Builder to the System");
 
-		Action editClientAction = new AbstractAction("Client",
-				new ImageIcon("")) {
+		Action editClientAction = new AbstractAction("Client", new ImageIcon(
+				"Images/editUser.png")) {
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Client");
 				EditCharacter.resetValues();
@@ -180,9 +189,10 @@ public class MainScreen extends JFrame {
 				editCharacter.toFront();
 			}
 		};
+		editClientAction.putValue(Action.SHORT_DESCRIPTION, "Edit an Existing Client's Details");
 
 		Action editArchAction = new AbstractAction("Architect", new ImageIcon(
-				"")) {
+				"Images/editUser.png")) {
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Architect");
 				EditCharacter.resetValues();
@@ -192,8 +202,10 @@ public class MainScreen extends JFrame {
 				editCharacter.toFront();
 			}
 		};
+		editArchAction.putValue(Action.SHORT_DESCRIPTION, "Edit an Existing Architect's Details");
 
-		Action editEngAction = new AbstractAction("Engineer", new ImageIcon("")) {
+		Action editEngAction = new AbstractAction("Engineer", new ImageIcon(
+				"Images/editUser.png")) {
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Engineer");
 				EditCharacter.resetValues();
@@ -203,8 +215,10 @@ public class MainScreen extends JFrame {
 				editCharacter.toFront();
 			}
 		};
+		editEngAction.putValue(Action.SHORT_DESCRIPTION, "Edit an Existing Engineer's Details");
 
-		Action editBuildAction = new AbstractAction("Builder") {
+		Action editBuildAction = new AbstractAction("Builder", new ImageIcon(
+				"Images/editUser.png")) {
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Builder");
 				EditCharacter.resetValues();
@@ -214,10 +228,10 @@ public class MainScreen extends JFrame {
 				editCharacter.toFront();
 			}
 		};
+		editBuildAction.putValue(Action.SHORT_DESCRIPTION, "Edit an Existing Builder's Details");
 
 		/**
-		 * Exit action implemented. Will be added to menubar and toolbar.
-		 * Mnemonic, tooltiptext and shortcuts added.
+		 * Create exitAction
 		 */
 		Action exitAction = new AbstractAction("Exit", new ImageIcon(
 				"Images/exit.png")) {
@@ -229,8 +243,6 @@ public class MainScreen extends JFrame {
 		exitAction.putValue(Action.ACCELERATOR_KEY,
 				KeyStroke.getKeyStroke("control X"));
 		exitAction.putValue(Action.SHORT_DESCRIPTION, "Exit");
-		
-		
 
 		menubar = new JMenuBar();
 		fileMenu = new JMenu("File");
@@ -288,18 +300,32 @@ public class MainScreen extends JFrame {
 		helpMenu.setMnemonic('H');
 		menubar.add(helpMenu);
 		helpMenu.add(about = new JMenuItem("About"));
-		
-		add(toolbar, BorderLayout.NORTH);
-		toolbar.setVisible(true);
-		toolbar.add(newAction);
 
 		frame.setJMenuBar(menubar);
-		frame.add(desk);
+		frame.getContentPane().add(desk);
+
+		toolbar = new JToolBar();
+		toolbar.setBounds(0, 0, screenSize.width, 40);
+		desk.add(toolbar);
+		toolbar.setFloatable(false);
+		toolbar.add(newAction);
+		toolbar.add(openAction);
+		toolbar.addSeparator();
+		toolbar.add(addClientAction);
+		toolbar.add(addArchAction);
+		toolbar.add(addEngAction);
+		toolbar.add(addBuildAction);
+		toolbar.addSeparator();
+		toolbar.add(editClientAction);
+		toolbar.add(editArchAction);
+		toolbar.add(editEngAction);
+		toolbar.add(editBuildAction);
 
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		frame.setBounds(0, 0, screenSize.width, screenSize.height);
+		frame.setBounds((int)(screenSize.width * 0.2), (int)(screenSize.height * 0.2), (int)(screenSize.width * 0.6), (int)(screenSize.height * 0.75));
 		frame.setTitle("Building Materials Calculator");
+		frame.setExtendedState(MAXIMIZED_BOTH);
 	}
 
 	protected static String getPageTitle() {

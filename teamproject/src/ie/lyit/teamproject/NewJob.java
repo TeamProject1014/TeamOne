@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@SuppressWarnings("serial")
 public class NewJob extends JInternalFrame {
 
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -70,7 +71,7 @@ public class NewJob extends JInternalFrame {
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = 0;
 		detailPanel.add(lblNewLabel, gbc_lblNewLabel);
-		///////////////CLIENT///////////////
+		// /////////////CLIENT///////////////
 		try {
 			count = 0;
 			rs = dbc.retrieveClientInfo();
@@ -99,6 +100,7 @@ public class NewJob extends JInternalFrame {
 		}
 
 		final JComboBox jcboClient = new JComboBox(clientName);
+		jcboClient.setSelectedItem(null);
 		GridBagConstraints gbc_jcboClient = new GridBagConstraints();
 		gbc_jcboClient.insets = new Insets(0, 0, 5, 5);
 		gbc_jcboClient.fill = GridBagConstraints.BOTH;
@@ -113,7 +115,7 @@ public class NewJob extends JInternalFrame {
 		gbc_lblNewLabel_2.gridx = 3;
 		gbc_lblNewLabel_2.gridy = 0;
 		detailPanel.add(lblNewLabel_2, gbc_lblNewLabel_2);
-		///////////////ARCHITECT///////////////
+		// /////////////ARCHITECT///////////////
 		try {
 			count = 0;
 			rs = dbc.retrieveArchInfo();
@@ -127,7 +129,7 @@ public class NewJob extends JInternalFrame {
 
 		archArray = new Object[count][2];
 		archName = new String[count];
-
+		
 		try {
 			rs = dbc.retrieveArchInfo();
 			count = 0;
@@ -142,6 +144,7 @@ public class NewJob extends JInternalFrame {
 		}
 
 		final JComboBox jcboArch = new JComboBox(archName);
+		jcboArch.setSelectedItem(null);
 		GridBagConstraints gbc_jcboArch = new GridBagConstraints();
 		gbc_jcboArch.insets = new Insets(0, 0, 5, 5);
 		gbc_jcboArch.fill = GridBagConstraints.HORIZONTAL;
@@ -156,7 +159,7 @@ public class NewJob extends JInternalFrame {
 		gbc_lblNewLabel_1.gridx = 0;
 		gbc_lblNewLabel_1.gridy = 1;
 		detailPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
-		///////////////ENGINEER///////////////
+		// /////////////ENGINEER///////////////
 		try {
 			count = 0;
 			rs = dbc.retrieveEngInfo();
@@ -183,20 +186,15 @@ public class NewJob extends JInternalFrame {
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
-		
+
 		final JComboBox jcboEng = new JComboBox(engName);
+		jcboEng.setSelectedItem(null);
 		GridBagConstraints gbc_jcboEng = new GridBagConstraints();
 		gbc_jcboEng.insets = new Insets(0, 0, 5, 5);
 		gbc_jcboEng.fill = GridBagConstraints.HORIZONTAL;
 		gbc_jcboEng.gridx = 1;
 		gbc_jcboEng.gridy = 1;
 		detailPanel.add(jcboEng, gbc_jcboEng);
-//		GridBagConstraints gbc_jcboBuild = new GridBagConstraints();
-//		gbc_jcboBuild.insets = new Insets(0, 0, 5, 5);
-//		gbc_jcboBuild.fill = GridBagConstraints.HORIZONTAL;
-//		gbc_jcboBuild.gridx = 1;
-//		gbc_jcboBuild.gridy = 1;
-//		detailPanel.add(jcboBuild, gbc_jcboBuild);
 
 		JLabel lblNewLabel_3 = new JLabel("Builder:");
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
@@ -205,7 +203,7 @@ public class NewJob extends JInternalFrame {
 		gbc_lblNewLabel_3.gridx = 3;
 		gbc_lblNewLabel_3.gridy = 1;
 		detailPanel.add(lblNewLabel_3, gbc_lblNewLabel_3);
-		///////////////BUILDER///////////////
+		// /////////////BUILDER///////////////
 		try {
 			count = 0;
 			rs = dbc.retrieveBuildInfo();
@@ -232,15 +230,15 @@ public class NewJob extends JInternalFrame {
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
-		
-				final JComboBox jcboBuild = new JComboBox(buildName);
-				
-						GridBagConstraints gbc_jcboBuild = new GridBagConstraints();
-						gbc_jcboBuild.insets = new Insets(0, 0, 5, 5);
-						gbc_jcboBuild.fill = GridBagConstraints.HORIZONTAL;
-						gbc_jcboBuild.gridx = 4;
-						gbc_jcboBuild.gridy = 1;
-						detailPanel.add(jcboBuild, gbc_jcboBuild);
+
+		final JComboBox jcboBuild = new JComboBox(buildName);
+		jcboBuild.setSelectedItem(null);
+		GridBagConstraints gbc_jcboBuild = new GridBagConstraints();
+		gbc_jcboBuild.insets = new Insets(0, 0, 5, 5);
+		gbc_jcboBuild.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jcboBuild.gridx = 4;
+		gbc_jcboBuild.gridy = 1;
+		detailPanel.add(jcboBuild, gbc_jcboBuild);
 
 		JLabel lblNewLabel_4 = new JLabel("Description:");
 		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
@@ -273,31 +271,32 @@ public class NewJob extends JInternalFrame {
 		JButton jbtAdd = new JButton("Add");
 		jbtAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				dbc = new DBConnectionClass();
-				
-				int client_id = 0;				
+
+				int client_id = 0;
 				for (int i = 0; i < clientName.length; i++)
 					if (jcboClient.getSelectedItem().equals(clientName[i]))
-						client_id = (Integer)clientArray[i][0];
-				
+						client_id = (Integer) clientArray[i][0];
+
 				int arch_id = 0;
 				for (int i = 0; i < archName.length; i++)
 					if (jcboArch.getSelectedItem().equals(archName[i]))
-						arch_id = (Integer)archArray[i][0];
-				
+						arch_id = (Integer) archArray[i][0];
+
 				int eng_id = 0;
 				for (int i = 0; i < engName.length; i++)
 					if (jcboEng.getSelectedItem().equals(engName[i]))
-						eng_id = (Integer)engArray[i][0];
-				
+						eng_id = (Integer) engArray[i][0];
+
 				int build_id = 0;
 				for (int i = 0; i < buildName.length; i++)
 					if (jcboBuild.getSelectedItem().equals(buildName[i]))
-						build_id = (Integer)buildArray[i][0];
-				
+						build_id = (Integer) buildArray[i][0];
+
 				String description = textArea.getText();
-				dbc.createNewJob(client_id, arch_id, eng_id, build_id, description);
+				dbc.createNewJob(client_id, arch_id, eng_id, build_id,
+						description);
 				OpenProject.updateClientJobTable();
 				//jobScreen.setVisible(true);
 				//jobScreen.toFront();
@@ -330,7 +329,6 @@ public class NewJob extends JInternalFrame {
 		this.setTitle("New Job");
 		this.setVisible(true);
 		this.setIconifiable(true);
-		this.setMaximizable(true);
 		this.setClosable(true);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));

@@ -63,7 +63,9 @@ public class ExternalAdd extends JPanel {
 		 * jobs data and storing value in count variable
 		 */
 		//updateMaterialTable(category_id);
-		updateMaterialTable(1);
+		
+		//updateMaterialTable(1);
+		
 //		try {
 //			count = 0;
 //			rs = dbc.retrieveCategoryMaterial(1);
@@ -106,24 +108,29 @@ public class ExternalAdd extends JPanel {
 
 		JPanel entirePanel = new JPanel();
 		entirePanel.setLayout(new BorderLayout(0, 0));
-
+	
 		setLayout(new BorderLayout());
 		add(entirePanel, BorderLayout.CENTER);
 
 		JPanel tablePanel = new JPanel();
+		tablePanel.setLayout(new BorderLayout(0, 0));
 		entirePanel.add(tablePanel, BorderLayout.CENTER);
 
 		clientModel = new ClientJobTableModel();
-		clientModel.data = displayArray;
+//		clientModel.data = displayArray;
+		clientModel.data = updateMaterialTable(1);
 		table = new JTable(clientModel);
+//		Dimension d = new Dimension(150, 100);
+//		table.setPreferredScrollableViewportSize(d);
 		
 		TableColumn col1 = table.getColumnModel().getColumn(0);
-		col1.setMaxWidth(200);
-		tablePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		col1.setMaxWidth(300);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		Dimension d = new Dimension(300, 300);
+		scrollPane.setPreferredSize(d);
 		tablePanel.add(scrollPane);
 
 		JPanel optionsPanel = new JPanel();
@@ -198,7 +205,7 @@ public class ExternalAdd extends JPanel {
 		
 	}
 
-	public static void updateMaterialTable(int cat_id) {
+	public static Object[][] updateMaterialTable(int cat_id) {
 		int count = 0;
 		ResultSet rs;
 
@@ -233,6 +240,7 @@ public class ExternalAdd extends JPanel {
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
+		return displayArray;
 	}
 
 	class ClientJobTableModel extends AbstractTableModel {
