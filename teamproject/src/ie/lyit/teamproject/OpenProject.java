@@ -42,7 +42,7 @@ public class OpenProject extends JInternalFrame {
 	private static int projectToOpen = -1;
 	private Object[][] jobArray;
 	private Object[][] displayArray;
-	private boolean instanceFlag = false;
+	static boolean instanceFlag = false;
 	private static Dimension screenSize = Toolkit.getDefaultToolkit()
 			.getScreenSize();
 		

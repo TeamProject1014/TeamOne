@@ -656,6 +656,21 @@ public class DBConnectionClass {
 			return material_id;
 		}
 	}	
+	
+	public int getLastJobCreated() {
+		int job_id = 0;
+		try {
+			String gdta = "SELECT MAX(job_id) FROM job";
+			rs = stmt.executeQuery(gdta);
+			while (rs.next()) {
+				job_id = rs.getInt(1);
+			}
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve job_id : "
+					+ ex.getMessage());
+		}
+		return job_id;
+	}
 
 	/**
 	 * Edit an Engineer entity based on parameters inputed by the user

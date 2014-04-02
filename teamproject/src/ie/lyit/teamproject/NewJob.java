@@ -40,6 +40,7 @@ public class NewJob extends JInternalFrame {
 	private String[] engName;
 	private Object[][] buildArray;
 	private String[] buildName;
+	//protected static JobScreen jobScreen;
 
 	public NewJob() {
 
@@ -298,9 +299,25 @@ public class NewJob extends JInternalFrame {
 				dbc.createNewJob(client_id, arch_id, eng_id, build_id,
 						description);
 				OpenProject.updateClientJobTable();
-				//jobScreen.setVisible(true);
-				//jobScreen.toFront();
 				setVisible(false);
+				
+				
+				int x = dbc.getLastJobCreated();
+				
+				OpenProject.setProjectToOpen(x);
+				
+				if (!OpenProject.instanceFlag) {
+//					jobScreen = new JobScreen(OpenProject.getProjectToOpen());
+//					MainScreen.desk.add(jobScreen);
+					OpenProject.jobScreen = new JobScreen(OpenProject.getProjectToOpen());
+					MainScreen.desk.add(OpenProject.jobScreen);
+					OpenProject.instanceFlag = true;
+				}
+				
+				JobScreen.setHeaderDetails(x);
+				JobScreen.updateTable();
+				OpenProject.jobScreen.setVisible(true);
+				OpenProject.jobScreen.toFront();
 			}
 		});
 		optionsPanel.add(jbtAdd);
