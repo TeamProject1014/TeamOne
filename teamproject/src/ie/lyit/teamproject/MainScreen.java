@@ -84,24 +84,25 @@ public class MainScreen extends JFrame {
 				g.drawImage(newimage, 0, 0, this);
 			}
 		};
+		desk.setLayout(null);
 
 		newJob = new NewJob();
+		newJob.setBounds(615, 413, 450, 225);
 		desk.add(newJob);
 		newJob.setVisible(false);
 		;
 
-		openProject = new OpenProject();
-		desk.add(openProject);
-		openProject.setVisible(false);
-
 		addCharacter = new AddCharacter();
+		addCharacter.setBounds(670, 368, 340, 315);
 		desk.add(addCharacter);
 		addCharacter.setVisible(false);
 
 		editCharacter = new EditCharacter();
+		editCharacter.setBounds(670, 368, 340, 315);
 		desk.add(editCharacter);
 		editCharacter.setVisible(false);
 
+		
 		Action newAction = new AbstractAction("New", new ImageIcon(
 				"Images/new.png")) {
 			public void actionPerformed(ActionEvent e) {
@@ -117,6 +118,9 @@ public class MainScreen extends JFrame {
 		Action openAction = new AbstractAction("Open", new ImageIcon(
 				"Images/open.png")) {
 			public void actionPerformed(ActionEvent e) {
+				openProject = new OpenProject();
+				openProject.setBounds(565, 388, 550, 275);
+				desk.add(openProject);
 				openProject.setVisible(true);
 				openProject.toFront();
 			}
@@ -305,7 +309,7 @@ public class MainScreen extends JFrame {
 		frame.getContentPane().add(desk);
 
 		toolbar = new JToolBar();
-		toolbar.setBounds(0, 0, screenSize.width, 40);
+		toolbar.setBounds(0, 0, 1680, 40);
 		desk.add(toolbar);
 		toolbar.setFloatable(false);
 		toolbar.add(newAction);

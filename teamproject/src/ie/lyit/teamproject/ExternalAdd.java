@@ -1,5 +1,7 @@
 package ie.lyit.teamproject;
 
+import ie.lyit.teamproject.JobScreen.JobTableModel;
+
 import javax.swing.JPanel;
 
 import java.awt.Dimension;
@@ -29,6 +31,9 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
 
 public class ExternalAdd extends JPanel {
 
@@ -113,12 +118,13 @@ public class ExternalAdd extends JPanel {
 		add(entirePanel, BorderLayout.CENTER);
 
 		JPanel tablePanel = new JPanel();
+		tablePanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Select Material", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		entirePanel.add(tablePanel, BorderLayout.CENTER);
 
 		clientModel = new ClientJobTableModel();
 //		clientModel.data = displayArray;
-		clientModel.data = updateMaterialTable(1);
+		clientModel.data = updateMaterialTable(2);
 		table = new JTable(clientModel);
 //		Dimension d = new Dimension(150, 100);
 //		table.setPreferredScrollableViewportSize(d);
@@ -134,6 +140,7 @@ public class ExternalAdd extends JPanel {
 		tablePanel.add(scrollPane);
 
 		JPanel optionsPanel = new JPanel();
+		optionsPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		entirePanel.add(optionsPanel, BorderLayout.SOUTH);
 		GridBagLayout gbl_optionsPanel = new GridBagLayout();
 		gbl_optionsPanel.columnWidths = new int[] { 0, 0, 0 };
@@ -194,7 +201,11 @@ public class ExternalAdd extends JPanel {
 						mat_id = (int) catMatArray[i][1];
 				
 				dbc.addMaterialToJob(job_id, mat_id, quant, price, total);
-				JobScreen.updateTable();
+				//JobScreen.updateTable();
+				//JobScreen.jobModel.data.equals(null);
+				JobScreen.jobModel.data = JobScreen.updateJobTable(job_id);
+				JobScreen.table.repaint();
+				JobScreen.table.revalidate();
 				JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
 			}
 		});

@@ -23,8 +23,11 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.awt.event.KeyAdapter;
 
 @SuppressWarnings("serial")
 public class NewJob extends JInternalFrame {
@@ -40,6 +43,7 @@ public class NewJob extends JInternalFrame {
 	private String[] engName;
 	private Object[][] buildArray;
 	private String[] buildName;
+	//protected static JobScreen jobScreen;
 
 	public NewJob() {
 
@@ -298,9 +302,25 @@ public class NewJob extends JInternalFrame {
 				dbc.createNewJob(client_id, arch_id, eng_id, build_id,
 						description);
 				OpenProject.updateClientJobTable();
-				//jobScreen.setVisible(true);
-				//jobScreen.toFront();
 				setVisible(false);
+				
+				
+				int x = dbc.getLastJobCreated();
+				
+				OpenProject.setProjectToOpen(x);
+				
+				if (!OpenProject.instanceFlag) {
+					OpenProject.jobScreen = new JobScreen(OpenProject.getProjectToOpen());
+					MainScreen.desk.add(OpenProject.jobScreen);
+					OpenProject.instanceFlag = true;
+				}
+				
+				JobScreen.setHeaderDetails(x);
+				
+				//JobScreen.updateTable();
+				JobScreen.updateJobTable(OpenProject.getProjectToOpen());
+				OpenProject.jobScreen.setVisible(true);
+				OpenProject.jobScreen.toFront();
 			}
 		});
 		optionsPanel.add(jbtAdd);
@@ -332,7 +352,6 @@ public class NewJob extends JInternalFrame {
 		this.setClosable(true);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
-
 	}
 
 }
