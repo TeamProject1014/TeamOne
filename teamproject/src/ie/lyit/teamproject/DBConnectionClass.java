@@ -32,6 +32,7 @@ public class DBConnectionClass {
 	static PreparedStatement addMatToJob;
 	static PreparedStatement addMaterial;
 	static PreparedStatement addCategoryMaterial;
+	static PreparedStatement deleteFromJob;
 	static ResultSet rs;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -316,17 +317,40 @@ public class DBConnectionClass {
 			// String gdta =
 			// "select material.description, job_material.price, job_material.quantity, job_material.TotalPrice "
 			// + "from material "
-			String gdta = "select job_material.job_id, job_material.material_id, material.description, job_material.price, job_material.quantity, job_material.TotalPrice "
-					+ "from material "
-					+ "inner join job_material "
-					+ "on job_material.material_id = material.Material_ID "
-					+ "and job_material.job_id = " + job_No;
+//			String gdta = "select job_material.job_id, job_material.material_id, material.description, job_material.price, job_material.quantity, job_material.TotalPrice "
+//					+ "from material "
+//					+ "inner join job_material "
+//					+ "on job_material.material_id = material.Material_ID "
+//					+ "and job_material.job_id = " + job_No;
+			String gdta = "select job_material.job_id, job_material.material_id, category.description, "
+					+ "material.description, job_material.price, job_material.quantity, job_material.TotalPrice "
+					+ "from material, category, category_material, job_material "
+					+ "where job_material.job_id = " + job_No 									// All lines to the left can be commented 
+					+ " and job_material.material_id = material.material_id "					// out and the code below uncommented  
+					+ "and category_material.material_id = material.material_id "				// to revert back to the previous SQL 
+					+ "and category_material.category_id = category.category_id ";				// statement that was definitely working correctly
+//					+ "where job_material.material_id = material.material_id "
+//					+ "and category_material.material_id = material.material_id "
+//					+ "and category_material.category_id = category.category_id "
+//					+ "and job_material.job_id = " + job_No;
 
 			rs = stmt.executeQuery(gdta);
 			return rs;
 		} catch (SQLException ex) {
 			System.err.println("Retrieve Data: " + ex.getMessage());
 			return null;
+		}
+	}
+	
+	public void deleteItemFromJob(int job_id, int mat_id) {
+		try {
+			String deleteItemFromJob = "delete from job_material where job_id = " + job_id + " and material_id = " + mat_id;
+			deleteFromJob = con.prepareStatement(deleteItemFromJob);
+
+			deleteFromJob.executeUpdate();
+			
+		} catch (SQLException ex) {
+			System.err.println("Retrieve Data: " + ex.getMessage());
 		}
 	}
 

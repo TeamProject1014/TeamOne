@@ -126,7 +126,16 @@ public class OpenProject extends JInternalFrame {
 						MainScreen.desk.add(jobScreen);
 						instanceFlag = true;
 					}
-					JobScreen.updateTable();
+					//JobScreen.updateTable();
+					
+//					JobScreen.jobModel.data = JobScreen.updateJobTable(OpenProject.getProjectToOpen());
+//					JobScreen.table.repaint();
+//					JobScreen.table.revalidate();
+//					JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
+										
+					JobScreen.jobModel.data = JobScreen.updateJobTable(OpenProject.getProjectToOpen());
+					JobScreen.table.repaint();
+					JobScreen.table.revalidate();
 					JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
 					jobScreen.setVisible(true);
 					jobScreen.toFront();
@@ -288,7 +297,8 @@ public class OpenProject extends JInternalFrame {
 						MainScreen.desk.add(jobScreen);
 						instanceFlag = true;
 					}
-					JobScreen.updateTable();
+					//JobScreen.updateTable();
+					JobScreen.updateJobTable(OpenProject.getProjectToOpen());
 					JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
 					jobScreen.setVisible(true);
 					jobScreen.toFront();
