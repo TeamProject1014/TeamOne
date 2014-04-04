@@ -19,7 +19,7 @@ public class ExternalTab extends JPanel {
 		externalPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "External Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(externalPanel, BorderLayout.WEST);
 		GridBagLayout gbl_externalPanel = new GridBagLayout();
-		gbl_externalPanel.columnWidths = new int[]{200, 200, 0};
+		gbl_externalPanel.columnWidths = new int[]{200, 100, 0};
 		gbl_externalPanel.rowHeights = new int[]{0, 0, 0, 0, 0};
 		gbl_externalPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_externalPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};

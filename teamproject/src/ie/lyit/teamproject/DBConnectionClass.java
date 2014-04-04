@@ -25,7 +25,7 @@ public class DBConnectionClass {
 	static PreparedStatement updateArchitect;
 	static PreparedStatement updateEngineer;
 	static PreparedStatement updateBuilder;
-	static PreparedStatement editEngineer;
+	//static PreparedStatement editEngineer;
 	static PreparedStatement editJobStatus;
 	static PreparedStatement updateJob;
 	static PreparedStatement updateJobClient;
@@ -145,7 +145,7 @@ public class DBConnectionClass {
 	 */
 	public ResultSet retrieveClientDetails() {
 		try {
-			String cliData = "SELECT name, address, address2, town, county, phone, email FROM client";
+			String cliData = "SELECT client_id, name, address, address2, town, county, phone, email FROM client";
 			rs = stmt.executeQuery(cliData);
 			return rs;
 		} catch (SQLException ex) {
@@ -162,7 +162,7 @@ public class DBConnectionClass {
 	 */
 	public ResultSet retrieveArchitectDetails() {
 		try {
-			String archData = "SELECT name, address, address2, town, county, phone, email FROM architect";
+			String archData = "SELECT arch_id, name, address, address2, town, county, phone, email FROM architect";
 			rs = stmt.executeQuery(archData);
 			return rs;
 		} catch (SQLException ex) {
@@ -189,19 +189,6 @@ public class DBConnectionClass {
 		}
 	}
 
-	// public ResultSet retrieveEngineerDetails() {
-	// try {
-	// String engData =
-	// "SELECT name, address, address2, town, county, phone, email FROM engineer";
-	// rs = stmt.executeQuery(engData);
-	// return rs;
-	// } catch (SQLException ex) {
-	// System.err.println("Error attempting to retrieve Engineer data: "
-	// + ex.getMessage());
-	// return null;
-	// }
-	// }
-
 	/**
 	 * Retrieves relevant information from Builder table
 	 * 
@@ -209,7 +196,7 @@ public class DBConnectionClass {
 	 */
 	public ResultSet retrieveBuilderDetails() {
 		try {
-			String buildData = "SELECT name, address, address2, town, county, phone, email FROM builder";
+			String buildData = "SELECT builder_id, name, address, address2, town, county, phone, email FROM builder";
 			rs = stmt.executeQuery(buildData);
 			return rs;
 		} catch (SQLException ex) {
@@ -712,24 +699,109 @@ public class DBConnectionClass {
 	 * @param email
 	 *            The Engineers email
 	 */
+//	public void editEngineer(String address, String address2, String town,
+//			String county, String phone, String email) {
+//		try {
+//			System.out.println(EditCharacter.characterId);
+//			String insertString = "UPDATE engineer SET address = '" + address
+//					+ "', address2 = '" + address2 + "', town = '" + town
+//					+ "', county = '" + county + "', phone = '" + phone
+//					+ "', email = '" + email + "' WHERE eng_id ="
+//					+ EditCharacter.characterId;
+//			editEngineer = con.prepareStatement(insertString);
+//			// editEngineer.setString(1, address);
+//			// editEngineer.setString(2, address2);
+//			// editEngineer.setString(3, town);
+//			// editEngineer.setString(4, county);
+//			// editEngineer.setString(5, phone);
+//			// editEngineer.setString(6, email);
+//
+//			editEngineer.executeUpdate();
+//
+//		} catch (SQLException ex) {
+//			System.err.println("There was an error when inserting Data: "
+//					+ ex.getMessage());
+//		}
+//
+//	}
+	//==============================================================//
+	//																//
+	// 		New Edit Screens received from Cathal 28/03/2014		//
+	//																//
+	//==============================================================//
+	
 	public void editEngineer(String address, String address2, String town,
 			String county, String phone, String email) {
 		try {
-			System.out.println(EditCharacter.characterId);
-			String insertString = "UPDATE engineer SET address = '" + address
-					+ "', address2 = '" + address2 + "', town = '" + town
-					+ "', county = '" + county + "', phone = '" + phone
-					+ "', email = '" + email + "' WHERE eng_id ="
-					+ EditCharacter.characterId;
-			editEngineer = con.prepareStatement(insertString);
-			// editEngineer.setString(1, address);
-			// editEngineer.setString(2, address2);
-			// editEngineer.setString(3, town);
-			// editEngineer.setString(4, county);
-			// editEngineer.setString(5, phone);
-			// editEngineer.setString(6, email);
+			String insertString = "UPDATE engineer SET address ='" + address 
+					+ "', address2 ='" + address2 
+					+ "', town = '" + town 
+					+ "', county = '" + county 
+					+ "', phone = '" + phone 
+					+ "', email = '" + email 
+					+ "' WHERE eng_id =" + EditCharacter.characterId;
+			updateEngineer = con.prepareStatement(insertString);
+			updateEngineer.executeUpdate();
 
-			editEngineer.executeUpdate();
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting Data: "
+					+ ex.getMessage());
+		}
+
+	}
+	
+	public void editClient(String address, String address2, String town,
+			String county, String phone, String email) {
+		try {
+			String insertString = "UPDATE client SET address ='" + address 
+					+ "', address2 ='" + address2 
+					+ "', town = '" + town 
+					+ "', county = '" + county 
+					+ "', phone = '" + phone 
+					+ "', email = '" + email 
+					+ "' WHERE client_id =" + EditCharacter.characterId;;
+			updateClient = con.prepareStatement(insertString);
+			updateClient.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting Data: "
+					+ ex.getMessage());
+		}
+
+	}
+	
+	public void editArchitect(String address, String address2, String town,
+			String county, String phone, String email) {
+		try {
+			String insertString = "UPDATE architect SET address ='" + address 
+					+ "', address2 ='" + address2 
+					+ "', town = '" + town 
+					+ "', county = '" + county 
+					+ "', phone = '" + phone 
+					+ "', email = '" + email 
+					+ "' WHERE arch_id =" + EditCharacter.characterId;;
+			updateArchitect = con.prepareStatement(insertString);
+			updateArchitect.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting Data: "
+					+ ex.getMessage());
+		}
+
+	}
+	
+	public void editBuilder(String address, String address2, String town,
+			String county, String phone, String email) {
+		try {
+			String insertString = "UPDATE builder SET address ='" + address 
+					+ "', address2 ='" + address2 
+					+ "', town = '" + town 
+					+ "', county = '" + county 
+					+ "', phone = '" + phone 
+					+ "', email = '" + email 
+					+ "' WHERE builder_id =" + EditCharacter.characterId;
+			updateBuilder = con.prepareStatement(insertString);
+			updateBuilder.executeUpdate();
 
 		} catch (SQLException ex) {
 			System.err.println("There was an error when inserting Data: "
@@ -800,7 +872,6 @@ public class DBConnectionClass {
 					+ "AND a.Arch_ID = j.Arch_ID "
 					+ "AND e.Eng_ID = j.Eng_ID "
 					+ "AND b.Builder_ID = j.Build_ID "
-					// + "AND jc.client_id = "
 					+ "AND jc.job_id = " + job_id;
 			rs = stmt.executeQuery(gdta);
 			return rs;

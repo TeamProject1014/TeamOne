@@ -1,5 +1,7 @@
 package ie.lyit.teamproject;
 
+//import ie.lyit.teamproject.OpenProject.ClientJobTableModel;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,6 +13,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -53,7 +56,8 @@ public class MainScreen extends JFrame {
 	private JMenuItem about;
 
 	private static String pageTitle;
-	static boolean instanceFlag;
+	static boolean openProjectInstanceFlag;
+	static boolean editCharacterInstanceFlag;
 
 	protected static NewJob newJob;
 	protected static OpenProject openProject;
@@ -90,19 +94,12 @@ public class MainScreen extends JFrame {
 		newJob.setBounds(615, 413, 450, 225);
 		desk.add(newJob);
 		newJob.setVisible(false);
-		;
 
 		addCharacter = new AddCharacter();
 		addCharacter.setBounds(670, 368, 340, 315);
 		desk.add(addCharacter);
 		addCharacter.setVisible(false);
 
-		editCharacter = new EditCharacter();
-		editCharacter.setBounds(670, 368, 340, 315);
-		desk.add(editCharacter);
-		editCharacter.setVisible(false);
-
-		
 		Action newAction = new AbstractAction("New", new ImageIcon(
 				"Images/new.png")) {
 			public void actionPerformed(ActionEvent e) {
@@ -118,9 +115,15 @@ public class MainScreen extends JFrame {
 		Action openAction = new AbstractAction("Open", new ImageIcon(
 				"Images/open.png")) {
 			public void actionPerformed(ActionEvent e) {
-				openProject = new OpenProject();
-				openProject.setBounds(565, 388, 550, 275);
-				desk.add(openProject);
+				if (!openProjectInstanceFlag) {
+					openProject = new OpenProject();
+					desk.add(openProject);
+					openProjectInstanceFlag = true;
+				}
+				openProject.clientModel.data = openProject.updateClientJobTable(); 
+				openProject.updateClientJobTable();
+				openProject.table.repaint();
+				openProject.table.revalidate();
 				openProject.setVisible(true);
 				openProject.toFront();
 			}
@@ -141,7 +144,8 @@ public class MainScreen extends JFrame {
 				addCharacter.toFront();
 			}
 		};
-		addClientAction.putValue(Action.SHORT_DESCRIPTION, "Enter a New Client to the System");
+		addClientAction.putValue(Action.SHORT_DESCRIPTION,
+				"Enter a New Client to the System");
 
 		Action addArchAction = new AbstractAction("Architect", new ImageIcon(
 				"Images/add.png")) {
@@ -154,7 +158,8 @@ public class MainScreen extends JFrame {
 				addCharacter.toFront();
 			}
 		};
-		addArchAction.putValue(Action.SHORT_DESCRIPTION, "Enter a New Architect to the System");
+		addArchAction.putValue(Action.SHORT_DESCRIPTION,
+				"Enter a New Architect to the System");
 
 		Action addEngAction = new AbstractAction("Engineer", new ImageIcon(
 				"Images/add.png")) {
@@ -164,10 +169,11 @@ public class MainScreen extends JFrame {
 
 				addCharacter.setVisible(true);
 				addCharacter.setTitle("Add " + pageTitle);
-				addCharacter.toFront();
+				addCharacter.toFront();//
 			}
 		};
-		addEngAction.putValue(Action.SHORT_DESCRIPTION, "Enter a New Engineer to the System");
+		addEngAction.putValue(Action.SHORT_DESCRIPTION,
+				"Enter a New Engineer to the System");
 
 		Action addBuildAction = new AbstractAction("Builder", new ImageIcon(
 				"Images/add.png")) {
@@ -180,59 +186,96 @@ public class MainScreen extends JFrame {
 				addCharacter.toFront();
 			}
 		};
-		addBuildAction.putValue(Action.SHORT_DESCRIPTION, "Enter a New Builder to the System");
+		addBuildAction.putValue(Action.SHORT_DESCRIPTION,
+				"Enter a New Builder to the System");
 
 		Action editClientAction = new AbstractAction("Client", new ImageIcon(
 				"Images/editUser.png")) {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Client");
+				
+				if (!editCharacterInstanceFlag) {
+					editCharacter = new EditCharacter();
+					MainScreen.desk.add(editCharacter);
+					editCharacterInstanceFlag = true;
+				}
+				EditCharacter.setComboContents("Client");
+				EditCharacter.characterComboBox.setModel(EditCharacter.getComboModel());
 				EditCharacter.resetValues();
-
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 				editCharacter.toFront();
 			}
 		};
-		editClientAction.putValue(Action.SHORT_DESCRIPTION, "Edit an Existing Client's Details");
+		editClientAction.putValue(Action.SHORT_DESCRIPTION,
+				"Edit an Existing Client's Details");
 
 		Action editArchAction = new AbstractAction("Architect", new ImageIcon(
 				"Images/editUser.png")) {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Architect");
+				
+				if (!editCharacterInstanceFlag) {
+					editCharacter = new EditCharacter();
+					MainScreen.desk.add(editCharacter);
+					editCharacterInstanceFlag = true;
+				}
+				EditCharacter.setComboContents("Architect");
+				EditCharacter.characterComboBox.setModel(EditCharacter.getComboModel());
 				EditCharacter.resetValues();
-
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 				editCharacter.toFront();
 			}
 		};
-		editArchAction.putValue(Action.SHORT_DESCRIPTION, "Edit an Existing Architect's Details");
+		editArchAction.putValue(Action.SHORT_DESCRIPTION,
+				"Edit an Existing Architect's Details");
 
 		Action editEngAction = new AbstractAction("Engineer", new ImageIcon(
 				"Images/editUser.png")) {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Engineer");
+				
+				if (!editCharacterInstanceFlag) {
+					editCharacter = new EditCharacter();
+					MainScreen.desk.add(editCharacter);
+					editCharacterInstanceFlag = true;
+				}
+				EditCharacter.setComboContents("Engineer");
+				EditCharacter.characterComboBox.setModel(EditCharacter.getComboModel());
 				EditCharacter.resetValues();
-
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 				editCharacter.toFront();
 			}
 		};
-		editEngAction.putValue(Action.SHORT_DESCRIPTION, "Edit an Existing Engineer's Details");
+		editEngAction.putValue(Action.SHORT_DESCRIPTION,
+				"Edit an Existing Engineer's Details");
 
 		Action editBuildAction = new AbstractAction("Builder", new ImageIcon(
 				"Images/editUser.png")) {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Builder");
+				
+				if (!editCharacterInstanceFlag) {
+					editCharacter = new EditCharacter();
+					MainScreen.desk.add(editCharacter);
+					editCharacterInstanceFlag = true;
+				}
+				EditCharacter.setComboContents("Builder");
+				EditCharacter.characterComboBox.setModel(EditCharacter.getComboModel());
 				EditCharacter.resetValues();
-
 				editCharacter.setVisible(true);
 				editCharacter.setTitle("Edit " + pageTitle);
 				editCharacter.toFront();
 			}
 		};
-		editBuildAction.putValue(Action.SHORT_DESCRIPTION, "Edit an Existing Builder's Details");
+		editBuildAction.putValue(Action.SHORT_DESCRIPTION,
+				"Edit an Existing Builder's Details");
 
 		/**
 		 * Create exitAction
@@ -327,7 +370,10 @@ public class MainScreen extends JFrame {
 
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		frame.setBounds((int)(screenSize.width * 0.2), (int)(screenSize.height * 0.2), (int)(screenSize.width * 0.6), (int)(screenSize.height * 0.75));
+		frame.setBounds((int) (screenSize.width * 0.2),
+				(int) (screenSize.height * 0.2),
+				(int) (screenSize.width * 0.6),
+				(int) (screenSize.height * 0.75));
 		frame.setTitle("Building Materials Calculator");
 		frame.setExtendedState(MAXIMIZED_BOTH);
 	}

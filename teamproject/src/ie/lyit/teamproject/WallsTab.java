@@ -37,7 +37,7 @@ public class WallsTab extends JPanel {
 		wallPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Walls Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(wallPanel, BorderLayout.WEST);
 		GridBagLayout gbl_wallPanel = new GridBagLayout();
-		gbl_wallPanel.columnWidths = new int[] { 200, 200, 0 };
+		gbl_wallPanel.columnWidths = new int[] { 200, 100, 0 };
 		gbl_wallPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_wallPanel.columnWeights = new double[] { 0.0, 0.0,
 				Double.MIN_VALUE };

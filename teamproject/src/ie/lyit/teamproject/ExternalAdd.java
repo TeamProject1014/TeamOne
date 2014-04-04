@@ -135,15 +135,15 @@ public class ExternalAdd extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		Dimension d = new Dimension(300, 300);
-		scrollPane.setPreferredSize(d);
+		//Dimension d = new Dimension(250, 300);
+		scrollPane.setPreferredSize(new Dimension(250, 300));
 		tablePanel.add(scrollPane);
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		entirePanel.add(optionsPanel, BorderLayout.SOUTH);
 		GridBagLayout gbl_optionsPanel = new GridBagLayout();
-		gbl_optionsPanel.columnWidths = new int[] { 0, 0, 0 };
+		gbl_optionsPanel.columnWidths = new int[] { 0, 74, 0 };
 		gbl_optionsPanel.rowHeights = new int[] { 0, 0, 0, 0 };
 		gbl_optionsPanel.columnWeights = new double[] { 0.0, 0.0,
 				Double.MIN_VALUE };

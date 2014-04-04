@@ -22,7 +22,7 @@ public class InternalTab extends JPanel {
 		internalPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Internal Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(internalPanel, BorderLayout.WEST);
 		GridBagLayout gbl_internalPanel = new GridBagLayout();
-		gbl_internalPanel.columnWidths = new int[]{200, 200, 0};
+		gbl_internalPanel.columnWidths = new int[]{200, 100, 0};
 		gbl_internalPanel.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
 		gbl_internalPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_internalPanel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};

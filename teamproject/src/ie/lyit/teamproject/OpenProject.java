@@ -37,7 +37,7 @@ public class OpenProject extends JInternalFrame {
 	private JButton jbtOpen;
 	private JButton jbtCancel;
 	private JScrollPane scrollPane;
-	private JTable table;
+	public static JTable table;
 	protected static JobScreen jobScreen;
 	private static int projectToOpen = -1;
 	private Object[][] jobArray;
@@ -45,6 +45,7 @@ public class OpenProject extends JInternalFrame {
 	static boolean instanceFlag = false;
 	private static Dimension screenSize = Toolkit.getDefaultToolkit()
 			.getScreenSize();
+	public static ClientJobTableModel clientModel;
 		
 	public OpenProject() {		
 		
@@ -94,7 +95,7 @@ public class OpenProject extends JInternalFrame {
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		
-		ClientJobTableModel clientModel = new ClientJobTableModel();
+		clientModel = new ClientJobTableModel();
 		clientModel.data = updateClientJobTable();//displayArray;
 		table = new JTable(clientModel);
 		
@@ -126,13 +127,6 @@ public class OpenProject extends JInternalFrame {
 						MainScreen.desk.add(jobScreen);
 						instanceFlag = true;
 					}
-					//JobScreen.updateTable();
-					
-//					JobScreen.jobModel.data = JobScreen.updateJobTable(OpenProject.getProjectToOpen());
-//					JobScreen.table.repaint();
-//					JobScreen.table.revalidate();
-//					JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
-										
 					JobScreen.jobModel.data = JobScreen.updateJobTable(OpenProject.getProjectToOpen());
 					JobScreen.table.repaint();
 					JobScreen.table.revalidate();
@@ -234,7 +228,7 @@ public class OpenProject extends JInternalFrame {
 			
 		private String[] columnNames = { "Client Name", "Job Description" };
 
-		private Object[][] data;
+		Object[][] data;
 		
 		@Override
 		public int getColumnCount() {
@@ -297,11 +291,12 @@ public class OpenProject extends JInternalFrame {
 						MainScreen.desk.add(jobScreen);
 						instanceFlag = true;
 					}
-					//JobScreen.updateTable();
-					JobScreen.updateJobTable(OpenProject.getProjectToOpen());
+					JobScreen.jobModel.data = JobScreen.updateJobTable(OpenProject.getProjectToOpen());
+					JobScreen.table.repaint();
+					JobScreen.table.revalidate();
 					JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
 					jobScreen.setVisible(true);
-					jobScreen.toFront();
+					jobScreen.toFront();					
 				}
 			} else if (e.getActionCommand().equals("Cancel")) {
 				setVisible(false);
