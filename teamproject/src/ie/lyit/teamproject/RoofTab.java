@@ -22,7 +22,7 @@ public class RoofTab extends JPanel {
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Roof Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(panel, BorderLayout.WEST);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{200, 200, 0};
+		gbl_panel.columnWidths = new int[]{200, 100, 0};
 		gbl_panel.rowHeights = new int[]{0, 0, 0};
 		gbl_panel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};

@@ -43,6 +43,7 @@ public class NewJob extends JInternalFrame {
 	private String[] engName;
 	private Object[][] buildArray;
 	private String[] buildName;
+	public OpenProject openProject;
 	//protected static JobScreen jobScreen;
 
 	public NewJob() {
@@ -274,6 +275,7 @@ public class NewJob extends JInternalFrame {
 
 		JButton jbtAdd = new JButton("Add");
 		jbtAdd.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent arg0) {
 
 				dbc = new DBConnectionClass();
@@ -305,9 +307,9 @@ public class NewJob extends JInternalFrame {
 				setVisible(false);
 				
 				
-				int x = dbc.getLastJobCreated();
+				int getLastJobCreated = dbc.getLastJobCreated();
 				
-				OpenProject.setProjectToOpen(x);
+				OpenProject.setProjectToOpen(getLastJobCreated);
 				
 				if (!OpenProject.instanceFlag) {
 					OpenProject.jobScreen = new JobScreen(OpenProject.getProjectToOpen());
@@ -315,10 +317,16 @@ public class NewJob extends JInternalFrame {
 					OpenProject.instanceFlag = true;
 				}
 				
-				JobScreen.setHeaderDetails(x);
+				JobScreen.setHeaderDetails(getLastJobCreated);
 				
-				//JobScreen.updateTable();
-				JobScreen.updateJobTable(OpenProject.getProjectToOpen());
+				JobScreen.jobModel.data = JobScreen.updateJobTable(OpenProject.getProjectToOpen());
+				JobScreen.table.repaint();
+				JobScreen.table.revalidate();
+				
+				openProject.clientModel.data = openProject.updateClientJobTable(); 
+				openProject.updateClientJobTable();
+				openProject.table.repaint();
+				openProject.table.revalidate();
 				OpenProject.jobScreen.setVisible(true);
 				OpenProject.jobScreen.toFront();
 			}
