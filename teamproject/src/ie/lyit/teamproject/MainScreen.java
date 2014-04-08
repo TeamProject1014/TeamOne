@@ -25,7 +25,7 @@ import javax.swing.KeyStroke;
 @SuppressWarnings("serial")
 public class MainScreen extends JFrame {
 
-	static JDesktopPane desk;
+	protected static JDesktopPane desk;
 	private JFrame frame;
 
 	private JToolBar toolbar;
@@ -41,10 +41,6 @@ public class MainScreen extends JFrame {
 	private JMenuItem editMaterial;
 	private JMenuItem editCategory;
 
-	private JMenuItem addUser;
-	private JMenuItem addMaterial;
-	private JMenuItem addCategory;
-
 	private JMenuItem viewUser;
 	private JMenuItem viewClient;
 	private JMenuItem viewMaterial;
@@ -56,15 +52,21 @@ public class MainScreen extends JFrame {
 	private JMenuItem about;
 
 	private static String pageTitle;
-	static boolean openProjectInstanceFlag;
-	static boolean editCharacterInstanceFlag;
+	private static boolean openProjectInstanceFlag;
+	private static boolean editCharacterInstanceFlag;
+	private static boolean addCategoryInstanceFlag;
+	private static boolean addMaterialInstanceFlag;
+	private static boolean addUserInstanceFlag;
 
 	protected static NewJob newJob;
 	protected static OpenProject openProject;
 	protected static AddClient addClient;
 	protected static AddCharacter addCharacter;
 	protected static EditCharacter editCharacter;
-
+	protected static AddCategory addCategory;
+	protected static AddMaterial addMaterial;
+	protected static AddUser addUser;
+	
 	public MainScreen() {
 
 		getContentPane().setLayout(new BorderLayout());
@@ -133,6 +135,60 @@ public class MainScreen extends JFrame {
 				KeyStroke.getKeyStroke("control O"));
 		openAction.putValue(Action.SHORT_DESCRIPTION, "Open an Existing Job");
 
+		Action pdfAction = new AbstractAction("Send to PDF", new ImageIcon(
+				"Images/pdf.png")) {
+			public void actionPerformed(ActionEvent e) {
+				// TODO
+			}
+		};
+		pdfAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_P));
+		pdfAction.putValue(Action.ACCELERATOR_KEY,
+				KeyStroke.getKeyStroke("control P"));
+		pdfAction.putValue(Action.SHORT_DESCRIPTION, "Send job to PDF");
+		
+		Action addUserAction = new AbstractAction("User", new ImageIcon(
+				"")) {
+			public void actionPerformed(ActionEvent e) {
+				if (!addUserInstanceFlag) {
+					addUser = new AddUser();
+					desk.add(addUser);
+					addUserInstanceFlag = true;
+				}
+				addUser.setVisible(true);
+				addUser.toFront();
+			}
+		};
+		addUserAction.putValue(Action.SHORT_DESCRIPTION, "Add a User to the Database");
+		
+		
+		Action addCategoryAction = new AbstractAction("Category", new ImageIcon(
+				"")) {
+			public void actionPerformed(ActionEvent e) {
+				if (!addCategoryInstanceFlag) {
+					addCategory = new AddCategory();
+					desk.add(addCategory);
+					addCategoryInstanceFlag = true;
+				}
+				addCategory.setVisible(true);
+				addCategory.toFront();
+			}
+		};
+		addCategoryAction.putValue(Action.SHORT_DESCRIPTION, "Add a Category to the Database");
+
+		Action addMaterialAction = new AbstractAction("Material", new ImageIcon(
+				"")) {
+			public void actionPerformed(ActionEvent e) {
+				if (!addMaterialInstanceFlag) {
+					addMaterial = new AddMaterial();
+					desk.add(addMaterial);
+					addMaterialInstanceFlag = true;
+				}
+				addMaterial.setVisible(true);
+				addMaterial.toFront();
+			}
+		};
+		addCategoryAction.putValue(Action.SHORT_DESCRIPTION, "Add a MAterial to the Database");
+		
 		Action addClientAction = new AbstractAction("Client", new ImageIcon(
 				"Images/add.png")) {
 			public void actionPerformed(ActionEvent e) {
@@ -190,7 +246,7 @@ public class MainScreen extends JFrame {
 				"Enter a New Builder to the System");
 
 		Action editClientAction = new AbstractAction("Client", new ImageIcon(
-				"Images/editUser.png")) {
+				"Images/editClient.png")) {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Client");
@@ -212,7 +268,7 @@ public class MainScreen extends JFrame {
 				"Edit an Existing Client's Details");
 
 		Action editArchAction = new AbstractAction("Architect", new ImageIcon(
-				"Images/editUser.png")) {
+				"Images/editArch.png")) {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Architect");
@@ -234,7 +290,7 @@ public class MainScreen extends JFrame {
 				"Edit an Existing Architect's Details");
 
 		Action editEngAction = new AbstractAction("Engineer", new ImageIcon(
-				"Images/editUser.png")) {
+				"Images/editEng.png")) {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Engineer");
@@ -256,7 +312,7 @@ public class MainScreen extends JFrame {
 				"Edit an Existing Engineer's Details");
 
 		Action editBuildAction = new AbstractAction("Builder", new ImageIcon(
-				"Images/editUser.png")) {
+				"Images/editBuilder.png")) {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				MainScreen.setPageTitle("Builder");
@@ -299,6 +355,7 @@ public class MainScreen extends JFrame {
 		// File Menu
 		fileMenu.add(newAction);
 		fileMenu.add(openAction);
+		fileMenu.add(pdfAction);
 		fileMenu.addSeparator();
 		fileMenu.add(exitAction);
 
@@ -321,9 +378,9 @@ public class MainScreen extends JFrame {
 		addMenu = new JMenu("Add");
 		addMenu.setMnemonic('A');
 		menubar.add(addMenu);
-		addMenu.add(addUser = new JMenuItem("User"));
-		addMenu.add(addMaterial = new JMenuItem("Material"));
-		addMenu.add(addCategory = new JMenuItem("Category"));
+		addMenu.add(addUserAction);
+		addMenu.add(addMaterialAction);
+		addMenu.add(addCategoryAction);
 		addMenu.addSeparator();
 		addMenu.add(addClientAction);
 		addMenu.add(addArchAction);
@@ -357,6 +414,7 @@ public class MainScreen extends JFrame {
 		toolbar.setFloatable(false);
 		toolbar.add(newAction);
 		toolbar.add(openAction);
+		toolbar.add(pdfAction);
 		toolbar.addSeparator();
 		toolbar.add(addClientAction);
 		toolbar.add(addArchAction);
