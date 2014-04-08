@@ -33,6 +33,7 @@ public class DBConnectionClass {
 	static PreparedStatement addMaterial;
 	static PreparedStatement addCategoryMaterial;
 	static PreparedStatement deleteFromJob;
+	static PreparedStatement updateCategory;
 	static ResultSet rs;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -880,6 +881,43 @@ public class DBConnectionClass {
 			return null;
 		}
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int retrieveCategory_id() {
+		int category_id = 0;
+		try {
+			String gdta = "SELECT MAX(category_id) FROM category";
+			rs = stmt.executeQuery(gdta);
+			while (rs.next()) {
+				category_id = rs.getInt(1);
+			}
+			return category_id+1;
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve material_id : "
+					+ ex.getMessage());
+			return category_id+1;
+		}
+	}
+	
+	/**
+	 * Creates a category and adds it to the database
+	 * 
+	 * @param description
+	 *            Describes the category to be added to the database
+	 */
+	public void createCategory(int id, String description) {
+		try {
+				String insertString = "INSERT INTO category VALUES ("+id+", '" + description + "')";
+				updateCategory = con.prepareStatement(insertString);
+				updateCategory.executeUpdate();	
+					
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting new category data: " + ex.getMessage());
+		}
+	}
 
 	public ResultSet retrieveCategoryMaterial(int category_id) {
 		try {
@@ -895,7 +933,55 @@ public class DBConnectionClass {
 			return null;
 		}
 	}
+	
+	//=================//
+	// Luke Code Begin //
+	//=================//
+	/**
+	 * 
+	 * @param category_id
+	 * @return
+	 */
+	public ResultSet retrieveAllCategoryMaterial() {
+		try {
+			//String gdta = "SELECT category_material.category_id, category_material.material_id, material.description "
+			//		+ "FROM category_material, material, category ";
+					
+			String gdta = "SELECT category_ID, Description  "
+					+ "FROM category";
+			rs = stmt.executeQuery(gdta);
+			return rs;
+		} catch (SQLException ex) {
+			System.err.println("Retrieve Data: " + ex.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param cat_id - Category ID based on combox box selection from AddMaterial Screen
+	 * @param description - Description of material to be added
+	 */
+	public void addMaterialToDB(int cat_id, String description) {
+		try {
+			int mat_id = retrieveMaterial_id();
+			String insertString = "INSERT INTO material VALUES ("+ (mat_id+1) + ", '" + description + "')";
+			PreparedStatement addMaterial = con.prepareStatement(insertString);
+			addMaterial.executeUpdate();
 
+			String insertIntoCatMat = "INSERT INTO category_material VALUES (" + (cat_id) + ", " + (mat_id+1) + ")";
+			PreparedStatement addCategoryMaterial = con.prepareStatement(insertIntoCatMat);
+			addCategoryMaterial.executeUpdate();
+			
+			
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting new material data: " + ex.getMessage());
+		}
+	}
+	//===============//
+	// End Luke Code //
+	//===============//
+	
 	/**
 	 * Close the connection class
 	 */
