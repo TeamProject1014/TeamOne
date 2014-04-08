@@ -25,13 +25,21 @@ public class DBConnectionClass {
 	static PreparedStatement updateArchitect;
 	static PreparedStatement updateEngineer;
 	static PreparedStatement updateBuilder;
+	//static PreparedStatement editEngineer;
+	static PreparedStatement editJobStatus;
+	static PreparedStatement updateJob;
+	static PreparedStatement updateJobClient;
+	static PreparedStatement addMatToJob;
+	static PreparedStatement addMaterial;
+	static PreparedStatement addCategoryMaterial;
+	static PreparedStatement deleteFromJob;
+	static PreparedStatement updateCategory;
 	static ResultSet rs;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public DBConnectionClass() {
 		this.loadDriver();
 		this.makeConnection();
-
 	}
 
 	/**
@@ -75,32 +83,32 @@ public class DBConnectionClass {
 		}
 	}
 
-//	/**
-//	 * Return the client ID
-//	 * 
-//	 * @param clientReturned
-//	 *            The client name
-//	 * @return The client ID
-//	 */
-//	public int getClientID(String clientReturned) {
-//		int client_id = -1;
-//		try {
-//			String cliData = "SELECT client_id from client where name = '"
-//					+ clientReturned + "'";
-//			rs = stmt.executeQuery(cliData);
-//
-//			while (rs.next()) {
-//				client_id = rs.getInt(1);
-//				// return client_id;
-//			}
-//
-//			return client_id;
-//		} catch (SQLException ex) {
-//			System.err.println("Error attempting to retrieve client data: "
-//					+ ex.getMessage());
-//			return client_id;
-//		}
-//	}
+	// /**
+	// * Return the client ID
+	// *
+	// * @param clientReturned
+	// * The client name
+	// * @return The client ID
+	// */
+	// public int getClientID(String clientReturned) {
+	// int client_id = -1;
+	// try {
+	// String cliData = "SELECT client_id from client where name = '"
+	// + clientReturned + "'";
+	// rs = stmt.executeQuery(cliData);
+	//
+	// while (rs.next()) {
+	// client_id = rs.getInt(1);
+	// // return client_id;
+	// }
+	//
+	// return client_id;
+	// } catch (SQLException ex) {
+	// System.err.println("Error attempting to retrieve client data: "
+	// + ex.getMessage());
+	// return client_id;
+	// }
+	// }
 
 	/**
 	 * Returns the name of the Architect associated with a project
@@ -109,28 +117,28 @@ public class DBConnectionClass {
 	 *            The client_id
 	 * @return The name of the Architect associated with a project
 	 */
-//	public String getProjectArchitect(int client_ID) {
-//		String arch = "";
-//		try {
-//			String archData = "select architect.name from architect "
-//					+ "inner join job, job_client "
-//					+ "where job.arch_id = architect.arch_id "
-//					+ "and job.job_id = job_client.job_id "
-//					+ "and job_client.client_id = " + client_ID + ";";
-//			rs = stmt.executeQuery(archData);
-//
-//			while (rs.next()) {
-//				arch = rs.getString(1);
-//			}
-//
-//			return arch;
-//		} catch (SQLException ex) {
-//			System.err.println("Error attempting to retrieve client data: "
-//					+ ex.getMessage());
-//			return null;
-//		}
-//	}
-	
+	// public String getProjectArchitect(int client_ID) {
+	// String arch = "";
+	// try {
+	// String archData = "select architect.name from architect "
+	// + "inner join job, job_client "
+	// + "where job.arch_id = architect.arch_id "
+	// + "and job.job_id = job_client.job_id "
+	// + "and job_client.client_id = " + client_ID + ";";
+	// rs = stmt.executeQuery(archData);
+	//
+	// while (rs.next()) {
+	// arch = rs.getString(1);
+	// }
+	//
+	// return arch;
+	// } catch (SQLException ex) {
+	// System.err.println("Error attempting to retrieve client data: "
+	// + ex.getMessage());
+	// return null;
+	// }
+	// }
+
 	/**
 	 * Retrieves relevant information from Client table
 	 * 
@@ -138,7 +146,7 @@ public class DBConnectionClass {
 	 */
 	public ResultSet retrieveClientDetails() {
 		try {
-			String cliData = "SELECT name, address, address2, town, county, phone, email FROM client";
+			String cliData = "SELECT client_id, name, address, address2, town, county, phone, email FROM client";
 			rs = stmt.executeQuery(cliData);
 			return rs;
 		} catch (SQLException ex) {
@@ -147,7 +155,7 @@ public class DBConnectionClass {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Retrieves relevant information from Architect table
 	 * 
@@ -155,7 +163,7 @@ public class DBConnectionClass {
 	 */
 	public ResultSet retrieveArchitectDetails() {
 		try {
-			String archData = "SELECT name, address, address2, town, county, phone, email FROM architect";
+			String archData = "SELECT arch_id, name, address, address2, town, county, phone, email FROM architect";
 			rs = stmt.executeQuery(archData);
 			return rs;
 		} catch (SQLException ex) {
@@ -164,7 +172,7 @@ public class DBConnectionClass {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Retrieves relevant information from Engineer table
 	 * 
@@ -172,7 +180,7 @@ public class DBConnectionClass {
 	 */
 	public ResultSet retrieveEngineerDetails() {
 		try {
-			String engData = "SELECT name, address, address2, town, county, phone, email FROM engineer";
+			String engData = "SELECT eng_id, name, address, address2, town, county, phone, email FROM engineer";
 			rs = stmt.executeQuery(engData);
 			return rs;
 		} catch (SQLException ex) {
@@ -181,7 +189,7 @@ public class DBConnectionClass {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Retrieves relevant information from Builder table
 	 * 
@@ -189,7 +197,7 @@ public class DBConnectionClass {
 	 */
 	public ResultSet retrieveBuilderDetails() {
 		try {
-			String buildData = "SELECT name, address, address2, town, county, phone, email FROM builder";
+			String buildData = "SELECT builder_id, name, address, address2, town, county, phone, email FROM builder";
 			rs = stmt.executeQuery(buildData);
 			return rs;
 		} catch (SQLException ex) {
@@ -198,17 +206,17 @@ public class DBConnectionClass {
 			return null;
 		}
 	}
-	
 
-/*	*//**
+	/*	*//**
 	 * Retrieves the client name from the client table
 	 * 
 	 * @return ResultSet The resultSet containing all the names in the client
 	 *         table
-	 *//*
-	public ResultSet retrieveClientName() {
+	 */
+
+	public ResultSet retrieveClientInfo() {
 		try {
-			String cliName = "SELECT name FROM client";
+			String cliName = "SELECT client_id, name FROM client";
 			rs = stmt.executeQuery(cliName);
 			return rs;
 		} catch (SQLException ex) {
@@ -216,7 +224,43 @@ public class DBConnectionClass {
 					+ ex.getMessage());
 			return null;
 		}
-	}*/
+	}
+
+	public ResultSet retrieveArchInfo() {
+		try {
+			String archName = "SELECT arch_id, name FROM architect";
+			rs = stmt.executeQuery(archName);
+			return rs;
+		} catch (SQLException ex) {
+			System.err.println("Attempting to retrieve architect name"
+					+ ex.getMessage());
+			return null;
+		}
+	}
+
+	public ResultSet retrieveEngInfo() {
+		try {
+			String engName = "SELECT eng_id, name FROM engineer";
+			rs = stmt.executeQuery(engName);
+			return rs;
+		} catch (SQLException ex) {
+			System.err.println("Attempting to retrieve engineer name"
+					+ ex.getMessage());
+			return null;
+		}
+	}
+
+	public ResultSet retrieveBuildInfo() {
+		try {
+			String buildName = "SELECT builder_id, name FROM builder";
+			rs = stmt.executeQuery(buildName);
+			return rs;
+		} catch (SQLException ex) {
+			System.err.println("Attempting to retrieve builder name"
+					+ ex.getMessage());
+			return null;
+		}
+	}
 
 	/**
 	 * Retrieves all information contained in the user table Currently just
@@ -224,63 +268,59 @@ public class DBConnectionClass {
 	 * return a ResultSet
 	 */
 	public int retrieveUserInfo(String username, String password) {
-		boolean result =false;
+		boolean result = false;
 		int count = 0;
 		try {
-			//String gdta = "select * from USER";
-			String gdta = "Select name, password FROM user WHERE name = '" + username + 
-        			"' AND password = '" + password+"'";
+			// String gdta = "select * from USER";
+			String gdta = "Select name, password FROM user WHERE name = '"
+					+ username + "' AND password = '" + password + "'";
 			rs = stmt.executeQuery(gdta);
 
 			while (rs.next()) {
-			    ++count;
-			    // Get data from the current row and use it
+				++count;
+				// Get data from the current row and use it
 			}
 
 		} catch (SQLException ex) {
 			System.err.println("Retrieve Data: " + ex.getMessage());
 		}
-		
+
 		return count;
 	}
-//	public void retrieveUserInfo() {
-//		try {
-//			String gdta = "select * from USER";
-//
-//			rs = stmt.executeQuery(gdta);
-//
-//			while (rs.next()) {
-//				int user_ID = rs.getInt(1);
-//				String name = rs.getString(2);
-//				System.out.println(user_ID + " " + name);
-//			}
-//
-//		} catch (SQLException ex) {
-//			System.err.println("Retrieve Data: " + ex.getMessage());
-//		}
-//	}
 
 	/**
-	 * Retrieves all materials that have been costed for a specified job
-	 * 				Used to populate the table in the 'JobScreen'
+	 * Retrieves all materials that have been costed for a specified job Used to
+	 * populate the table in the 'JobScreen'
 	 * 
 	 * @param job_No
-	 * 				The unique job_id of the job
-	 * @return 
-	 * 				ResultSet The information relating to the job. The following
-	 *         		fields are contained within the ResultSet int The unique job_id
-	 *         		of the material String The description of the material double The
-	 *         		price per unit of the material int The number of units costed for
-	 *         		this job
+	 *            The unique job_id of the job
+	 * @return ResultSet The information relating to the job. The following
+	 *         fields are contained within the ResultSet String - The
+	 *         description of the material double - The price of a single
+	 *         element of the material int - The number of units required for
+	 *         this job double - The total price for a given item
 	 */
 	public ResultSet retrieveAllJobDetails(int job_No) {
 		try {
-			//String gdta = "select job_material.material_id, material.description, job_material.price, job_material.quantity "
-			String gdta = "select material.description, job_material.price, job_material.quantity, job_material.TotalPrice "
-					+ "from material "
-					+ "inner join job_material "
-					+ "on job_material.material_id = material.Material_ID "
-					+ "and job_material.job_id = " + job_No;
+			// String gdta =
+			// "select material.description, job_material.price, job_material.quantity, job_material.TotalPrice "
+			// + "from material "
+//			String gdta = "select job_material.job_id, job_material.material_id, material.description, job_material.price, job_material.quantity, job_material.TotalPrice "
+//					+ "from material "
+//					+ "inner join job_material "
+//					+ "on job_material.material_id = material.Material_ID "
+//					+ "and job_material.job_id = " + job_No;
+			String gdta = "select job_material.job_id, job_material.material_id, category.description, "
+					+ "material.description, job_material.price, job_material.quantity, job_material.TotalPrice "
+					+ "from material, category, category_material, job_material "
+					+ "where job_material.job_id = " + job_No 									// All lines to the left can be commented 
+					+ " and job_material.material_id = material.material_id "					// out and the code below uncommented  
+					+ "and category_material.material_id = material.material_id "				// to revert back to the previous SQL 
+					+ "and category_material.category_id = category.category_id ";				// statement that was definitely working correctly
+//					+ "where job_material.material_id = material.material_id "
+//					+ "and category_material.material_id = material.material_id "
+//					+ "and category_material.category_id = category.category_id "
+//					+ "and job_material.job_id = " + job_No;
 
 			rs = stmt.executeQuery(gdta);
 			return rs;
@@ -289,30 +329,43 @@ public class DBConnectionClass {
 			return null;
 		}
 	}
+	
+	public void deleteItemFromJob(int job_id, int mat_id) {
+		try {
+			String deleteItemFromJob = "delete from job_material where job_id = " + job_id + " and material_id = " + mat_id;
+			deleteFromJob = con.prepareStatement(deleteItemFromJob);
 
-//	/**
-//	 * Retrieves the total cost of all materials that have been added to a job
-//	 * 
-//	 * @param job_no
-//	 *            The job_no that is to be displayed on the screen
-//	 * @return double The total cost of all materials added to this job
-//	 */
-//	public double retrieveJobTotal(int job_no) {
-//		try {
-//			String costPerJob = "SELECT sum(job_material.quantity * job_material.price) "
-//					+ "FROM job_material, material "
-//					+ "WHERE job_material.Material_ID = material.Material_ID "
-//					+ "AND job_material.job_ID = " + job_no;
-//			rs = stmt.executeQuery(costPerJob);
-//			rs.next();
-//			double returnValue = rs.getDouble(1);
-//			return returnValue;
-//		} catch (SQLException ex) {
-//			System.out.println("Error retrieving data" + ex.getMessage());
-//		}
-//
-//		return -1.0;
-//	}
+			deleteFromJob.executeUpdate();
+			
+		} catch (SQLException ex) {
+			System.err.println("Retrieve Data: " + ex.getMessage());
+		}
+	}
+
+	// /**
+	// * Retrieves the total cost of all materials that have been added to a job
+	// *
+	// * @param job_no
+	// * The job_no that is to be displayed on the screen
+	// * @return double The total cost of all materials added to this job
+	// */
+	// public double retrieveJobTotal(int job_no) {
+	// try {
+	// String costPerJob =
+	// "SELECT sum(job_material.quantity * job_material.price) "
+	// + "FROM job_material, material "
+	// + "WHERE job_material.Material_ID = material.Material_ID "
+	// + "AND job_material.job_ID = " + job_no;
+	// rs = stmt.executeQuery(costPerJob);
+	// rs.next();
+	// double returnValue = rs.getDouble(1);
+	// return returnValue;
+	// } catch (SQLException ex) {
+	// System.out.println("Error retrieving data" + ex.getMessage());
+	// }
+	//
+	// return -1.0;
+	// }
 
 	/**
 	 * Creates a user and adds it to the database
@@ -336,7 +389,7 @@ public class DBConnectionClass {
 					+ ex.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Creates a category and adds it to the database
 	 * 
@@ -515,36 +568,220 @@ public class DBConnectionClass {
 					+ ex.getMessage());
 		}
 	}
+
+	public void createNewJob(int client_id, int arch_id, int eng_id,
+			int build_id, String description) {
+		try {
+			String insertString = "INSERT INTO job (status, total_cost, arch_id, eng_id, build_id, description) "
+					+ "VALUES ('Open', 0, "
+					+ arch_id
+					+ ", "
+					+ eng_id
+					+ ", "
+					+ build_id + ", '" + description + "')";
+			
+			updateJob = con.prepareStatement(insertString);
+			updateJob.executeUpdate();
+
+			int tempJobId = retrieveJobID();
+			String insertJobClientString = "INSERT INTO job_client VALUES ("
+					+ tempJobId + ", " + client_id + ")";
+			updateJobClient = con.prepareStatement(insertJobClientString);
+			
+			updateJobClient.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.err
+					.println("There was an error when inserting new job Data: "
+							+ ex.getMessage());
+		}
+	}
 	
+	public int retrieveJobID() {
+		int job_id = 0;
+		try {
+			String gdta = "SELECT MAX(job_id) FROM job";
+			rs = stmt.executeQuery(gdta);
+			while (rs.next()) {
+				job_id = rs.getInt(1);
+			}
+
+			return job_id;
+
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve job id : "
+					+ ex.getMessage());
+			return job_id;
+		}
+	}
+	
+	public void addMaterialToJob(int job_id, int mat_id, int quant, double price, double total) {
+		try {
+			String insertString = "INSERT INTO job_material "
+					+ "VALUES ("
+					+ job_id + ", "
+					+ mat_id + ", "
+					+ quant + ", " 
+					+ price + ", "
+					+ (quant*price) + ")";
+			
+			addMatToJob = con.prepareStatement(insertString);
+			addMatToJob.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.err
+					.println("There was an error when inserting new job Data: "
+							+ ex.getMessage());
+		}
+	}
+	
+	public void addMaterial(String description, int cat_id) {
+		try {
+			String insertString = "INSERT INTO material VALUES ('" + description + "')";
+			addMaterial = con.prepareStatement(insertString);
+			addMaterial.executeUpdate();
+			
+			int mat_id = retrieveMaterial_id();
+			
+			String insertIntoCatMat = "INSERT INTO category_material VALUES (" + cat_id + ", " + mat_id + ")";
+			addCategoryMaterial = con.prepareStatement(insertIntoCatMat);
+			addCategoryMaterial.executeUpdate();
+			
+			
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting new material data: " + ex.getMessage());
+		}
+	}
+	
+	public int retrieveMaterial_id() {
+		int material_id = 0;
+		try {
+			String gdta = "SELECT MAX(material_id) FROM material";
+			rs = stmt.executeQuery(gdta);
+			while (rs.next()) {
+				material_id = rs.getInt(1);
+			}
+			return material_id;
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve material_id : "
+					+ ex.getMessage());
+			return material_id;
+		}
+	}	
+	
+	public int getLastJobCreated() {
+		int job_id = 0;
+		try {
+			String gdta = "SELECT MAX(job_id) FROM job";
+			rs = stmt.executeQuery(gdta);
+			while (rs.next()) {
+				job_id = rs.getInt(1);
+			}
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve job_id : "
+					+ ex.getMessage());
+		}
+		return job_id;
+	}
+
 	/**
 	 * Edit an Engineer entity based on parameters inputed by the user
 	 * 
 	 * @param address
-	 * 				First line of the Engineers address 
+	 *            First line of the Engineers address
 	 * @param address2
-	 * 				Second line of the Engineers address 
+	 *            Second line of the Engineers address
 	 * @param town
-	 * 				The Engineers Town 
+	 *            The Engineers Town
 	 * @param county
-	 * 				The Engineers County
+	 *            The Engineers County
 	 * @param phone
-	 * 				The Engineers phone
+	 *            The Engineers phone
 	 * @param email
-	 * 				The Engineers email
+	 *            The Engineers email
 	 */
+//	public void editEngineer(String address, String address2, String town,
+//			String county, String phone, String email) {
+//		try {
+//			System.out.println(EditCharacter.characterId);
+//			String insertString = "UPDATE engineer SET address = '" + address
+//					+ "', address2 = '" + address2 + "', town = '" + town
+//					+ "', county = '" + county + "', phone = '" + phone
+//					+ "', email = '" + email + "' WHERE eng_id ="
+//					+ EditCharacter.characterId;
+//			editEngineer = con.prepareStatement(insertString);
+//			// editEngineer.setString(1, address);
+//			// editEngineer.setString(2, address2);
+//			// editEngineer.setString(3, town);
+//			// editEngineer.setString(4, county);
+//			// editEngineer.setString(5, phone);
+//			// editEngineer.setString(6, email);
+//
+//			editEngineer.executeUpdate();
+//
+//		} catch (SQLException ex) {
+//			System.err.println("There was an error when inserting Data: "
+//					+ ex.getMessage());
+//		}
+//
+//	}
+	//==============================================================//
+	//																//
+	// 		New Edit Screens received from Cathal 28/03/2014		//
+	//																//
+	//==============================================================//
+	
 	public void editEngineer(String address, String address2, String town,
 			String county, String phone, String email) {
 		try {
-			String insertString = "UPDATE engineer SET address, address2, town, county, phone, email (default, ?, ?, ?, ?, ?, ?) WHERE engineer_id ="
-					+ EditCharacter.characterId;
-			updateArchitect = con.prepareStatement(insertString);
-			updateArchitect.setString(1, address);
-			updateArchitect.setString(2, address2);
-			updateArchitect.setString(3, town);
-			updateArchitect.setString(4, county);
-			updateArchitect.setString(5, phone);
-			updateArchitect.setString(6, email);
+			String insertString = "UPDATE engineer SET address ='" + address 
+					+ "', address2 ='" + address2 
+					+ "', town = '" + town 
+					+ "', county = '" + county 
+					+ "', phone = '" + phone 
+					+ "', email = '" + email 
+					+ "' WHERE eng_id =" + EditCharacter.characterId;
+			updateEngineer = con.prepareStatement(insertString);
+			updateEngineer.executeUpdate();
 
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting Data: "
+					+ ex.getMessage());
+		}
+
+	}
+	
+	public void editClient(String address, String address2, String town,
+			String county, String phone, String email) {
+		try {
+			String insertString = "UPDATE client SET address ='" + address 
+					+ "', address2 ='" + address2 
+					+ "', town = '" + town 
+					+ "', county = '" + county 
+					+ "', phone = '" + phone 
+					+ "', email = '" + email 
+					+ "' WHERE client_id =" + EditCharacter.characterId;;
+			updateClient = con.prepareStatement(insertString);
+			updateClient.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting Data: "
+					+ ex.getMessage());
+		}
+
+	}
+	
+	public void editArchitect(String address, String address2, String town,
+			String county, String phone, String email) {
+		try {
+			String insertString = "UPDATE architect SET address ='" + address 
+					+ "', address2 ='" + address2 
+					+ "', town = '" + town 
+					+ "', county = '" + county 
+					+ "', phone = '" + phone 
+					+ "', email = '" + email 
+					+ "' WHERE arch_id =" + EditCharacter.characterId;;
+			updateArchitect = con.prepareStatement(insertString);
 			updateArchitect.executeUpdate();
 
 		} catch (SQLException ex) {
@@ -554,12 +791,52 @@ public class DBConnectionClass {
 
 	}
 	
+	public void editBuilder(String address, String address2, String town,
+			String county, String phone, String email) {
+		try {
+			String insertString = "UPDATE builder SET address ='" + address 
+					+ "', address2 ='" + address2 
+					+ "', town = '" + town 
+					+ "', county = '" + county 
+					+ "', phone = '" + phone 
+					+ "', email = '" + email 
+					+ "' WHERE builder_id =" + EditCharacter.characterId;
+			updateBuilder = con.prepareStatement(insertString);
+			updateBuilder.executeUpdate();
+
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting Data: "
+					+ ex.getMessage());
+		}
+
+	}
+
+	/**
+	 * Edit a jobs status
+	 * 
+	 * @param jobId
+	 *            The unique Id of the job whose status is to be updated
+	 * @param status
+	 *            The status that will be assigned to the job
+	 */
+	public void editJobStatus(int jobId, String status) {
+		try {
+			String insertString = "UPDATE job SET status = '" + status
+					+ "' WHERE job_id =" + jobId;
+			editJobStatus = con.prepareStatement(insertString);
+
+			editJobStatus.executeUpdate();
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting Data: "
+					+ ex.getMessage());
+		}
+	}
+
 	/**
 	 * Retrieves all jobs associated with a specific client
 	 * 
-	 * @return
-	 * 				The ResultSet containing all relevant information to populate 
-	 * 				the table in the 'OpenProject' screen
+	 * @return The ResultSet containing all relevant information to populate the
+	 *         table in the 'OpenProject' screen
 	 */
 	public ResultSet retrieveClientJobs() {
 		try {
@@ -576,27 +853,15 @@ public class DBConnectionClass {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Retrieves all details from view 'job_view'
 	 * 
 	 * @param job_id
-	 * 				The job_id of the relevant job
-	 * @return
-	 * 				The ResultSet containing all relevant information required 
-	 * 				to populate the header section of the 'JobScreen'
+	 *            The job_id of the relevant job
+	 * @return The ResultSet containing all relevant information required to
+	 *         populate the header section of the 'JobScreen'
 	 */
-//	public ResultSet retrieveJobDetails(int job_id) {
-//		try {
-//			String gdta = "SELECT * from job_view where job.job_id = " + job_id;
-//			rs = stmt.executeQuery(gdta);
-//			return rs;
-//		} catch (SQLException ex) {
-//			System.err.println("Retrieve Data: " + ex.getMessage());
-//			return null;
-//		}
-//	}
-	
 	public ResultSet retrieveJobDetails(int job_id) {
 		try {
 			String gdta = "SELECT c.name AS 'Client', j.description AS 'Description', j.status AS 'Status', "
@@ -608,7 +873,7 @@ public class DBConnectionClass {
 					+ "AND a.Arch_ID = j.Arch_ID "
 					+ "AND e.Eng_ID = j.Eng_ID "
 					+ "AND b.Builder_ID = j.Build_ID "
-					+ "AND jc.client_id = " + job_id;
+					+ "AND jc.job_id = " + job_id;
 			rs = stmt.executeQuery(gdta);
 			return rs;
 		} catch (SQLException ex) {
@@ -616,7 +881,107 @@ public class DBConnectionClass {
 			return null;
 		}
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int retrieveCategory_id() {
+		int category_id = 0;
+		try {
+			String gdta = "SELECT MAX(category_id) FROM category";
+			rs = stmt.executeQuery(gdta);
+			while (rs.next()) {
+				category_id = rs.getInt(1);
+			}
+			return category_id+1;
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve material_id : "
+					+ ex.getMessage());
+			return category_id+1;
+		}
+	}
+	
+	/**
+	 * Creates a category and adds it to the database
+	 * 
+	 * @param description
+	 *            Describes the category to be added to the database
+	 */
+	public void createCategory(int id, String description) {
+		try {
+				String insertString = "INSERT INTO category VALUES ("+id+", '" + description + "')";
+				updateCategory = con.prepareStatement(insertString);
+				updateCategory.executeUpdate();	
+					
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting new category data: " + ex.getMessage());
+		}
+	}
 
+	public ResultSet retrieveCategoryMaterial(int category_id) {
+		try {
+			String gdta = "SELECT category_material.category_id, category_material.material_id, material.description "
+					+ "FROM category_material, material, category "
+					+ "WHERE category.category_id = category_material.category_id "
+					+ "AND material.material_id = category_material.material_id "
+					+ "AND category.category_id = " + category_id;
+			rs = stmt.executeQuery(gdta);
+			return rs;
+		} catch (SQLException ex) {
+			System.err.println("Retrieve Data: " + ex.getMessage());
+			return null;
+		}
+	}
+	
+	//=================//
+	// Luke Code Begin //
+	//=================//
+	/**
+	 * 
+	 * @param category_id
+	 * @return
+	 */
+	public ResultSet retrieveAllCategoryMaterial() {
+		try {
+			//String gdta = "SELECT category_material.category_id, category_material.material_id, material.description "
+			//		+ "FROM category_material, material, category ";
+					
+			String gdta = "SELECT category_ID, Description  "
+					+ "FROM category";
+			rs = stmt.executeQuery(gdta);
+			return rs;
+		} catch (SQLException ex) {
+			System.err.println("Retrieve Data: " + ex.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param cat_id - Category ID based on combox box selection from AddMaterial Screen
+	 * @param description - Description of material to be added
+	 */
+	public void addMaterialToDB(int cat_id, String description) {
+		try {
+			int mat_id = retrieveMaterial_id();
+			String insertString = "INSERT INTO material VALUES ("+ (mat_id+1) + ", '" + description + "')";
+			PreparedStatement addMaterial = con.prepareStatement(insertString);
+			addMaterial.executeUpdate();
+
+			String insertIntoCatMat = "INSERT INTO category_material VALUES (" + (cat_id) + ", " + (mat_id+1) + ")";
+			PreparedStatement addCategoryMaterial = con.prepareStatement(insertIntoCatMat);
+			addCategoryMaterial.executeUpdate();
+			
+			
+		} catch (SQLException ex) {
+			System.err.println("There was an error when inserting new material data: " + ex.getMessage());
+		}
+	}
+	//===============//
+	// End Luke Code //
+	//===============//
+	
 	/**
 	 * Close the connection class
 	 */
