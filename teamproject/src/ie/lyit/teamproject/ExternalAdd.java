@@ -1,11 +1,8 @@
 package ie.lyit.teamproject;
 
-import ie.lyit.teamproject.JobScreen.JobTableModel;
-
 import javax.swing.JPanel;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -67,50 +64,6 @@ public class ExternalAdd extends JPanel {
 		 * Retrieve the number of jobs that currently exist by iterating through
 		 * jobs data and storing value in count variable
 		 */
-		//updateMaterialTable(category_id);
-		
-		//updateMaterialTable(1);
-		
-//		try {
-//			count = 0;
-//			rs = dbc.retrieveCategoryMaterial(1);
-//			// rs = dbc.retrieveClientJobs();
-//			while (rs.next()) {
-//				count++;
-//			}
-//		} catch (SQLException ex) {
-//			System.out.println(ex.getMessage());
-//		}
-//
-//		/**
-//		 * Instantiate multidimensional jobArray & displayArray with correct
-//		 * number of rows, obtained from count variable
-//		 */
-//		displayArray = new Object[count][1];
-//		catMatArray = new Object[count][3];
-//		try {
-//			rs = dbc.retrieveCategoryMaterial(1);
-//			// rs = dbc.retrieveClientJobs();
-//			count = 0;
-//
-//			while (rs.next()) {
-//				// jobArray[count][0] = rs.getInt(1);
-//				// jobArray[count][1] = displayArray[count][0] =
-//				// rs.getString(2);
-//				// jobArray[count][2] = displayArray[count][1] =
-//				// rs.getString(3);
-//				// count++;
-//				catMatArray[count][0] = rs.getInt(1);
-//				catMatArray[count][1] = rs.getInt(2);
-//				catMatArray[count][2] = displayArray[count][0] = rs
-//						.getString(3);
-//				count++;
-//			}
-//
-//		} catch (SQLException ex) {
-//			System.out.println(ex.getMessage());
-//		}
-
 		JPanel entirePanel = new JPanel();
 		entirePanel.setLayout(new BorderLayout(0, 0));
 	
@@ -123,11 +76,8 @@ public class ExternalAdd extends JPanel {
 		entirePanel.add(tablePanel, BorderLayout.CENTER);
 
 		clientModel = new ClientJobTableModel();
-//		clientModel.data = displayArray;
 		clientModel.data = updateMaterialTable(2);
 		table = new JTable(clientModel);
-//		Dimension d = new Dimension(150, 100);
-//		table.setPreferredScrollableViewportSize(d);
 		
 		TableColumn col1 = table.getColumnModel().getColumn(0);
 		col1.setMaxWidth(300);
@@ -135,8 +85,7 @@ public class ExternalAdd extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		//Dimension d = new Dimension(250, 300);
-		scrollPane.setPreferredSize(new Dimension(250, 300));
+		scrollPane.setPreferredSize(new Dimension(250, 250));
 		tablePanel.add(scrollPane);
 
 		JPanel optionsPanel = new JPanel();

@@ -15,6 +15,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
@@ -39,6 +40,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 
@@ -51,8 +53,46 @@ import java.awt.CardLayout;
 
 @SuppressWarnings("serial")
 public class JobScreen extends JInternalFrame {
+
+	/**
+	 * Declare Swing components
+	 */
 	private final JPanel tablePanel = new JPanel();
+	private final JPanel optionsPanel = new JPanel();
+	private JPanel entirePanel;
+	private JPanel totalPanel;
+	private JPanel mainOptionsPanel;
+	private JPanel jobDescriptionPanel;
+	private JPanel calcPanel;
+	private JPanel calcTopPanel;
+	private JPanel calcLowerPanel;
+	
+	private JScrollPane scrollPane;
 	public static JTable table;
+	public static JobTableModel jobModel;
+	
+	private JTabbedPane tabbedPane;
+	
+	private final JLabel jlblTotal = new JLabel("SubTotal: \u20AC");
+	private JLabel jlblEditStatus;
+	private JLabel jlblCliDescr;
+	private JLabel jlblArchDescr;
+	private JLabel jlblDescr;
+	private JLabel jlblEngDescr;
+	private JLabel jlblStatusDescr;
+	private JLabel jlblBuildDescr;
+	
+	private static JTextField jtfClientName;
+	private static JTextField jtfTotal;
+	private static JTextField jtfArchitect;	
+	private static JTextField jtfEngineer;
+	protected static JTextField jtfJobStatus;
+	private static JTextField jtfBuilder;
+	private static JTextArea jtaJobDescription;	
+	private JButton jbtEdit;
+	private JButton jbtDelete;
+	private JButton jbtPDF;
+	private JButton jbtExit;
 
 	private static DecimalFormat df;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -73,19 +113,7 @@ public class JobScreen extends JInternalFrame {
 	private Roof roof;
 	private EditStatus editStatus;
 	private boolean instanceFlag = false;
-	private JLabel jlblEditStatus;
 	private static int categoryToOpen;
-
-	private final JLabel jlblTotal = new JLabel("SubTotal: \u20AC");
-	private final JPanel optionsPanel = new JPanel();
-	private static JTextField jtfClientName;
-	private static JTextField jtfTotal;
-	private static JTextField jtfArchitect;
-	private static JTextArea jtaJobDescription;
-	private static JTextField jtfEngineer;
-	protected static JTextField jtfJobStatus;
-	private static JTextField jtfBuilder;
-	public static JobTableModel jobModel;
 
 	/**
 	 * Create the frame.
@@ -98,122 +126,86 @@ public class JobScreen extends JInternalFrame {
 
 		df = new DecimalFormat("###,###.00");
 
-		JPanel entirePanel = new JPanel();
+		entirePanel = new JPanel();
 		getContentPane().add(entirePanel, BorderLayout.CENTER);
 		entirePanel.setLayout(new BorderLayout(0, 0));
-//		entirePanel.add(optionsPanel, BorderLayout.SOUTH);
-//
-//		optionsPanel.setBorder(new TitledBorder(new EtchedBorder(
-//				EtchedBorder.LOWERED, null, null), "Options",
-//				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-//		optionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-		
-		// ==========================================//
-		// 											 //
-		// 		NEW ABSTRACT TABLE MODEL CODE 		 //
-		// 		V-V-V-V-V-V-V-V-V-V-V-V-V-V-		 //
-		// ==========================================//
+
 		jobModel = new JobTableModel();
 		jobModel.data = updateJobTable(OpenProject.getProjectToOpen());
-		
-		
-		tablePanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Project Costings", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+		tablePanel.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "Project Costings",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		entirePanel.add(tablePanel, BorderLayout.CENTER);
 		table = new JTable(jobModel);
 		TableColumn col1 = table.getColumnModel().getColumn(0);
 		TableColumn col2 = table.getColumnModel().getColumn(1);
 		TableColumn col3 = table.getColumnModel().getColumn(2);
 		TableColumn col4 = table.getColumnModel().getColumn(3);
-		TableColumn col5 = table.getColumnModel().getColumn(4);	
+		TableColumn col5 = table.getColumnModel().getColumn(4);
 		col1.setPreferredWidth(150);
 		col2.setPreferredWidth(250);
 		col3.setPreferredWidth(100);
 		col4.setPreferredWidth(100);
-		col5.setPreferredWidth(100);//.setPreferredWidth(75);
-	
-		
+		col5.setPreferredWidth(100);
+
 		tablePanel.setLayout(new BorderLayout(0, 0));
-		
-//		TableColumn col5 = table.getColumnModel().getColumn(5);
-//		col5.setPreferredWidth(100);
-		
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		//Dimension d = new Dimension(675, 330);
+
+		scrollPane = new JScrollPane(table);
+		scrollPane
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setPreferredSize(new Dimension(675, 330));
 		tablePanel.add(scrollPane, BorderLayout.CENTER);
-		
-				// ==========================================//
-				//		^-^-^-^-^-^-^-^-^-^-^-^-^-^-^		 //
-				//		| | | | | | | | | | | | | | |		 //
-				//											 //
-				// 		NEW ABSTRACT TABLE MODEL CODE		 //
-				// 		OLD DEFAULT TABLE MODEL CODE 		 //
-				//											 //
-				//		| | | | | | | | | | | | | | |		 //
-				// 		V-V-V-V-V-V-V-V-V-V-V-V-V-V-V		 //
-				// ==========================================//		
-		//		tablePanel.setBorder(new TitledBorder(new EtchedBorder(
-		//				EtchedBorder.LOWERED, null, null), "Project Overview",
-		//				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		//		tablePanel.setLayout(new BorderLayout(0, 0));
-		//		table = new JTable(dTableModel);
-		//		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		//		table.setAutoCreateRowSorter(true);
-		//		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		//		table.setBounds(10, 24, 677, 328);
-		//
-		//		TableColumn col0 = table.getColumnModel().getColumn(0);
-		//		TableColumn col1 = table.getColumnModel().getColumn(1);
-		//		TableColumn col3 = table.getColumnModel().getColumn(3);
-		//
-		//		JScrollPane scrollPane = new JScrollPane(table);
-		//		scrollPane.setBounds(15, 15, 672, 340);
-		//		tablePanel.add(scrollPane, BorderLayout.NORTH);
-		//		col0.setPreferredWidth(325);
-		//
-		//		CurrencyTableCellRenderer currencyRenderer = new CurrencyTableCellRenderer();
-		//		col1.setCellRenderer(currencyRenderer);
-		//		col3.setCellRenderer(currencyRenderer);
-				// ==========================================//
-				// 		^-^-^-^-^-^-^-^-^-^-^-^-^-^-		 //
-				// 		OLD DEFAULT TABLE MODEL CODE 		 //
-				// 											 //
-				// ==========================================//
-		
-				JPanel totalPanel = new JPanel();
-				totalPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-				tablePanel.add(totalPanel, BorderLayout.SOUTH);
-				totalPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-								
-										JButton jbtExit = new JButton("Exit");
-										totalPanel.add(jbtExit);
-										jbtExit.addActionListener(new ActionListener() {
-											public void actionPerformed(ActionEvent e) {
-												setVisible(false);
-											}
-										});
-						
-								JButton jbtEdit = new JButton("Edit");
-								totalPanel.add(jbtEdit);
-				
-						JButton jbtDelete = new JButton("Delete");
-						totalPanel.add(jbtDelete);
-						jbtDelete.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								deleteFromTable();
-							}
-						});
-				totalPanel.add(jlblTotal);
-				jlblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-				
-						jtfTotal = new JTextField();
-						jtfTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-						jtfTotal.setEditable(false);
-						totalPanel.add(jtfTotal);
-						jtfTotal.setColumns(10);
 
-		JPanel jobDescriptionPanel = new JPanel();
+		totalPanel = new JPanel();
+		totalPanel
+				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		tablePanel.add(totalPanel, BorderLayout.SOUTH);
+		totalPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+
+		jbtEdit = new JButton("Edit");
+		totalPanel.add(jbtEdit);
+
+		jbtDelete = new JButton("Delete");
+		totalPanel.add(jbtDelete);
+		jbtDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteFromTable();
+			}
+		});
+		totalPanel.add(jlblTotal);
+		jlblTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		jtfTotal = new JTextField();
+		jtfTotal.setHorizontalAlignment(SwingConstants.RIGHT);
+		jtfTotal.setEditable(false);
+		totalPanel.add(jtfTotal);
+		jtfTotal.setColumns(10);
+
+		mainOptionsPanel = new JPanel();
+		mainOptionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		mainOptionsPanel.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "Options",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		entirePanel.add(mainOptionsPanel, BorderLayout.SOUTH);
+
+		jbtPDF = new JButton("PDF");
+		jbtPDF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sendToPDF();
+			}
+		});
+		mainOptionsPanel.add(jbtPDF);
+
+		jbtExit = new JButton("Exit");
+		mainOptionsPanel.add(jbtExit);
+		jbtExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+			}
+		});
+
+		jobDescriptionPanel = new JPanel();
 		entirePanel.add(jobDescriptionPanel, BorderLayout.NORTH);
 		jobDescriptionPanel.setBorder(new TitledBorder(new EtchedBorder(
 				EtchedBorder.LOWERED, null, null), "Project Details",
@@ -228,7 +220,7 @@ public class JobScreen extends JInternalFrame {
 				Double.MIN_VALUE };
 		jobDescriptionPanel.setLayout(gbl_jobDescriptionPanel);
 
-		JLabel jlblCliDescr = new JLabel("Client Name:");
+		jlblCliDescr = new JLabel("Client Name:");
 		GridBagConstraints gbc_jlblCliDescr = new GridBagConstraints();
 		gbc_jlblCliDescr.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblCliDescr.insets = new Insets(0, 0, 5, 5);
@@ -247,7 +239,7 @@ public class JobScreen extends JInternalFrame {
 		gbc_jtfClientName.gridy = 0;
 		jobDescriptionPanel.add(jtfClientName, gbc_jtfClientName);
 
-		JLabel jlblArchDescr = new JLabel("Architect:");
+		jlblArchDescr = new JLabel("Architect:");
 		GridBagConstraints gbc_jlblArchDescr = new GridBagConstraints();
 		gbc_jlblArchDescr.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblArchDescr.insets = new Insets(0, 0, 5, 5);
@@ -265,7 +257,7 @@ public class JobScreen extends JInternalFrame {
 		gbc_jtfArchitect.gridy = 0;
 		jobDescriptionPanel.add(jtfArchitect, gbc_jtfArchitect);
 
-		JLabel jlblDescr = new JLabel("Job Description:");
+		jlblDescr = new JLabel("Job Description:");
 		GridBagConstraints gbc_jlblDescr = new GridBagConstraints();
 		gbc_jlblDescr.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblDescr.insets = new Insets(0, 0, 5, 5);
@@ -292,7 +284,7 @@ public class JobScreen extends JInternalFrame {
 		gbc_jtaJobDescription.gridy = 1;
 		jobDescriptionPanel.add(jtaJobDescription, gbc_jtaJobDescription);
 
-		JLabel jlblEngDescr = new JLabel("Engineer:");
+		jlblEngDescr = new JLabel("Engineer:");
 		GridBagConstraints gbc_jlblEngDescr = new GridBagConstraints();
 		gbc_jlblEngDescr.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblEngDescr.insets = new Insets(0, 0, 5, 5);
@@ -310,7 +302,7 @@ public class JobScreen extends JInternalFrame {
 		gbc_jtfEngineer.gridy = 1;
 		jobDescriptionPanel.add(jtfEngineer, gbc_jtfEngineer);
 
-		JLabel jlblStatusDescr = new JLabel("Job Status:");
+		jlblStatusDescr = new JLabel("Job Status:");
 		GridBagConstraints gbc_jlblStatusDescr = new GridBagConstraints();
 		gbc_jlblStatusDescr.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblStatusDescr.insets = new Insets(0, 0, 0, 5);
@@ -356,7 +348,7 @@ public class JobScreen extends JInternalFrame {
 			}
 		});
 
-		JLabel jlblBuildDescr = new JLabel("Builder:");
+		jlblBuildDescr = new JLabel("Builder:");
 		GridBagConstraints gbc_jlblBuildDescr = new GridBagConstraints();
 		gbc_jlblBuildDescr.anchor = GridBagConstraints.NORTHEAST;
 		gbc_jlblBuildDescr.insets = new Insets(0, 0, 0, 5);
@@ -374,7 +366,7 @@ public class JobScreen extends JInternalFrame {
 		gbc_jtfBuilder.gridy = 2;
 		jobDescriptionPanel.add(jtfBuilder, gbc_jtfBuilder);
 
-		JPanel calcPanel = new JPanel();
+		calcPanel = new JPanel();
 		getContentPane().add(calcPanel, BorderLayout.EAST);
 		calcPanel.setLayout(new BorderLayout(0, 0));
 
@@ -385,10 +377,10 @@ public class JobScreen extends JInternalFrame {
 		// externalTab = new ExternalTab();
 		// calculatePanel.add(externalTab);
 
-		JPanel calcTopPanel = new JPanel();
+		calcTopPanel = new JPanel();
 		calcPanel.add(calcTopPanel, BorderLayout.CENTER);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		calcTopPanel.add(tabbedPane);
 
 		externalTab = new ExternalTab();
@@ -403,7 +395,7 @@ public class JobScreen extends JInternalFrame {
 		roofTab = new RoofTab();
 		tabbedPane.add(roofTab, "Roof");
 
-		JPanel calcLowerPanel = new JPanel();
+		calcLowerPanel = new JPanel();
 		calcPanel.add(calcLowerPanel, BorderLayout.SOUTH);
 		calcLowerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
@@ -420,9 +412,9 @@ public class JobScreen extends JInternalFrame {
 		 * Create new JTable component and add the dTableModel to it
 		 * 
 		 */
-		
+
 		int ownX = 1024;
-		int ownY = 768;
+		int ownY = 655;
 
 		int screenX = screenSize.width;
 		int screenY = screenSize.height;
@@ -441,23 +433,38 @@ public class JobScreen extends JInternalFrame {
 		this.setClosable(true);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
-
-		// JFileChooser chooser = new JFileChooser();
-		// //FileNameExtensionFilter filter = new
-		// FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
-		// //chooser.setFileFilter(filter);
-		// int returnVal = chooser.showSaveDialog(init);
-		// if(returnVal == JFileChooser.APPROVE_OPTION) {
-		// System.out.println("You chose to open this file: " +
-		// chooser.getSelectedFile().getName());
-		// }
 	}
-	
+
+	public void sendToPDF() {
+		try {
+
+			String fileToSave = "";
+			JFileChooser chooser = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter(
+					"PDF Files", "pdf");
+			chooser.setFileFilter(filter);
+			int returnVal = chooser.showSaveDialog(chooser);
+
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				fileToSave = chooser.getCurrentDirectory().getAbsolutePath()
+						+ "/" + chooser.getSelectedFile().getName() + ".pdf";
+			}
+
+			PDFWriter.setHeaderDetails(this.getHeaderDetails());
+			PDFWriter.setTableContent(displayArray);
+			PDFWriter.setFileNameToSave(fileToSave);
+			PDFWriter.writeFile();
+
+		} catch (HeadlessException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static Object[][] updateJobTable(int job_id) {
-		
+
 		int count = 0;
 		ResultSet rs;
-		
+
 		try {
 			count = 0;
 			rs = dbc.retrieveAllJobDetails(job_id);
@@ -467,108 +474,59 @@ public class JobScreen extends JInternalFrame {
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
+
+		// =====================================//
+		// Check if table populates correctly with the second value below set to
+		// 5
+		// =====================================//
+		displayArray = new Object[count][5];// [6]; // Check if can just use
+											// job_id associated with jobScreen
+											// instead of retrieving this job_id
 		
-		//=====================================//
-		// Check if table populates correctly with the second value below set to 5 
-		//=====================================//
-		displayArray = new Object[count][5];//[6];						// Check if can just use job_id associated with jobScreen instead of retrieving this job_id
-		jobArray = new Object[count][7];							// Also includes job_id and material_id
+		jobArray = new Object[count][7]; // Also includes job_id and material_id
 		try {
 			rs = dbc.retrieveAllJobDetails(job_id);
 			count = 0;
-			
+
 			boolean categorySet = false;
-			
+
 			while (rs.next()) {
-//				displayArray[count][0] = rs.getString(1);
-//				displayArray[count][1] = rs.getString(2);
-//				displayArray[count][2] = rs.getDouble(3);
-//				displayArray[count][3] = rs.getInt(4);
-//				displayArray[count][4] = rs.getDouble(5);
-//				//=====================================//			// The code below should correctly populate
-				jobArray[count][0] = rs.getInt(1);					// both the jobArray and displayArray arrays
+
+				jobArray[count][0] = rs.getInt(1);
 				jobArray[count][1] = rs.getInt(2);
 				if (!categorySet) {
-					jobArray[count][2] = displayArray[count][0] = rs.getString(3);
+					jobArray[count][2] = displayArray[count][0] = rs
+							.getString(3);
 					categorySet = true;
 				} else {
 					jobArray[count][2] = rs.getString(3);
 					if (jobArray[count][2].equals(jobArray[count - 1][2])) {
-						displayArray[count][0] = ""; 
+						displayArray[count][0] = "";
 					} else {
 						displayArray[count][0] = jobArray[count][2];
-					}				
-					
+					}
+
 				}
 				jobArray[count][3] = displayArray[count][1] = rs.getString(4);
 				jobArray[count][4] = displayArray[count][2] = rs.getDouble(5);
 				jobArray[count][5] = displayArray[count][3] = rs.getInt(6);
 				jobArray[count][6] = displayArray[count][4] = rs.getDouble(7);
-//				//=====================================//
-//				displayArray[count][0] = rs.getString(3);
-//				displayArray[count][1] = rs.getString(4);
-//				displayArray[count][2] = rs.getDouble(5);
-//				displayArray[count][3] = rs.getInt(6);
-//				displayArray[count][4] = rs.getDouble(7);
-				
-//				displayArray[count][0] = rs.getString(4);
-//				displayArray[count][1] = rs.getDouble(5);
-//				displayArray[count][2] = rs.getInt(6);
-//				displayArray[count][3] = rs.getDouble(7);
+
 				count++;
 			}
 		} catch (SQLException ex) {
 			System.out.println(ex.getMessage());
 		}
-		
+
 		return displayArray;
 	}
-
-//	public static JTable updateTable() {
-//
-//		int jobId = OpenProject.getProjectToOpen();
-//
-//		/**
-//		 * If table already has contents, clear the table contents
-//		 */
-//		if (dTableModel.getRowCount() > 0) {
-//			dTableModel.setRowCount(0);
-//			// while (dTableModel.getRowCount() > 0) {
-//			// dTableModel.removeRow(dTableModel.getRowCount() - 1);
-//			// }
-//		}
-//		/**
-//		 * Retrieve all materials for the selected job from the ResultSet rs
-//		 * Create new array and add relevant information for each row to the
-//		 * array
-//		 */
-//		try {
-//			rs = dbc.retrieveAllJobDetails(jobId);
-//
-//			Object[] tempRow;
-//
-//			while (rs.next()) {
-//				// tempRow = new Object[] { rs.getString(1),
-//				// df.format(rs.getDouble(2)), rs.getInt(3),
-//				// df.format(rs.getDouble(4)) };
-//				// dTableModel.addRow(tempRow);
-//				tempRow = new Object[] { rs.getString(3),
-//						df.format(rs.getDouble(4)), rs.getInt(5),
-//						df.format(rs.getDouble(6)) };
-//				dTableModel.addRow(tempRow);
-//			}
-//		} catch (SQLException ex) {
-//			System.out.println(ex.getMessage());
-//		}
-//		return table;
-//	}
 
 	public void deleteFromTable() {
 		System.out.println(table.getSelectedRow());
 		int mat_id = (int) jobArray[table.getSelectedRow()][1];
 		int job_id = OpenProject.getProjectToOpen();
-		System.out.println("deleting material with material_id: " + mat_id 
-							+ "\nFrom job no: " + job_id);
+		System.out.println("deleting material with material_id: " + mat_id
+				+ "\nFrom job no: " + job_id);
 		dbc.deleteItemFromJob(job_id, mat_id);
 		jobModel.data = JobScreen.updateJobTable(job_id);
 		table.repaint();
@@ -593,6 +551,18 @@ public class JobScreen extends JInternalFrame {
 		}
 	}
 
+	public String[] getHeaderDetails() {
+		String[] headerArray = new String[6];
+		headerArray[0] = jtfClientName.getText();
+		headerArray[1] = jtaJobDescription.getText();
+		headerArray[2] = jtfArchitect.getText();
+		headerArray[3] = jtfEngineer.getText();
+		headerArray[4] = jtfBuilder.getText();
+		headerArray[5] = jtfTotal.getText();
+
+		return headerArray;
+	}
+
 	public static int getCategoryToOpen() {
 		return categoryToOpen;
 	}
@@ -607,11 +577,13 @@ public class JobScreen extends JInternalFrame {
 	}
 
 	/**
-	 * see http://stackoverflow.com/questions/12348932/change-background-color-of-one-cell-in-jtable/12352838#12352838
+	 * see
+	 * http://stackoverflow.com/questions/12348932/change-background-color-of
+	 * -one-cell-in-jtable/12352838#12352838
 	 * 
-	 *
+	 * 
 	 */
-	
+
 	class JobTableModel extends AbstractTableModel {
 
 		private String[] columnNames = { "Category", "Description", "Price",
@@ -647,7 +619,7 @@ public class JobScreen extends JInternalFrame {
 
 		@Override
 		public boolean isCellEditable(int row, int col) {
-			//return false;
+			// return false;
 			if (col < 2 || col == 4)
 				return false;
 			else
