@@ -25,7 +25,7 @@ import javax.swing.KeyStroke;
 @SuppressWarnings("serial")
 public class MainScreen extends JFrame {
 
-	protected static JDesktopPane desk;
+	public static JDesktopPane desk;
 	private JFrame frame;
 
 	private JToolBar toolbar;
@@ -48,13 +48,16 @@ public class MainScreen extends JFrame {
 	private JMenuItem viewArchitect;
 	private JMenuItem viewEngineer;
 	private JMenuItem viewBuilder;
+	
+	private JMenuItem logIn;
+	private JMenuItem logOut;
 
 	private JMenuItem about;
 
 	private static String pageTitle;
 	private static boolean openProjectInstanceFlag;
 	private static boolean editCharacterInstanceFlag;
-	private static boolean addCategoryInstanceFlag;
+	public static boolean addCategoryInstanceFlag;
 	private static boolean addMaterialInstanceFlag;
 	private static boolean addUserInstanceFlag;
 
@@ -63,9 +66,12 @@ public class MainScreen extends JFrame {
 	protected static AddClient addClient;
 	protected static AddCharacter addCharacter;
 	protected static EditCharacter editCharacter;
-	protected static AddCategory addCategory;
+	public static AddCategory addCategory;
 	protected static AddMaterial addMaterial;
 	protected static AddUser addUser;
+	
+	private static int categoryToDisplay;
+	private static int userLoggedIn;
 	
 	public MainScreen() {
 
@@ -434,6 +440,14 @@ public class MainScreen extends JFrame {
 				(int) (screenSize.height * 0.75));
 		frame.setTitle("Building Materials Calculator");
 		frame.setExtendedState(MAXIMIZED_BOTH);
+	}
+
+	public static int getCategoryToDisplay() {
+		return categoryToDisplay;
+	}
+
+	public static void setCategoryToDisplay(int categoryToDisplay) {
+		MainScreen.categoryToDisplay = categoryToDisplay;
 	}
 
 	protected static String getPageTitle() {

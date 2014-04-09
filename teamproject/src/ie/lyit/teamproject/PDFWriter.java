@@ -1,5 +1,7 @@
 package ie.lyit.teamproject;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -32,8 +34,9 @@ public class PDFWriter {
 			Font.NORMAL, BaseColor.RED);
 	private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
 			Font.BOLD);
-	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10,
+	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
 			Font.BOLD);
+	private static Font tableText = new Font(Font.FontFamily.TIMES_ROMAN, 10);
 	private static String[] headerDetails;
 	private static Object[][] displayArray;
 	private static String fileNameToSave;
@@ -48,6 +51,18 @@ public class PDFWriter {
 			addTitlePage(document);
 			addContent(document);
 			document.close();
+
+			if (getFileNameToSave().toString().endsWith(".pdf")) {
+				Runtime.getRuntime().exec(
+						"rundll32 url.dll,FileProtocolHandler "
+								+ getFileNameToSave());
+			} else {
+				// For cross platform use
+				Desktop desktop = Desktop.getDesktop();
+
+				File fileToOpen = new File(getFileNameToSave());
+				desktop.open(fileToOpen);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -97,19 +112,14 @@ public class PDFWriter {
 		addEmptyLine(preface, 1);
 		// Lets write a big header
 		preface.add(new Paragraph(
-				("Schedule of costs for \n" + headerDetails[1]),
-				catFont));
+				("Schedule of costs for \n" + headerDetails[1]), catFont));
 
 		addEmptyLine(preface, 1);
 
-		preface.add(new Paragraph(
-				"Client:      " + headerDetails[0], smallBold));
-		preface.add(new Paragraph(
-				"Architect: " + headerDetails[2], smallBold));
-		preface.add(new Paragraph(
-				"Engineer:  " + headerDetails[3], smallBold));
-		preface.add(new Paragraph(
-				"Builder:    " + headerDetails[4], smallBold));
+		preface.add(new Paragraph("Client:      " + headerDetails[0], smallBold));
+		preface.add(new Paragraph("Architect: " + headerDetails[2], smallBold));
+		preface.add(new Paragraph("Engineer:  " + headerDetails[3], smallBold));
+		preface.add(new Paragraph("Builder:    " + headerDetails[4], smallBold));
 		addEmptyLine(preface, 3);
 
 		addEmptyLine(preface, 8);
@@ -177,45 +187,47 @@ public class PDFWriter {
 		// t.setPadding(4);
 		// t.setSpacing(4);
 		// t.setBorderWidth(1);
-		PdfPCell c1 = new PdfPCell(new Phrase("Category"));
+		PdfPCell c1 = new PdfPCell(new Phrase("Category", tableText));
 		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c1);
 
-		c1 = new PdfPCell(new Phrase("Description"));
+		c1 = new PdfPCell(new Phrase("Description", tableText));
 		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		c1.setColspan(2);
-//		c1.setBorder(Rectangle.OUT_BOTTOM);
-//		c1.setBorder(Rectangle.OUT_LEFT);
-//		c1.setBorder(Rectangle.OUT_RIGHT);
-//		c1.setBorder(Rectangle.OUT_TOP);
+		// c1.setBorder(Rectangle.OUT_BOTTOM);
+		// c1.setBorder(Rectangle.OUT_LEFT);
+		// c1.setBorder(Rectangle.OUT_RIGHT);
+		// c1.setBorder(Rectangle.OUT_TOP);
 		table.addCell(c1);
 
-		c1 = new PdfPCell(new Phrase("Quantity"));
+		c1 = new PdfPCell(new Phrase("Quantity", tableText));
 		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c1);
 
-		c1 = new PdfPCell(new Phrase("Price"));
+		c1 = new PdfPCell(new Phrase("Price", tableText));
 		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c1);
 
-		c1 = new PdfPCell(new Phrase("Total"));
+		c1 = new PdfPCell(new Phrase("Total", tableText));
 		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c1);
 		table.setHeaderRows(1);
 
+		PdfPCell nCell = new PdfPCell();
+
 		for (int i = 0; i < displayArray.length; i++) {
-			table.addCell((String) displayArray[i][0]);
-			PdfPCell nCell = new PdfPCell(new Phrase("" + displayArray[i][1]));
+			nCell = new PdfPCell(new Phrase("" + displayArray[i][0], tableText));
+			table.addCell(nCell);
+			nCell = new PdfPCell(new Phrase("" + displayArray[i][1], tableText));
 			nCell.setColspan(2);
 			table.addCell(nCell);
-			
-			nCell = new PdfPCell(new Phrase("" + displayArray[i][2]));
+			nCell = new PdfPCell(new Phrase("" + displayArray[i][2], tableText));
 			nCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			table.addCell(nCell);
-			nCell = new PdfPCell(new Phrase("" + displayArray[i][3]));
+			nCell = new PdfPCell(new Phrase("" + displayArray[i][3], tableText));
 			nCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			table.addCell(nCell);
-			nCell = new PdfPCell(new Phrase("" + displayArray[i][4]));
+			nCell = new PdfPCell(new Phrase("" + displayArray[i][4], tableText));
 			nCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			table.addCell(nCell);
 		}

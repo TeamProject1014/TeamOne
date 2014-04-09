@@ -902,6 +902,20 @@ public class DBConnectionClass {
 		}
 	}
 	
+	public ResultSet retrieveCategory() {
+		int category_id = 0;
+		try {
+			String gdta = "SELECT category_id, description FROM category";
+			rs = stmt.executeQuery(gdta);
+
+			return rs;
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve material_id : "
+					+ ex.getMessage());
+			return rs;
+		}
+	}
+	
 	/**
 	 * Creates a category and adds it to the database
 	 * 
