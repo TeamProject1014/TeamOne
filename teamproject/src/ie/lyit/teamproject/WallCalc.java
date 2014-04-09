@@ -124,7 +124,7 @@ public class WallCalc extends JPanel {
 					height = Double.parseDouble(jtfHeight.getText());
 					area = (int) length * height;
 
-					// Divide area of a block into area of the wall					
+					// Divide area of a block into area of the wall
 					innerLeaf = outerleaf = (int) Math.round(area / BLOCK);
 
 					// Calculate number of wall ties required
@@ -290,7 +290,7 @@ public class WallCalc extends JPanel {
 		jtfTotal.setEditable(false);
 		totalPanel.add(jtfTotal);
 		jtfTotal.setColumns(10);
-		
-		//getRootPane().setDefaultButton(jbtCalculate);
+
+		// getRootPane().setDefaultButton(jbtCalculate);
 	}
 }

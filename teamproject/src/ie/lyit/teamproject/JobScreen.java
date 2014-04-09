@@ -1,5 +1,18 @@
 package ie.lyit.teamproject;
 
+import ie.lyit.teamproject.tabs.BlockBrickMortarCalc;
+import ie.lyit.teamproject.tabs.CategorySelect;
+import ie.lyit.teamproject.tabs.ExternalTab;
+import ie.lyit.teamproject.tabs.Floor;
+import ie.lyit.teamproject.tabs.InternalTab;
+import ie.lyit.teamproject.tabs.MortarCalculator;
+import ie.lyit.teamproject.tabs.PavingBedCalc;
+import ie.lyit.teamproject.tabs.PlasteringQuantitiesCalc;
+import ie.lyit.teamproject.tabs.Roof;
+import ie.lyit.teamproject.tabs.StudWallCalc;
+import ie.lyit.teamproject.tabs.SubBase;
+import ie.lyit.teamproject.tabs.WallsTab;
+
 import javax.swing.JInternalFrame;
 
 import java.awt.GridBagLayout;
@@ -40,6 +53,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
@@ -103,13 +118,20 @@ public class JobScreen extends JInternalFrame {
 	private static DBConnectionClass dbc;
 	private WallsTab walls;
 	public static WallCalc wallCalc;
+	public static SubBase subBase;
+	public static BlockBrickMortarCalc brickBlockMortar;
+	public static MortarCalculator mortarCalc;
+	public static Floor floorCalc;
+	public static Roof roofCalc;
+	public static StudWallCalc studWallCalc;
+	public static PlasteringQuantitiesCalc plastQuantCalc;
+	public static PavingBedCalc pavingBedCalc;
 
 	private ExternalTab externalTab;
-	public static ExternalAdd externalAdd;
+	public static MaterialSelect selectMaterial;
 	private InternalTab internalTab;
 	private RoofTab roofTab;
-	// private ExternalTab externalTab;
-	private Internal internal;
+	private CategorySelect categoryTab;
 	private Roof roof;
 	private EditStatus editStatus;
 	private boolean instanceFlag = false;
@@ -183,7 +205,7 @@ public class JobScreen extends JInternalFrame {
 		jtfTotal.setColumns(10);
 
 		mainOptionsPanel = new JPanel();
-		mainOptionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		mainOptionsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		mainOptionsPanel.setBorder(new TitledBorder(new EtchedBorder(
 				EtchedBorder.LOWERED, null, null), "Options",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -370,13 +392,6 @@ public class JobScreen extends JInternalFrame {
 		getContentPane().add(calcPanel, BorderLayout.EAST);
 		calcPanel.setLayout(new BorderLayout(0, 0));
 
-		// walls = new WallsTab();
-		// //tabbedPane.add(walls, "Walls");
-		// calculatePanel.add(walls);
-
-		// externalTab = new ExternalTab();
-		// calculatePanel.add(externalTab);
-
 		calcTopPanel = new JPanel();
 		calcPanel.add(calcTopPanel, BorderLayout.CENTER);
 
@@ -394,19 +409,63 @@ public class JobScreen extends JInternalFrame {
 
 		roofTab = new RoofTab();
 		tabbedPane.add(roofTab, "Roof");
+		
+		categoryTab = new CategorySelect();
+		tabbedPane.add(categoryTab, "Category");
+		tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				if (tabbedPane.getSelectedIndex() == 4) {
+					JobScreen.resetLowerPanes();
+					JobScreen.selectMaterial.setVisible(true);
+				}
+			}			
+		});
 
 		calcLowerPanel = new JPanel();
 		calcPanel.add(calcLowerPanel, BorderLayout.SOUTH);
 		calcLowerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-		externalAdd = new ExternalAdd();
-		calcLowerPanel.add(externalAdd);
-		externalAdd.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		externalAdd.setVisible(false);
+		
+		subBase = new SubBase();
+		calcLowerPanel.add(subBase);
+		subBase.setVisible(false);
+		
+		pavingBedCalc = new PavingBedCalc();
+		calcLowerPanel.add(pavingBedCalc);
+		pavingBedCalc.setVisible(false);
+		
+		selectMaterial = new MaterialSelect();
+		calcLowerPanel.add(selectMaterial);
+		selectMaterial.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		selectMaterial.setVisible(false);
+		
+		brickBlockMortar = new BlockBrickMortarCalc();
+		calcLowerPanel.add(brickBlockMortar);
+		brickBlockMortar.setVisible(false);
 
 		wallCalc = new WallCalc();
 		calcLowerPanel.add(wallCalc);
 		wallCalc.setVisible(false);
+		
+		mortarCalc = new MortarCalculator();
+		calcLowerPanel.add(mortarCalc);
+		mortarCalc.setVisible(false);
+		
+		floorCalc = new Floor();
+		calcLowerPanel.add(floorCalc);
+		floorCalc.setVisible(false);
+		
+		roofCalc = new Roof();
+		calcLowerPanel.add(roofCalc);
+		roofCalc.setVisible(false);
+		
+		studWallCalc = new StudWallCalc();
+		calcLowerPanel.add(studWallCalc);
+		studWallCalc.setVisible(false);
+		
+		plastQuantCalc = new PlasteringQuantitiesCalc();
+		calcLowerPanel.add(plastQuantCalc);
+		plastQuantCalc.setVisible(false);
 
 		/**
 		 * Create new JTable component and add the dTableModel to it
@@ -572,8 +631,16 @@ public class JobScreen extends JInternalFrame {
 	}
 
 	public static void resetLowerPanes() {
-		externalAdd.setVisible(false);
+		selectMaterial.setVisible(false);
 		wallCalc.setVisible(false);
+		subBase.setVisible(false);
+		brickBlockMortar.setVisible(false);
+		mortarCalc.setVisible(false);
+		floorCalc.setVisible(false);
+		roofCalc.setVisible(false);
+		studWallCalc.setVisible(false);
+		plastQuantCalc.setVisible(false);
+		pavingBedCalc.setVisible(false);
 	}
 
 	/**

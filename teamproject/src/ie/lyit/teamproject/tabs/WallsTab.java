@@ -1,4 +1,6 @@
-package ie.lyit.teamproject;
+package ie.lyit.teamproject.tabs;
+
+import ie.lyit.teamproject.JobScreen;
 
 import javax.swing.JPanel;
 
@@ -54,6 +56,12 @@ public class WallsTab extends JPanel {
 		wallPanel.add(lblNewLabel, gbc_lblNewLabel);
 		
 		JButton btnNewButton = new JButton("Select");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JobScreen.resetLowerPanes();
+				JobScreen.mortarCalc.setVisible(true);
+			}
+		});
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.anchor = GridBagConstraints.WEST;
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
@@ -70,6 +78,12 @@ public class WallsTab extends JPanel {
 		wallPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
 		JButton btnNewButton_1 = new JButton("Select");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JobScreen.resetLowerPanes();
+				JobScreen.brickBlockMortar.setVisible(true);
+			}
+		});
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.anchor = GridBagConstraints.WEST;
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 0);
@@ -114,30 +128,6 @@ public class WallsTab extends JPanel {
 		gbc_btnNewButton_3.gridx = 1;
 		gbc_btnNewButton_3.gridy = 4;
 		wallPanel.add(btnNewButton_3, gbc_btnNewButton_3);
-		
-		JLabel lblNotLisetd = new JLabel("Not Listed");
-		GridBagConstraints gbc_lblNotLisetd = new GridBagConstraints();
-		gbc_lblNotLisetd.anchor = GridBagConstraints.WEST;
-		gbc_lblNotLisetd.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNotLisetd.gridx = 0;
-		gbc_lblNotLisetd.gridy = 5;
-		wallPanel.add(lblNotLisetd, gbc_lblNotLisetd);
-		
-		JButton btnNewButton_4 = new JButton("Select");
-		btnNewButton_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JobScreen.resetLowerPanes();
-				JobScreen.setCategoryToOpen(1);
-				//ExternalAdd.updateTable();
-				JobScreen.externalAdd.setVisible(true);
-			}
-		});
-		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
-		gbc_btnNewButton_4.anchor = GridBagConstraints.WEST;
-		gbc_btnNewButton_4.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton_4.gridx = 1;
-		gbc_btnNewButton_4.gridy = 5;
-		wallPanel.add(btnNewButton_4, gbc_btnNewButton_4);
 
 	}
 }
