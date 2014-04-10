@@ -1,11 +1,8 @@
 package ie.lyit.teamproject;
 
-import ie.lyit.teamproject.JobScreen.JobTableModel;
-
 import javax.swing.JPanel;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,16 +28,22 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 
-public class ExternalAdd extends JPanel {
+import com.itextpdf.awt.geom.Point;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+
+public class MaterialSelect extends JPanel {
 
 	private static DBConnectionClass dbc;
 	private ResultSet rs;
 
-	private JTable table;
+	public static JTable table;
 	protected static JobScreen jobScreen;
 	private static int projectToOpen = -1;
 	private static int category_id;
@@ -51,9 +54,9 @@ public class ExternalAdd extends JPanel {
 			.getScreenSize();
 	private JTextField jtfQuantity;
 	private JTextField jtfPrice;
-	private static ClientJobTableModel clientModel;
+	public static MaterialTableModel clientModel;
 
-	public ExternalAdd() {
+	public MaterialSelect() {
 
 		/**
 		 * Instantiate variables
@@ -67,50 +70,6 @@ public class ExternalAdd extends JPanel {
 		 * Retrieve the number of jobs that currently exist by iterating through
 		 * jobs data and storing value in count variable
 		 */
-		//updateMaterialTable(category_id);
-		
-		//updateMaterialTable(1);
-		
-//		try {
-//			count = 0;
-//			rs = dbc.retrieveCategoryMaterial(1);
-//			// rs = dbc.retrieveClientJobs();
-//			while (rs.next()) {
-//				count++;
-//			}
-//		} catch (SQLException ex) {
-//			System.out.println(ex.getMessage());
-//		}
-//
-//		/**
-//		 * Instantiate multidimensional jobArray & displayArray with correct
-//		 * number of rows, obtained from count variable
-//		 */
-//		displayArray = new Object[count][1];
-//		catMatArray = new Object[count][3];
-//		try {
-//			rs = dbc.retrieveCategoryMaterial(1);
-//			// rs = dbc.retrieveClientJobs();
-//			count = 0;
-//
-//			while (rs.next()) {
-//				// jobArray[count][0] = rs.getInt(1);
-//				// jobArray[count][1] = displayArray[count][0] =
-//				// rs.getString(2);
-//				// jobArray[count][2] = displayArray[count][1] =
-//				// rs.getString(3);
-//				// count++;
-//				catMatArray[count][0] = rs.getInt(1);
-//				catMatArray[count][1] = rs.getInt(2);
-//				catMatArray[count][2] = displayArray[count][0] = rs
-//						.getString(3);
-//				count++;
-//			}
-//
-//		} catch (SQLException ex) {
-//			System.out.println(ex.getMessage());
-//		}
-
 		JPanel entirePanel = new JPanel();
 		entirePanel.setLayout(new BorderLayout(0, 0));
 	
@@ -122,12 +81,9 @@ public class ExternalAdd extends JPanel {
 		tablePanel.setLayout(new BorderLayout(0, 0));
 		entirePanel.add(tablePanel, BorderLayout.CENTER);
 
-		clientModel = new ClientJobTableModel();
-//		clientModel.data = displayArray;
-		clientModel.data = updateMaterialTable(2);
+		clientModel = new MaterialTableModel();
+		clientModel.data = updateMaterialTable(MainScreen.getCategoryToDisplay());
 		table = new JTable(clientModel);
-//		Dimension d = new Dimension(150, 100);
-//		table.setPreferredScrollableViewportSize(d);
 		
 		TableColumn col1 = table.getColumnModel().getColumn(0);
 		col1.setMaxWidth(300);
@@ -135,10 +91,9 @@ public class ExternalAdd extends JPanel {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		//Dimension d = new Dimension(250, 300);
-		scrollPane.setPreferredSize(new Dimension(250, 300));
+		scrollPane.setPreferredSize(new Dimension(290, 200));
 		tablePanel.add(scrollPane);
-
+		
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		entirePanel.add(optionsPanel, BorderLayout.SOUTH);
@@ -160,6 +115,12 @@ public class ExternalAdd extends JPanel {
 		optionsPanel.add(lblNewLabel, gbc_lblNewLabel);
 
 		jtfQuantity = new JTextField();
+		jtfQuantity.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				jtfQuantity.selectAll();
+			}
+		});
 		GridBagConstraints gbc_jtfQuantity = new GridBagConstraints();
 		gbc_jtfQuantity.insets = new Insets(0, 0, 5, 0);
 		gbc_jtfQuantity.fill = GridBagConstraints.HORIZONTAL;
@@ -177,6 +138,12 @@ public class ExternalAdd extends JPanel {
 		optionsPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		jtfPrice = new JTextField();
+		jtfPrice.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				jtfPrice.selectAll();
+			}
+		});
 		GridBagConstraints gbc_jtfPrice = new GridBagConstraints();
 		gbc_jtfPrice.insets = new Insets(0, 0, 5, 0);
 		gbc_jtfPrice.fill = GridBagConstraints.HORIZONTAL;
@@ -191,22 +158,22 @@ public class ExternalAdd extends JPanel {
 				
 				int job_id = OpenProject.getProjectToOpen();
 				int mat_id = 0;
-				String sel = (String)table.getValueAt(table.getSelectedRow(),  0);
+				String rowSelected = (String)table.getValueAt(table.getSelectedRow(),  0);
 				int quant = Integer.parseInt(jtfQuantity.getText());
 				double price = Double.parseDouble(jtfPrice.getText());
 				double total = (quant * price);
 				
 				for (int i = 0; i < displayArray.length; i++)
-					if (catMatArray[i][2].equals(sel))
+					if (catMatArray[i][2].equals(rowSelected))
 						mat_id = (int) catMatArray[i][1];
 				
 				dbc.addMaterialToJob(job_id, mat_id, quant, price, total);
-				//JobScreen.updateTable();
-				//JobScreen.jobModel.data.equals(null);
 				JobScreen.jobModel.data = JobScreen.updateJobTable(job_id);
 				JobScreen.table.repaint();
 				JobScreen.table.revalidate();
 				JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
+				jtfQuantity.setText("");
+				jtfPrice.setText("");
 			}
 		});
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
@@ -254,11 +221,11 @@ public class ExternalAdd extends JPanel {
 		return displayArray;
 	}
 
-	class ClientJobTableModel extends AbstractTableModel {
+	public class MaterialTableModel extends AbstractTableModel {
 
 		private String[] columnNames = { "Material Description" };
 
-		private Object[][] data;
+		public Object[][] data;
 
 		@Override
 		public int getColumnCount() {

@@ -1,14 +1,23 @@
-package ie.lyit.teamproject;
+package ie.lyit.teamproject.tabs;
+
+import ie.lyit.teamproject.JobScreen;
 
 import javax.swing.JPanel;
+
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
+
 import javax.swing.JLabel;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class InternalTab extends JPanel {
 
@@ -53,6 +62,12 @@ public class InternalTab extends JPanel {
 		internalPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
 		JButton btnNewButton_1 = new JButton("Select");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JobScreen.resetLowerPanes();
+				JobScreen.plastQuantCalc.setVisible(true);
+			}
+		});
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.anchor = GridBagConstraints.WEST;
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 0);
@@ -69,6 +84,12 @@ public class InternalTab extends JPanel {
 		internalPanel.add(lblNewLabel_2, gbc_lblNewLabel_2);
 		
 		JButton btnNewButton_2 = new JButton("Select");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JobScreen.resetLowerPanes();
+				JobScreen.studWallCalc.setVisible(true);
+			}
+		});
 		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
 		gbc_btnNewButton_2.anchor = GridBagConstraints.WEST;
 		gbc_btnNewButton_2.insets = new Insets(0, 0, 5, 0);
@@ -101,6 +122,12 @@ public class InternalTab extends JPanel {
 		internalPanel.add(lblNewLabel_4, gbc_lblNewLabel_4);
 		
 		JButton btnNewButton_4 = new JButton("Select");
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JobScreen.resetLowerPanes();
+				JobScreen.floorCalc.setVisible(true);
+			}
+		});
 		GridBagConstraints gbc_btnNewButton_4 = new GridBagConstraints();
 		gbc_btnNewButton_4.anchor = GridBagConstraints.WEST;
 		gbc_btnNewButton_4.insets = new Insets(0, 0, 5, 0);

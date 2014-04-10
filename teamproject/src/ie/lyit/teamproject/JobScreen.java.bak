@@ -101,9 +101,6 @@ public class JobScreen extends JInternalFrame {
 	private static JTextField jtfEngineer;
 	protected static JTextField jtfJobStatus;
 	private static JTextField jtfBuilder;
-	private JTextField newMaterial;
-	private JTextField newPrice;
-	private JTextField newQuantity;
 	private static JTextArea jtaJobDescription;	
 	private JButton jbtEdit;
 	private JButton jbtDelete;

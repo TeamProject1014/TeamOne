@@ -55,7 +55,7 @@ public class MainScreen extends JFrame {
 	private JMenuItem about;
 
 	private static String pageTitle;
-	protected static boolean openProjectInstanceFlag;
+	private static boolean openProjectInstanceFlag;
 	private static boolean editCharacterInstanceFlag;
 	public static boolean addCategoryInstanceFlag;
 	private static boolean addMaterialInstanceFlag;
