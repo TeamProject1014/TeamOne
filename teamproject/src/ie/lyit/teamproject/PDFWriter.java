@@ -4,12 +4,8 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
+import java.text.DecimalFormat;
 
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import com.itextpdf.awt.geom.Rectangle;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -40,6 +36,8 @@ public class PDFWriter {
 	private static String[] headerDetails;
 	private static Object[][] displayArray;
 	private static String fileNameToSave;
+	private static DecimalFormat df = new DecimalFormat("###,###.00");
+	private static DecimalFormat intf = new DecimalFormat("###,###");
 
 	public static void writeFile() {
 		try {
@@ -221,15 +219,16 @@ public class PDFWriter {
 			nCell = new PdfPCell(new Phrase("" + displayArray[i][1], tableText));
 			nCell.setColspan(2);
 			table.addCell(nCell);
-			nCell = new PdfPCell(new Phrase("" + displayArray[i][2], tableText));
+			nCell = new PdfPCell(new Phrase("" + intf.format(displayArray[i][2]), tableText));
 			nCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			table.addCell(nCell);
-			nCell = new PdfPCell(new Phrase("" + displayArray[i][3], tableText));
+			nCell = new PdfPCell(new Phrase("" + df.format(displayArray[i][3]), tableText));
 			nCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			table.addCell(nCell);
-			nCell = new PdfPCell(new Phrase("" + displayArray[i][4], tableText));
+			nCell = new PdfPCell(new Phrase("" + df.format(displayArray[i][4]), tableText));
 			nCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			table.addCell(nCell);
+			// jtfTotal.setText("" + df.format(rs.getDouble(4)));
 		}
 
 		subCatPart.add(table);

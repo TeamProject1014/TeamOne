@@ -34,10 +34,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -53,52 +51,59 @@ public class AddCategory extends JInternalFrame {
 	public AddCategory()
 	{
 		getContentPane().setLayout(null);
-		setTitle("Add Category");
 		
-		JButton btnConfirm = new JButton("Add");
-		btnConfirm.setBounds(35, 76, 71, 20);
-		getContentPane().add(btnConfirm);
-		
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(116, 76, 79, 20);
-		getContentPane().add(btnCancel);
+		JPanel txtPanel = new JPanel();
+		txtPanel.setBounds(10, 11, 424, 76);
+		getContentPane().add(txtPanel);
+		txtPanel.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "Category Details",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagLayout gbl_txtPanel = new GridBagLayout();
+		gbl_txtPanel.columnWidths = new int[]{53, 101, 131, 0};
+		gbl_txtPanel.rowHeights = new int[]{0, 25, 0, 0};
+		gbl_txtPanel.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_txtPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		txtPanel.setLayout(gbl_txtPanel);
 		
 		JLabel lblDescription = new JLabel("Description: ");
-		lblDescription.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDescription.setBounds(10, 29, 97, 14);
-		getContentPane().add(lblDescription);
+		GridBagConstraints gbc_lblDescription = new GridBagConstraints();
+		gbc_lblDescription.anchor = GridBagConstraints.EAST;
+		gbc_lblDescription.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDescription.gridx = 1;
+		gbc_lblDescription.gridy = 1;
+		txtPanel.add(lblDescription, gbc_lblDescription);
 		
 		jtxtDesc = new JTextField();
-		jtxtDesc.setBounds(116, 26, 101, 20);
-		getContentPane().add(jtxtDesc);
+		GridBagConstraints gbc_jtxtDesc = new GridBagConstraints();
+		gbc_jtxtDesc.insets = new Insets(0, 0, 5, 0);
+		gbc_jtxtDesc.anchor = GridBagConstraints.NORTH;
+		gbc_jtxtDesc.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jtxtDesc.gridx = 2;
+		gbc_jtxtDesc.gridy = 1;
+		txtPanel.add(jtxtDesc, gbc_jtxtDesc);
 		jtxtDesc.setColumns(10);
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-			}
-		});
+		
+		JPanel options = new JPanel();
+		options.setBounds(10, 98, 424, 76);
+		getContentPane().add(options);
+		options.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "Options",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		JButton btnConfirm = new JButton("Confirm");
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int id = dbc.retrieveCategory_id();//Get last ID from db
+				
 				String description = jtxtDesc.getText();  
-				
-				if(dbc.checkCategory(description) >= 1)
-				{
-					JOptionPane.showMessageDialog(new JFrame(), "Category already exists");
-				}
-				else if(description.equals(""))
-				{
-					JOptionPane.showMessageDialog(new JFrame(), "Enter a description");
-				}
-				else
-				{
-					dbc.createCategory(id, description);
-					//setVisible(false);
-					jtxtDesc.setText("");
-				}
-				
+				dbc.createCategory(id, description);
+				setVisible(false);
 			}
 		});
+		options.add(btnConfirm);
+		
+		JButton btnCancel = new JButton("Cancel");
+		options.add(btnCancel);
 		
 		//spawn
 		int ownX = 455;
@@ -110,7 +115,7 @@ public class AddCategory extends JInternalFrame {
 		int xPos = (int)((screenX / 2) - (ownX / 2)) ;
 		int yPos = (int)((screenY / 2) - (ownY / 2));
 		
-		this.setSize(251, 156);
+		this.setSize(454, 213);
 		this.setLocation(xPos, yPos);
 		
 		this.setClosable(true);

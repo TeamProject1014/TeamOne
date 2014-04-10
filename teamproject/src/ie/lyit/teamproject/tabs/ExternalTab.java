@@ -47,8 +47,7 @@ public class ExternalTab extends JPanel {
 		JButton btnNewButton = new JButton("Select");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JobScreen.resetLowerPanes();
-				JobScreen.subBase.setVisible(true);
+				
 			}
 		});
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
@@ -69,6 +68,8 @@ public class ExternalTab extends JPanel {
 		JButton btnNewButton_1 = new JButton("Select");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JobScreen.resetLowerPanes();
+				JobScreen.subBase.setVisible(true);
 			}
 		});
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();

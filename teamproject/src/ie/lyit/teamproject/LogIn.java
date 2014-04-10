@@ -2,7 +2,10 @@ package ie.lyit.teamproject;
 
 //import java.awt.CardLayout;
 //import java.awt.Toolkit;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
 //import java.io.File;
 //import java.io.IOException;
 //import java.sql.DriverManager;
@@ -11,7 +14,9 @@ import java.awt.image.BufferedImage;
 //import javax.imageio.ImageIO;
 //import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -22,6 +27,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
+import javax.swing.SwingConstants;
 
 /**
  * LW - We should look at the following link to have some element of security on this login screen
@@ -29,94 +35,117 @@ import javax.swing.JPasswordField;
  * It's not critical for our application, but some understanding of it will be useful in the future,
  */
 
-public class LogIn extends JFrame {
+public class LogIn extends JInternalFrame {
 	private JTextField txtUname;
 	private JPanel main;
-
+	DBConnectionClass dbConn = new DBConnectionClass();
+	OpenProject openProject = new OpenProject();
 	// Move to my desktopPane
 	//CardLayout cardLayout = new CardLayout();
 	private JPasswordField txtPassword;
+	private JTextField jtxtUser;
+	private JPasswordField passwordtxt;
+	
+	private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public LogIn() {
-
-		main = new JPanel();
-		//
-		// clPanel.add(main, "1");
-		// clPanel.add(new MyDesktopPane(), "2");
-
-		main.setLayout(null);
-		// background
-		BufferedImage img = null;
-		/**
-		 * LW - I commented out the code below as I don't have a copy of the image -
-		 * make sure images in future are stored in the Images folder and not on an individual machine
-		 */
-		// try {
-		// // img = ImageIO.read(new File("E:\\Team Project\\New\\teamproject\\teamproject\\images.PNG"));
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-		txtUname = new JTextField();
-		txtUname.setBounds(435, 200, 164, 37);
-		main.add(txtUname);
-		txtUname.setColumns(10);
-
-		/*
-		 * Login button User clicks, variables are taken from the username and
-		 * password boxes These variables are checked against the details stored
-		 * in the database
-		 */
+		setTitle("Member - Log in");
+		getContentPane().setLayout(null);
+		
+		JLabel lblUsername = new JLabel("Username:");
+		lblUsername.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblUsername.setBounds(10, 37, 86, 14);
+		getContentPane().add(lblUsername);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPassword.setBounds(10, 78, 86, 14);
+		getContentPane().add(lblPassword);
+		
+		jtxtUser = new JTextField();
+		jtxtUser.setBounds(106, 34, 86, 20);
+		getContentPane().add(jtxtUser);
+		jtxtUser.setColumns(10);
+		
+		passwordtxt = new JPasswordField();
+		passwordtxt.setBounds(106, 76, 89, 17);
+		getContentPane().add(passwordtxt);
+		
 		JButton btnLogIn = new JButton("Log In");
 		btnLogIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String username = txtUname.getText();
-				String password = "";
-				for (char x : txtPassword.getPassword()) {
-					password += x;
-				}
-				DBConnectionClass dbConn = new DBConnectionClass();
-				int result = dbConn.retrieveUserInfo(username, password);
-
-				if (result == 1) {
-					// System.out.print("User exists!");
-					setVisible(false);
-					MainScreen mainScreen = new MainScreen();
-					// CardLayout cl = (CardLayout)(clPanel.getLayout());
-					// cl.show(clPanel, "2");
-				} else {
-					System.out.print("User doesn't exist");
-				}
+				logInUser();
 			}
-
 		});
-		btnLogIn.setBounds(451, 341, 124, 54);
-		main.add(btnLogIn);
+		btnLogIn.setBounds(73, 118, 89, 23);
+		getContentPane().add(btnLogIn);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
+			}
+		});
+		btnCancel.setBounds(73, 152, 89, 23);
+		getContentPane().add(btnCancel);
+		//spawn
+				int ownX = 455;
+				int ownY = 330;
+				
+				int screenX = screenSize.width;
+				int screenY = screenSize.height;
 
-		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setBounds(477, 187, 72, 14);
-		main.add(lblUsername);
-
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setBounds(477, 248, 72, 14);
-		main.add(lblPassword);
-
-		// JLabel lblBg = new JLabel(new ImageIcon(img));
-		// lblBg.setBounds(0, 0, 1920, 670);
-		// main.add(lblBg);
-
-		txtPassword = new JPasswordField();
-		txtPassword.setBounds(435, 273, 164, 37);
-		main.add(txtPassword);
-
-		getContentPane().add(main);
-		getRootPane().setDefaultButton(btnLogIn);
+				int xPos = (int)((screenX / 2) - (ownX / 2)) ;
+				int yPos = (int)((screenY / 2) - (ownY / 2));
+				
+				this.setSize(247, 229);
+				this.setLocation(xPos, yPos);
+				
+				this.setClosable(true);
+				this.setResizable(false);
+				this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
+				this.setFrameIcon(new ImageIcon(""));
+	
 	}
-
-	public static void main(String[] args) {
-		LogIn logIn = new LogIn();
-		logIn.setVisible(true);
-		logIn.setSize(1080, 720);
-		logIn.setLocationRelativeTo(null);
-		// logIn.setExtendedState(JFrame.MAXIMIZED_BOTH);
+	
+	/**
+	 * 
+	 */
+	public void logInUser()
+	{
+		String username = jtxtUser.getText();
+		String password = new String(passwordtxt.getPassword());
+		
+		//Check if users exists
+		int result = dbConn.checkUser(username);
+		if(result >= 1)
+		{
+			//Get id of loggedIn user
+			int userID = dbConn.retrieveUserInfo(username, password);
+			MainScreen.setUserLoggedIn(userID);
+			setVisible(false);
+			
+			if (!MainScreen.openProjectInstanceFlag) {
+				openProject = new OpenProject();
+				MainScreen.desk.add(openProject);
+				MainScreen.openProjectInstanceFlag = true;
+			}
+			openProject.clientModel.data = openProject.updateClientJobTable(); 
+			openProject.updateClientJobTable();
+			openProject.table.repaint();
+			openProject.table.revalidate();
+			openProject.setVisible(true);
+			openProject.toFront();
+			
+			jtxtUser.setText("");
+			passwordtxt.setText("");
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(new JPanel(), "Incorrect Details", "Info",
+			        JOptionPane.INFORMATION_MESSAGE);
+		}
+		
+		
 	}
 }
