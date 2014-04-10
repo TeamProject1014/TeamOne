@@ -34,9 +34,6 @@ public class DBConnectionClass {
 	static PreparedStatement addCategoryMaterial;
 	static PreparedStatement deleteFromJob;
 	static PreparedStatement updateCategory;
-	static PreparedStatement updateTableItem;
-	static PreparedStatement checkUser;
-	
 	static ResultSet rs;
 	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -72,87 +69,75 @@ public class DBConnectionClass {
 
 	}
 
-		/**
-	 * Checks if a user exits when creating a new one
-	 * @param username
-	 * @return
+	/**
+	 * Legacy/generic method that is no longer used. Retained here for reference
+	 * when creating future methods
 	 */
-	public int checkUser(String username)
-	{
-		boolean result = false;
-		int count = 0;
+	public void createTable() {
 		try {
-			// String gdta = "select * from USER";
-			String gdta = "Select name FROM user WHERE name = '"
-					+ username + "'";
-			rs = stmt.executeQuery(gdta);
-
-			while (rs.next()) {
-				++count;
-				// Get data from the current row and use it
-			}
+			stmt = con.createStatement();
 
 		} catch (SQLException ex) {
-			System.err.println("Retrieve Data: " + ex.getMessage());
+			System.err.println("Create table error function: "
+					+ ex.getMessage());
 		}
-
-		return count;
 	}
 
+	// /**
+	// * Return the client ID
+	// *
+	// * @param clientReturned
+	// * The client name
+	// * @return The client ID
+	// */
+	// public int getClientID(String clientReturned) {
+	// int client_id = -1;
+	// try {
+	// String cliData = "SELECT client_id from client where name = '"
+	// + clientReturned + "'";
+	// rs = stmt.executeQuery(cliData);
+	//
+	// while (rs.next()) {
+	// client_id = rs.getInt(1);
+	// // return client_id;
+	// }
+	//
+	// return client_id;
+	// } catch (SQLException ex) {
+	// System.err.println("Error attempting to retrieve client data: "
+	// + ex.getMessage());
+	// return client_id;
+	// }
+	// }
 
 	/**
-	 * Checks if a category exists
-	 * @param username
-	 * @return
-	 */
-	public int checkCategory(String cat)
-	{
-		boolean result = false;
-		int count = 0;
-		try {
-			// String gdta = "select * from USER";
-			String gdta = "Select * FROM category WHERE description = '"
-					+ cat + "'";
-			rs = stmt.executeQuery(gdta); 
-
-			while (rs.next()) {
-				++count;
-				// Get data from the current row and use it
-			}
-
-		} catch (SQLException ex) {
-			System.err.println("Retrieve Data: " + ex.getMessage());
-		}
-
-		return count;
-	}
-	
-	/**
+	 * Returns the name of the Architect associated with a project
 	 * 
-	 * @param mat
-	 * @return
+	 * @param client_ID
+	 *            The client_id
+	 * @return The name of the Architect associated with a project
 	 */
-	public int checkMaterial(String mat)
-	{
-		boolean result = false;
-		int count = 0;
-		try {
-			// String gdta = "select * from USER";
-			String gdta = "Select * FROM material WHERE description = '"
-					+ mat + "'";
-			rs = stmt.executeQuery(gdta);
-
-			while (rs.next()) {
-				++count;
-				// Get data from the current row and use it
-			}
-
-		} catch (SQLException ex) {
-			System.err.println("Retrieve Data: " + ex.getMessage());
-		}
-
-		return count;
-	}
+	// public String getProjectArchitect(int client_ID) {
+	// String arch = "";
+	// try {
+	// String archData = "select architect.name from architect "
+	// + "inner join job, job_client "
+	// + "where job.arch_id = architect.arch_id "
+	// + "and job.job_id = job_client.job_id "
+	// + "and job_client.client_id = " + client_ID + ";";
+	// rs = stmt.executeQuery(archData);
+	//
+	// while (rs.next()) {
+	// arch = rs.getString(1);
+	// }
+	//
+	// return arch;
+	// } catch (SQLException ex) {
+	// System.err.println("Error attempting to retrieve client data: "
+	// + ex.getMessage());
+	// return null;
+	// }
+	// }
 
 	/**
 	 * Retrieves relevant information from Client table
@@ -284,51 +269,23 @@ public class DBConnectionClass {
 	 */
 	public int retrieveUserInfo(String username, String password) {
 		boolean result = false;
-		int userID = 0;
+		int count = 0;
 		try {
 			// String gdta = "select * from USER";
-			String gdta = "Select user_ID FROM user WHERE name = '"
+			String gdta = "Select name, password FROM user WHERE name = '"
 					+ username + "' AND password = '" + password + "'";
 			rs = stmt.executeQuery(gdta);
 
 			while (rs.next()) {
+				++count;
 				// Get data from the current row and use it
-				userID = Integer.parseInt(rs.getString(1));
-				System.out.print("User ID: "+ userID);
 			}
 
 		} catch (SQLException ex) {
 			System.err.println("Retrieve Data: " + ex.getMessage());
 		}
 
-		return userID;
-	}
-	
-	/**
-	 * Gets material with the id
-	 * @param mat_id
-	 * @return
-	 */
-	public String getMaterial(int mat_id)
-	{
-		String mat="";
-		
-		try {
-			// String gdta = "select * from USER";
-			String gdta = "Select description FROM material WHERE Material_ID = '"
-					+ mat_id + "'";
-			rs = stmt.executeQuery(gdta);
-
-			while (rs.next()) {
-				// Get data from the current row and use it
-				mat = rs.getString(1);
-			}
-
-		} catch (SQLException ex) {
-			System.err.println("Retrieve Data: " + ex.getMessage());
-		}
-		System.out.print("Material : "+ mat);
-		return mat;
+		return count;
 	}
 
 	/**
@@ -385,21 +342,6 @@ public class DBConnectionClass {
 		}
 	}
 
-	public void editItemFromJob(int job_id, int mat_id, double quantity, double price) {
-		double total = quantity*price;
-		try {
-			String insertString = "UPDATE job_material SET quantity =" + quantity 
-					+ ", price =" + price  + ", totalprice ="+total + 
-					" WHERE job_id =" + job_id + " AND material_id = " + mat_id;
-			updateTableItem = con.prepareStatement(insertString);
-			updateTableItem.executeUpdate();
-
-		} catch (SQLException ex) {
-			System.err.println("There was an error when editing Data: "
-					+ ex.getMessage());
-		}
-
-	}
 	// /**
 	// * Retrieves the total cost of all materials that have been added to a job
 	// *
@@ -902,7 +844,7 @@ public class DBConnectionClass {
 					+ "FROM client, job "
 					+ "INNER JOIN job_client "
 					+ "WHERE job.job_id = job_client.job_id "
-					+ "AND client.client_id = job_client.client_id AND job.user_id = "+MainScreen.getUserLoggedIn();
+					+ "AND client.client_id = job_client.client_id";
 
 			rs = stmt.executeQuery(gdta);
 			return rs;

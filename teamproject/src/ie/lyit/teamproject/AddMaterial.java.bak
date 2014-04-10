@@ -10,10 +10,8 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -78,67 +76,76 @@ private final JPanel contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Material Details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(10, 11, 314, 113);
+		contentPanel.add(panel);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{47, 0, 150, 0};
+		gbl_panel.rowHeights = new int[]{22, 20, 0, 0};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
+		
+		jlblName = new JLabel("Material: ");
+		GridBagConstraints gbc_jlblName = new GridBagConstraints();
+		gbc_jlblName.anchor = GridBagConstraints.EAST;
+		gbc_jlblName.insets = new Insets(0, 0, 5, 5);
+		gbc_jlblName.gridx = 1;
+		gbc_jlblName.gridy = 1;
+		panel.add(jlblName, gbc_jlblName);
+		jlblName.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		jtfName = new JTextField();
+		GridBagConstraints gbc_jtfName = new GridBagConstraints();
+		gbc_jtfName.insets = new Insets(0, 0, 5, 0);
+		gbc_jtfName.anchor = GridBagConstraints.NORTHWEST;
+		gbc_jtfName.gridx = 2;
+		gbc_jtfName.gridy = 1;
+		panel.add(jtfName, gbc_jtfName);
+		jtfName.setColumns(10);
+		
+		JLabel lblCategory = new JLabel("Category:");
+		GridBagConstraints gbc_lblCategory = new GridBagConstraints();
+		gbc_lblCategory.anchor = GridBagConstraints.EAST;
+		gbc_lblCategory.insets = new Insets(0, 0, 0, 5);
+		gbc_lblCategory.gridx = 1;
+		gbc_lblCategory.gridy = 2;
+		panel.add(lblCategory, gbc_lblCategory);
+		
+		comboBox = new JComboBox(categories);
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.anchor = GridBagConstraints.NORTHWEST;
+		gbc_comboBox.gridx = 2;
+		gbc_comboBox.gridy = 2;
+		panel.add(comboBox, gbc_comboBox);
 		{
+			JPanel buttonPane = new JPanel();
+			buttonPane.setBounds(10, 152, 314, 77);
+			buttonPane.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			contentPanel.add(buttonPane);
+					buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+			
+			JButton btnSave = new JButton("Save");
+			buttonPane.add(btnSave);
+			
 					
-					JButton btnSave = new JButton("Add");
-					btnSave.setBounds(27, 97, 65, 23);
-					contentPanel.add(btnSave);
-					
-							
-							jbtExit = new JButton("Cancel");
-							jbtExit.setBounds(108, 97, 86, 23);
-							contentPanel.add(jbtExit);
-							
-							jtfName = new JTextField();
-							jtfName.setBounds(108, 49, 109, 20);
-							contentPanel.add(jtfName);
-							jtfName.setColumns(10);
-							
-							jlblName = new JLabel("Material: ");
-							jlblName.setBounds(27, 52, 65, 14);
-							contentPanel.add(jlblName);
-							jlblName.setHorizontalAlignment(SwingConstants.RIGHT);
-							
-							JLabel lblCategory = new JLabel("Category:");
-							lblCategory.setHorizontalAlignment(SwingConstants.RIGHT);
-							lblCategory.setBounds(27, 21, 65, 14);
-							contentPanel.add(lblCategory);
-							
-							comboBox = new JComboBox(categories);
-							comboBox.setBounds(108, 18, 109, 20);
-							contentPanel.add(comboBox);
-							jbtExit.addActionListener(new ActionListener() {
-								public void actionPerformed(ActionEvent arg0) {
-									setVisible(false);
-									
-								}
-							});
-					btnSave.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							String description = jtfName.getText();
-							int cat_id = checkCombo();
-							
-							//Error handling
-							if(dbc.checkMaterial(description) >= 1)
-							{
-								JOptionPane.showMessageDialog(new JFrame(), "Material already exists");
-							}
-							else if(description.equals("") || cat_id<=0)
-							{
-								JOptionPane.showConfirmDialog(null,
-										"Incorrect details", "Incorrect details",
-										JOptionPane.DEFAULT_OPTION,
-										JOptionPane.WARNING_MESSAGE);
-							}
-							else
-							{
-								dbc.addMaterialToDB(cat_id, description);
-								jtfName.setText("");
-								
-								//setVisible(false);
-							}
+					jbtExit = new JButton("Exit");
+					buttonPane.add(jbtExit);
+					jbtExit.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							setVisible(false);
 						}
 					});
+			btnSave.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String description = jtfName.getText();
+					int cat_id = checkCombo();
+					dbc.addMaterialToDB(cat_id, description);
+					setVisible(false);
+				}
+			});
 		}
 		
 		setResizable(false);
@@ -152,7 +159,7 @@ private final JPanel contentPanel = new JPanel();
 		int xPos = (int)((screenX / 2) - (ownX / 2)) ;
 		int yPos = (int)((screenY / 2) - (ownY / 2));
 		
-		this.setSize(259, 188);
+		this.setSize(346, 271);
 		this.setLocation(xPos, yPos);
 		
 		this.setClosable(true);
