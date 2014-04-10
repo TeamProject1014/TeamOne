@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
@@ -60,6 +61,7 @@ public class MainScreen extends JFrame {
 	public static boolean addCategoryInstanceFlag;
 	private static boolean addMaterialInstanceFlag;
 	private static boolean addUserInstanceFlag;
+	private static boolean loginInstanceFlag;
 
 	protected static NewJob newJob;
 	protected static OpenProject openProject;
@@ -75,6 +77,8 @@ public class MainScreen extends JFrame {
 	private static int userLoggedIn;
 	
 	public MainScreen() {
+		
+		userLoggedIn = -1;
 
 		getContentPane().setLayout(new BorderLayout());
 
@@ -134,17 +138,39 @@ public class MainScreen extends JFrame {
 		Action openAction = new AbstractAction("Open", new ImageIcon(
 				"Images/open.png")) {
 			public void actionPerformed(ActionEvent e) {
-				if (!openProjectInstanceFlag) {
-					openProject = new OpenProject();
-					desk.add(openProject);
-					openProjectInstanceFlag = true;
+				try {
+				if (userLoggedIn > -1) {
+					if (!openProjectInstanceFlag) {
+						
+						openProject = new OpenProject();
+						desk.add(openProject);
+						openProjectInstanceFlag = true;
+					}
+					OpenProject.clientModel.data = OpenProject.updateClientJobTable(); 
+					OpenProject.updateClientJobTable();
+					OpenProject.table.repaint();
+					OpenProject.table.revalidate();
+					if (openProject.isVisible() == false) {
+						openProject.setVisible(true);
+					}
+					
+					
+					openProject.toFront();
 				}
-				openProject.clientModel.data = openProject.updateClientJobTable(); 
-				openProject.updateClientJobTable();
-				openProject.table.repaint();
-				openProject.table.revalidate();
-				openProject.setVisible(true);
-				openProject.toFront();
+				else {
+					JOptionPane.showMessageDialog(null, "You must log in to open a Job", "No User Logged in", JOptionPane.OK_OPTION);
+//					.showConfirmDialog(null,
+//							"You must log in to open a Job", "Not User Logged in",
+//							JOptionPane.OK_OPTION,
+//							JOptionPane.INFORMATION_MESSAGE);
+				}
+				} catch (Exception ex) {
+					// TODO Auto-generated catch block
+					JOptionPane.showConfirmDialog(null,
+							"Problem with login page", "No User Logged in",
+							JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.WARNING_MESSAGE);
+				}
 			}
 		};
 		openAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_O));
@@ -180,10 +206,10 @@ public class MainScreen extends JFrame {
 		Action newLogIn = new AbstractAction("Log In", new ImageIcon(
 				"")) {
 			public void actionPerformed(ActionEvent e) {
-				if (!addUserInstanceFlag) {
+				if (!loginInstanceFlag) {
 					userLogIn = new LogIn();
 					desk.add(userLogIn);
-					addUserInstanceFlag = true;
+					loginInstanceFlag = true;
 				}
 				userLogIn.setVisible(true);
 				userLogIn.toFront();

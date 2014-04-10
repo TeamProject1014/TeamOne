@@ -197,6 +197,14 @@ public class JobScreen extends JInternalFrame {
 		totalPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 
 		jbtEdit = new JButton("Edit");
+		jbtEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				if (table.getSelectedRow() > -1) {
+					runEdit();
+				}
+			}
+		});
 		totalPanel.add(jbtEdit);
 
 		jbtDelete = new JButton("Delete");
@@ -753,11 +761,14 @@ public class JobScreen extends JInternalFrame {
 
 		@Override
 		public boolean isCellEditable(int row, int col) {
-			// return false;
-			if (col < 2 || col == 4)
-				return false;
-			else
-				return true;
+			 return false;
+			 /**
+			  * The columns below were set to allow editing to be carried out within the table
+			  */
+//			if (col < 2 || col == 4)
+//				return false;
+//			else
+//				return true;
 		}
 
 		@Override

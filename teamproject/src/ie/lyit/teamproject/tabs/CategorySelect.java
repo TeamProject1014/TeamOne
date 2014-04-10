@@ -132,7 +132,7 @@ public class CategorySelect extends JPanel {
 			}
 		});
 
-		JButton jbtAdd = new JButton("Add");
+		JButton jbtAdd = new JButton("Add New");
 		jbtAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!MainScreen.addCategoryInstanceFlag) {
