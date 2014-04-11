@@ -31,13 +31,13 @@ public class NewJob extends JInternalFrame {
 	private static DBConnectionClass dbc;
 	private static ResultSet rs;
 	private static Object[][] clientArray;
-//	private static String[] clientName;
+
 	private static Object[][] archArray;
-//	private String[] archName;
+
 	private static Object[][] engArray;
-//	private String[] engName;
+
 	private static Object[][] buildArray;
-//	private String[] buildName;
+
 	public OpenProject openProject;
 	public static boolean tracker = false;
 
