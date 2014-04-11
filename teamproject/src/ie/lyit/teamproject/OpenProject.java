@@ -182,6 +182,7 @@ public class OpenProject extends JInternalFrame {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
+		//getRootPane().setDefaultButton(jbtOpen);
 	}
 	
 	public static Object[][] updateClientJobTable() {
