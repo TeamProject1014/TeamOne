@@ -49,7 +49,7 @@ import java.awt.event.ComponentEvent;
 
 public class AddCategory extends JInternalFrame {
 	private DBConnectionClass dbc = new DBConnectionClass();
-	private JTextField jtxtDesc;
+	public JTextField jtxtDesc;
 	private static Dimension screenSize = Toolkit.getDefaultToolkit()
 			.getScreenSize();
 
@@ -60,32 +60,27 @@ public class AddCategory extends JInternalFrame {
 				jtxtDesc.requestFocus();
 			}
 		});
-		getContentPane().setLayout(null);
 		setTitle("Add Category");
+		getContentPane().setLayout(new BorderLayout(0, 0));
+		
+		JPanel categoryPanel = new JPanel();
+		categoryPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Category", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		getContentPane().add(categoryPanel, BorderLayout.CENTER);
+		
+				JLabel lblDescription = new JLabel("Description: ");
+				categoryPanel.add(lblDescription);
+				lblDescription.setHorizontalAlignment(SwingConstants.RIGHT);
+				
+						jtxtDesc = new JTextField();
+						categoryPanel.add(jtxtDesc);
+						jtxtDesc.setColumns(10);
+		
+		JPanel optionsPanel = new JPanel();
+		optionsPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		getContentPane().add(optionsPanel, BorderLayout.SOUTH);
 
 		JButton btnConfirm = new JButton("Add");
-		btnConfirm.setBounds(35, 76, 71, 20);
-		getContentPane().add(btnConfirm);
-
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(116, 76, 79, 20);
-		getContentPane().add(btnCancel);
-
-		JLabel lblDescription = new JLabel("Description: ");
-		lblDescription.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblDescription.setBounds(10, 29, 97, 14);
-		getContentPane().add(lblDescription);
-
-		jtxtDesc = new JTextField();
-		jtxtDesc.setBounds(116, 26, 101, 20);
-		getContentPane().add(jtxtDesc);
-		jtxtDesc.setColumns(10);
-		btnCancel.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				setVisible(false);
-				jtxtDesc.setText("");
-			}
-		});
+		optionsPanel.add(btnConfirm);
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int id = dbc.retrieveCategory_id();// Get last ID from db
@@ -103,6 +98,16 @@ public class AddCategory extends JInternalFrame {
 					jtxtDesc.setText("");
 				}
 
+			}
+		});
+		getRootPane().setDefaultButton(btnConfirm);
+
+		JButton btnCancel = new JButton("Cancel");
+		optionsPanel.add(btnCancel);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
+				jtxtDesc.setText("");
 			}
 		});
 
@@ -123,7 +128,6 @@ public class AddCategory extends JInternalFrame {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
-		getRootPane().setDefaultButton(btnConfirm);
 
 	}
 }

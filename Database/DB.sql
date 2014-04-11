@@ -34,7 +34,7 @@ CREATE TABLE `architect` (
   `phone` varchar(10) DEFAULT NULL,
   `Email` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`Arch_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,7 +88,7 @@ CREATE TABLE `category` (
   `category_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Description` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`category_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +97,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'Substructure'),(2,'External Walls'),(3,'Internal Walls'),(4,'Upper Floors'),(5,'Stairs'),(6,'Roof Structure'),(7,'External Walls Completion'),(8,'Internal Walls Completion'),(9,'Roof Completion'),(10,'External Wall Finishes'),(11,'Internal Wall Finishes'),(12,'Floor Finishes'),(13,'Stair Finishes'),(14,'Ceiling Finishes'),(15,'Roof Finishes'),(16,'Mechanical Services'),(17,'Electrical Services'),(18,'Building Fittings'),(19,'siteworks');
+INSERT INTO `category` VALUES (1,'Substructure'),(2,'External Walls'),(3,'Internal Walls'),(4,'Upper Floors'),(5,'Stairs'),(6,'Roof Structure'),(7,'External Walls Completion'),(8,'Internal Walls Completion'),(9,'Roof Completion'),(10,'External Wall Finishes'),(11,'Internal Wall Finishes'),(12,'Floor Finishes'),(13,'Stair Finishes'),(14,'Ceiling Finishes'),(15,'Roof Finishes'),(16,'Mechanical Services'),(17,'Electrical Services'),(18,'Building Fittings'),(19,'siteworks'),(20,'Landscaping');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +124,7 @@ CREATE TABLE `category_material` (
 
 LOCK TABLES `category_material` WRITE;
 /*!40000 ALTER TABLE `category_material` DISABLE KEYS */;
-INSERT INTO `category_material` VALUES (1,1),(1,2),(1,3),(1,4),(1,6),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,18),(1,19),(1,20),(1,21),(2,22),(2,23),(2,24),(2,25),(2,26),(2,27),(3,28),(5,29);
+INSERT INTO `category_material` VALUES (1,1),(1,2),(1,3),(1,4),(1,6),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,18),(1,19),(1,20),(1,21),(2,22),(2,23),(2,24),(2,25),(2,26),(2,27),(3,28),(5,29),(2,30);
 /*!40000 ALTER TABLE `category_material` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,7 +145,7 @@ CREATE TABLE `client` (
   `phone` varchar(10) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`Client_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,7 +154,7 @@ CREATE TABLE `client` (
 
 LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
-INSERT INTO `client` VALUES (1,'Joe Bloggs','Main Street','','Donegal Town','Donegal','871234567','joebloggs@lyit.com'),(2,'John Doe','The Mall',NULL,'Ballyshannon','Donegal','877654321','johndoe@lyit.ie'),(4,'Pat Murphy','Bridge Street',NULL,'Ramelton','Donegal','878901234','patmurphy@lyit.ie'),(5,'Fred West','Pearse Road','','Letterkenny','Donegal','126171511','fredwest@lyit.ie'),(6,'Fr. Ted Crilly','Parochial House','','Craggy Island','Clare','651234567','frted@lyit.ie'),(7,'Christopher Negus','Random Road','','Donegal Town','Donegal','0751236542','chrisneg@client.ie'),(8,'Joel Murach','12 Castle Street','','Donegal Town','Donegal','749798765','joel.murach@client.ie'),(9,'Roisin Eccles','3 Middle Drumrooske','','Donegal Town','Donegal','863761519','roshec@gmail.com');
+INSERT INTO `client` VALUES (1,'Joe Bloggs','Main Street','','Donegal Town','Donegal','871234567','joebloggs@lyit.com'),(2,'John Doe','The Mall',NULL,'Ballyshannon','Donegal','877654321','johndoe@lyit.ie'),(4,'Pat Murphy','Bridge Street',NULL,'Ramelton','Donegal','878901234','patmurphy@lyit.ie'),(5,'Fred West','Pearse Road','','Letterkenny','Donegal','126171511','fredwest@lyit.ie'),(6,'Fr. Ted Crilly','Parochial House','','Craggy Island','Clare','651234567','frted@lyit.ie'),(7,'Christopher Negus','Random Road','','Donegal Town','Donegal','0751236542','chrisneg@client.ie'),(8,'Joel Murach','12 Castle Street','','Donegal Town','Donegal','749798765','joel.murach@client.ie'),(9,'Roisin Eccles','3 Middle Drumrooske','','Donegal Town','Donegal','863761519','roshec@gmail.com'),(10,'Andrew Tannenbaum','Canal Street','','Buncranna','Donegal','87456152','andytan@client.ie');
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,7 +212,7 @@ CREATE TABLE `job` (
   CONSTRAINT `job_ibfk_1` FOREIGN KEY (`Build_ID`) REFERENCES `builder` (`Builder_ID`),
   CONSTRAINT `job_ibfk_2` FOREIGN KEY (`Arch_ID`) REFERENCES `architect` (`Arch_ID`),
   CONSTRAINT `job_ibfk_3` FOREIGN KEY (`Eng_ID`) REFERENCES `engineer` (`Eng_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -221,7 +221,7 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES (1,'Open',41979.01,1,3,2,'Proposed Health Centre in downtown Ramelton',1),(2,'Open',14694.00,2,2,3,'Proposed development in uptown Ballyshannon',2),(8,'Open',10935.00,4,5,4,'Proposed Dwelling at Ballybofey',3),(9,'Open',15153.00,4,2,3,'Propsed Shed at Laghey',4),(11,'Open',10859.00,2,1,3,'Proposed Health Centre at Port Road, Letterkenny',1),(12,'Open',NULL,5,5,5,'Proposed Development up the Road',1),(14,'Open',NULL,NULL,NULL,NULL,'Test Development',2),(15,'Open',NULL,NULL,NULL,NULL,'Test Development',3),(16,'Open',NULL,2,2,2,'test\n',4),(17,'Open',NULL,5,2,5,'Another test',3),(18,'Pending',134.55,3,4,3,'New Job',2),(19,'Open',NULL,3,1,4,'Brand New Development',2),(20,'Open',NULL,1,1,1,'Another Bloggs Job',3),(21,'Open',NULL,2,2,2,'Another Doe Job',4),(22,'Open',NULL,3,3,3,'PM Job',1),(23,'Open',23940.00,3,2,3,'Proposed Development at Middle Drumrroske',4),(24,'Open',0.00,1,1,1,'hjkl',NULL),(25,'Open',0.00,2,1,5,'hkl',NULL);
+INSERT INTO `job` VALUES (1,'Approved',41979.01,1,3,2,'Proposed Health Centre in downtown Ramelton',1),(2,'Open',14694.00,2,2,3,'Proposed development in uptown Ballyshannon',2),(8,'Open',10935.00,4,5,4,'Proposed Dwelling at Ballybofey',3),(9,'Open',15153.00,4,2,3,'Propsed Shed at Laghey',4),(11,'Open',10859.00,2,1,3,'Proposed Health Centre at Port Road, Letterkenny',1),(27,'Open',0.00,5,2,3,'',NULL);
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -248,7 +248,7 @@ CREATE TABLE `job_client` (
 
 LOCK TABLES `job_client` WRITE;
 /*!40000 ALTER TABLE `job_client` DISABLE KEYS */;
-INSERT INTO `job_client` VALUES (1,1),(20,1),(23,1),(24,1),(2,2),(16,2),(21,2),(25,2),(8,4),(22,4),(17,5),(18,5),(15,6),(11,7),(19,7),(9,8),(12,8);
+INSERT INTO `job_client` VALUES (1,1),(2,2),(8,4),(11,7),(9,8),(27,9);
 /*!40000 ALTER TABLE `job_client` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -278,7 +278,7 @@ CREATE TABLE `job_material` (
 
 LOCK TABLES `job_material` WRITE;
 /*!40000 ALTER TABLE `job_material` DISABLE KEYS */;
-INSERT INTO `job_material` VALUES (1,1,8900,1.00,8900.00),(1,2,15,40.00,600.00),(1,3,61,17.00,1037.00),(1,4,10,30.00,300.00),(1,10,6,32.00,192.00),(1,12,85,36.00,3060.00),(1,13,57,38.00,2166.00),(1,14,6,95.00,570.00),(1,15,30,15.00,450.00),(1,16,200,8.00,1600.00),(1,22,320,42.00,13440.00),(1,23,5123,1.87,9580.01),(1,24,3,28.00,84.00),(2,2,41,40.00,1640.00),(2,3,61,17.00,1037.00),(2,4,77,13.00,1001.00),(2,5,50,95.00,4750.00),(2,6,2,200.00,400.00),(2,10,6,32.00,192.00),(2,12,115,36.00,4140.00),(2,14,6,95.00,570.00),(2,16,44,6.00,264.00),(2,18,2,200.00,400.00),(2,19,1,300.00,300.00),(8,21,243,45.00,10935.00),(9,1,1,8900.00,8900.00),(9,2,21,40.00,840.00),(9,14,6,95.00,570.00),(9,16,644,6.00,3864.00),(9,25,23,23.00,529.00),(9,27,25,18.00,450.00),(11,1,1,6500.00,6500.00),(11,2,35,45.00,1575.00),(11,3,45,38.00,1710.00),(11,14,58,13.00,754.00),(11,19,4,80.00,320.00),(18,23,23,5.85,134.55),(23,1,8900,1.00,8900.00),(23,2,40,40.00,1600.00),(23,22,320,42.00,13440.00);
+INSERT INTO `job_material` VALUES (1,1,8900,1.00,8900.00),(1,2,15,40.00,600.00),(1,3,61,17.00,1037.00),(1,4,10,30.00,300.00),(1,10,6,32.00,192.00),(1,12,85,36.00,3060.00),(1,13,57,38.00,2166.00),(1,14,6,95.00,570.00),(1,15,30,15.00,450.00),(1,16,200,8.00,1600.00),(1,22,320,42.00,13440.00),(1,23,5123,1.87,9580.01),(1,24,3,28.00,84.00),(2,2,41,40.00,1640.00),(2,3,61,17.00,1037.00),(2,4,77,13.00,1001.00),(2,5,50,95.00,4750.00),(2,6,2,200.00,400.00),(2,10,6,32.00,192.00),(2,12,115,36.00,4140.00),(2,14,6,95.00,570.00),(2,16,44,6.00,264.00),(2,18,2,200.00,400.00),(2,19,1,300.00,300.00),(8,21,243,45.00,10935.00),(9,1,1,8900.00,8900.00),(9,2,21,40.00,840.00),(9,14,6,95.00,570.00),(9,16,644,6.00,3864.00),(9,25,23,23.00,529.00),(9,27,25,18.00,450.00),(11,1,1,6500.00,6500.00),(11,2,35,45.00,1575.00),(11,3,45,38.00,1710.00),(11,14,58,13.00,754.00),(11,19,4,80.00,320.00);
 /*!40000 ALTER TABLE `job_material` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -411,7 +411,7 @@ CREATE TABLE `material` (
   `Material_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Description` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`Material_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -420,7 +420,7 @@ CREATE TABLE `material` (
 
 LOCK TABLES `material` WRITE;
 /*!40000 ALTER TABLE `material` DISABLE KEYS */;
-INSERT INTO `material` VALUES (1,'PC sum for driven piles'),(2,'Cutting top of piles'),(3,'Hardcore over site for piling, 250th'),(4,'exec trenches & disposal'),(5,'Reinforced Concrete Ground Beam'),(6,'Ditto Pads'),(8,'prov r\'ment'),(9,'r\'ment @ 42kg/m3'),(10,'blinding'),(11,'Working Space'),(12,'300 Rising Cavity Blockwork'),(13,'215 Rising Blockwork'),(14,'Cavity Fill'),(15,'H\'core b\'fill'),(16,'DPC\'s'),(17,'Radon Barrier'),(18,'Sumps'),(19,'Sump Pipes'),(20,'250 thick h\'core to make up levels'),(21,'200 PCC Slabs on 60 Ins on Blinding'),(22,'Cavity Wall'),(23,'Blocks'),(24,'Cement'),(25,'Sand'),(26,'Wall Ties'),(27,'Insulation'),(28,'100mm Thick Walls'),(29,'Grabrail');
+INSERT INTO `material` VALUES (1,'PC sum for driven piles'),(2,'Cutting top of piles'),(3,'Hardcore over site for piling, 250th'),(4,'exec trenches & disposal'),(5,'Reinforced Concrete Ground Beam'),(6,'Ditto Pads'),(8,'prov r\'ment'),(9,'r\'ment @ 42kg/m3'),(10,'blinding'),(11,'Working Space'),(12,'300 Rising Cavity Blockwork'),(13,'215 Rising Blockwork'),(14,'Cavity Fill'),(15,'H\'core b\'fill'),(16,'DPC\'s'),(17,'Radon Barrier'),(18,'Sumps'),(19,'Sump Pipes'),(20,'250 thick h\'core to make up levels'),(21,'200 PCC Slabs on 60 Ins on Blinding'),(22,'Cavity Wall'),(23,'Blocks'),(24,'Cement'),(25,'Sand'),(26,'Wall Ties'),(27,'Insulation'),(28,'100mm Thick Walls'),(29,'Grabrail'),(30,'Colinwell FCG Quoins');
 /*!40000 ALTER TABLE `material` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -436,7 +436,7 @@ CREATE TABLE `user` (
   `name` varchar(30) DEFAULT NULL,
   `password` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`User_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -445,9 +445,13 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'Liam','password'),(2,'Cathal','password'),(3,'Eamon','password'),(4,'Luke','password');
+INSERT INTO `user` VALUES (1,'Liam','password'),(2,'Cathal','password'),(3,'Eamon','password'),(4,'Luke','password'),(5,'Helen','password'),(6,'Martin','password'),(7,'Paul','password'),(8,'Dermot','password'),(11,'Maeve','password'),(12,'administrator','letmein');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'quantities'
+--
 
 --
 -- Final view structure for view `job_view`
@@ -477,4 +481,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-10  1:13:04
+-- Dump completed on 2014-04-11  3:47:48

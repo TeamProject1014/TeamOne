@@ -46,6 +46,8 @@ import java.awt.Color;
 import javax.swing.JPasswordField;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class AddUser extends JInternalFrame {
 
@@ -55,9 +57,12 @@ public class AddUser extends JInternalFrame {
 	private static Dimension screenSize = Toolkit.getDefaultToolkit()
 			.getScreenSize();
 	private DBConnectionClass dbc;
-	private JPasswordField jtxtConfirm;
-	private JPasswordField jtxtPass;
-	private JTextField jtxtUser;
+
+	public JTextField jtxtUser;
+	public JPasswordField jtxtConfirm;
+	public JPasswordField jtxtPass;
+	private JLabel lblPassword;
+	private JLabel lblConfirmPassword;
 
 	public AddUser() {
 		addComponentListener(new ComponentAdapter() {
@@ -67,45 +72,106 @@ public class AddUser extends JInternalFrame {
 			}
 		});
 		dbc = new DBConnectionClass();
-		getContentPane().setLayout(null);
 		setTitle("Add User");
+		getContentPane().setLayout(new BorderLayout(0, 0));
 
-		JButton btnConfirm = new JButton("Add");
-		btnConfirm.setBounds(33, 123, 67, 23);
-		getContentPane().add(btnConfirm);
-
-		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(138, 123, 83, 23);
-		getContentPane().add(btnCancel);
-
-		jtxtConfirm = new JPasswordField();
-		jtxtConfirm.setBounds(147, 74, 93, 20);
-		getContentPane().add(jtxtConfirm);
-
-		JLabel lblConfirmPassword = new JLabel("Confirm Password:");
-		lblConfirmPassword.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblConfirmPassword.setBounds(10, 77, 127, 14);
-		getContentPane().add(lblConfirmPassword);
-
-		JLabel lblPassword = new JLabel("Password:");
-		lblPassword.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblPassword.setBounds(48, 46, 89, 14);
-		getContentPane().add(lblPassword);
-
-		jtxtPass = new JPasswordField();
-		jtxtPass.setBounds(147, 43, 93, 20);
-		getContentPane().add(jtxtPass);
+		JPanel textPanel = new JPanel();
+		textPanel.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "User Details",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		getContentPane().add(textPanel, BorderLayout.CENTER);
+		GridBagLayout gbl_textPanel = new GridBagLayout();
+		gbl_textPanel.columnWidths = new int[] { 57, 109, 0 };
+		gbl_textPanel.rowHeights = new int[] { 20, 20, 20, 0 };
+		gbl_textPanel.columnWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		gbl_textPanel.rowWeights = new double[] { 0.0, 0.0, 0.0,
+				Double.MIN_VALUE };
+		textPanel.setLayout(gbl_textPanel);
 
 		JLabel lblUsername = new JLabel("Username:");
-		lblUsername.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblUsername.setBounds(33, 16, 104, 12);
-		getContentPane().add(lblUsername);
+		GridBagConstraints gbc_lblUsername = new GridBagConstraints();
+		gbc_lblUsername.anchor = GridBagConstraints.EAST;
+		gbc_lblUsername.insets = new Insets(0, 0, 5, 5);
+		gbc_lblUsername.gridx = 0;
+		gbc_lblUsername.gridy = 0;
+		textPanel.add(lblUsername, gbc_lblUsername);
 
 		jtxtUser = new JTextField();
-		jtxtUser.setBounds(147, 12, 93, 20);
-		getContentPane().add(jtxtUser);
+		jtxtUser.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				jtxtUser.selectAll();
+			}
+		});
+		GridBagConstraints gbc_jtxtUser = new GridBagConstraints();
+		gbc_jtxtUser.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jtxtUser.anchor = GridBagConstraints.NORTH;
+		gbc_jtxtUser.insets = new Insets(0, 0, 5, 0);
+		gbc_jtxtUser.gridx = 1;
+		gbc_jtxtUser.gridy = 0;
+		textPanel.add(jtxtUser, gbc_jtxtUser);
 		jtxtUser.setColumns(10);
-		
+
+		lblPassword = new JLabel("Password:");
+		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+		gbc_lblPassword.anchor = GridBagConstraints.EAST;
+		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
+		gbc_lblPassword.gridx = 0;
+		gbc_lblPassword.gridy = 1;
+		textPanel.add(lblPassword, gbc_lblPassword);
+
+		jtxtPass = new JPasswordField();
+		jtxtPass.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				jtxtPass.selectAll();
+			}
+		});
+		GridBagConstraints gbc_jtxtPass = new GridBagConstraints();
+		gbc_jtxtPass.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jtxtPass.anchor = GridBagConstraints.NORTH;
+		gbc_jtxtPass.insets = new Insets(0, 0, 5, 0);
+		gbc_jtxtPass.gridx = 1;
+		gbc_jtxtPass.gridy = 1;
+		textPanel.add(jtxtPass, gbc_jtxtPass);
+		jtxtPass.setColumns(10);
+
+		lblConfirmPassword = new JLabel("Confirm Password:");
+		GridBagConstraints gbc_lblConfirmPassword = new GridBagConstraints();
+		gbc_lblConfirmPassword.anchor = GridBagConstraints.EAST;
+		gbc_lblConfirmPassword.insets = new Insets(0, 0, 0, 5);
+		gbc_lblConfirmPassword.gridx = 0;
+		gbc_lblConfirmPassword.gridy = 2;
+		textPanel.add(lblConfirmPassword, gbc_lblConfirmPassword);
+
+		jtxtConfirm = new JPasswordField();
+		jtxtConfirm.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				jtxtConfirm.selectAll();
+			}
+		});
+		GridBagConstraints gbc_jtxtConfirm = new GridBagConstraints();
+		gbc_jtxtConfirm.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jtxtConfirm.anchor = GridBagConstraints.NORTH;
+		gbc_jtxtConfirm.gridx = 1;
+		gbc_jtxtConfirm.gridy = 2;
+		textPanel.add(jtxtConfirm, gbc_jtxtConfirm);
+		jtxtConfirm.setColumns(10);
+
+		JPanel options = new JPanel();
+		getContentPane().add(options, BorderLayout.SOUTH);
+		options.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "Options",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		options.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		JButton btnConfirm = new JButton("Add");
+		options.add(btnConfirm);
+
+		JButton btnCancel = new JButton("Cancel");
+		options.add(btnCancel);
+
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
@@ -114,18 +180,19 @@ public class AddUser extends JInternalFrame {
 				jtxtConfirm.setText("");
 			}
 		});
-		
+
+		//btnConfirm = new JButton("Confirm");
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				username = jtxtUser.getText();
 				password = new String(jtxtPass.getPassword());
 				confirm = new String(jtxtConfirm.getPassword());
 
-				if (dbc.checkUser(username) >= 1) {
+				if (dbc.checkUserifUserExists(username) >= 1) {
 					JOptionPane.showMessageDialog(new JPanel(),
 							"User already exists", "Info",
 							JOptionPane.INFORMATION_MESSAGE);
-				} else if (password.equals(confirm)) {
+				} else if (password.equals(confirm) && (!password.equals(""))) {
 					dbc.createUser(username, password);
 					jtxtUser.setText("");
 					jtxtPass.setText("");
@@ -136,11 +203,16 @@ public class AddUser extends JInternalFrame {
 							"Password must equals confirm password", "Info",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
+				// else
+				// {
+				// JOptionPane.showMessageDialog(new JPanel(),
+				// "Password must equals confirm password", "Info",
+				// JOptionPane.INFORMATION_MESSAGE);
+				// }
 
 			}
 		});
 
-		// spawn
 		int ownX = 455;
 		int ownY = 330;
 

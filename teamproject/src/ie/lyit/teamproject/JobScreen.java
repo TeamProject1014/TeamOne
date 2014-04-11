@@ -167,16 +167,16 @@ public class JobScreen extends JInternalFrame {
 		TableColumn col5 = table.getColumnModel().getColumn(4);
 		col1.setPreferredWidth(150);
 		col2.setPreferredWidth(250);
-		col3.setPreferredWidth(100);
-		col4.setPreferredWidth(100);
-		col5.setPreferredWidth(100);
+		col3.setPreferredWidth(85);
+		col4.setPreferredWidth(85);
+		col5.setPreferredWidth(85);
 
 		tablePanel.setLayout(new BorderLayout(0, 0));
 
 		scrollPane = new JScrollPane(table);
 		scrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(675, 330));
+		scrollPane.setPreferredSize(new Dimension(630, 330));
 		tablePanel.add(scrollPane, BorderLayout.CENTER);
 		table.addMouseListener(new MouseAdapter() {
 
@@ -551,11 +551,11 @@ public class JobScreen extends JInternalFrame {
 		main.add(labels, BorderLayout.WEST);
 
 		//Get data from table
-		System.out.println(table.getSelectedRow());
+//		System.out.println(table.getSelectedRow());
 		int mat_id = (int) jobArray[table.getSelectedRow()][1];
 		int job_id = OpenProject.getProjectToOpen();
-		System.out.println("Editing entry with material_id: " + mat_id 
-							+ "\nFrom job no: " + job_id);
+//		System.out.println("Editing entry with material_id: " + mat_id 
+//							+ "\nFrom job no: " + job_id);
 		
 		//Get material
 		String material = dbc.getMaterial(mat_id);
@@ -609,14 +609,7 @@ public class JobScreen extends JInternalFrame {
 			System.out.println(ex.getMessage());
 		}
 
-		// =====================================//
-		// Check if table populates correctly with the second value below set to
-		// 5
-		// =====================================//
-		displayArray = new Object[count][5];// [6]; // Check if can just use
-											// job_id associated with jobScreen
-											// instead of retrieving this job_id
-		
+		displayArray = new Object[count][5];		
 		jobArray = new Object[count][7]; // Also includes job_id and material_id
 		try {
 			rs = dbc.retrieveAllJobDetails(job_id);
@@ -656,11 +649,11 @@ public class JobScreen extends JInternalFrame {
 	}
 
 	public void deleteFromTable() {
-		System.out.println(table.getSelectedRow());
+//		System.out.println(table.getSelectedRow());
 		int mat_id = (int) jobArray[table.getSelectedRow()][1];
 		int job_id = OpenProject.getProjectToOpen();
-		System.out.println("deleting material with material_id: " + mat_id
-				+ "\nFrom job no: " + job_id);
+//		System.out.println("deleting material with material_id: " + mat_id
+//				+ "\nFrom job no: " + job_id);
 		dbc.deleteItemFromJob(job_id, mat_id);
 		jobModel.data = JobScreen.updateJobTable(job_id);
 		table.repaint();
@@ -779,9 +772,9 @@ public class JobScreen extends JInternalFrame {
 	}
 }
 
-@SuppressWarnings("serial")
-class CurrencyTableCellRenderer extends DefaultTableCellRenderer {
-	public CurrencyTableCellRenderer() {
-		setHorizontalAlignment(JLabel.RIGHT);
-	}
-}
+//@SuppressWarnings("serial")
+//class CurrencyTableCellRenderer extends DefaultTableCellRenderer {
+//	public CurrencyTableCellRenderer() {
+//		setHorizontalAlignment(JLabel.RIGHT);
+//	}
+//}

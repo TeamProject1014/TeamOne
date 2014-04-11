@@ -38,12 +38,11 @@ public class AddMaterial extends JInternalFrame {
 
 	private JLabel jlblName;
 
-	private JTextField jtfName;
+	public JTextField jtfName;
 	private JComboBox comboBox;
 	@SuppressWarnings("rawtypes")
 	private JComboBox jcboCategory;
 
-	//private JButton jbtSave;
 	private JButton jbtCancel;
 	private JButton jbtAdd;
 
@@ -76,9 +75,11 @@ public class AddMaterial extends JInternalFrame {
 		categories = (String[]) details.toArray(new String[details.size()]);
 
 		getContentPane().setLayout(new BorderLayout());
-		
+
 		panel = new JPanel();
-		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,
+				null, null), "Options", TitledBorder.LEADING, TitledBorder.TOP,
+				null, null));
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		{
 
@@ -106,61 +107,65 @@ public class AddMaterial extends JInternalFrame {
 			});
 		}
 		getRootPane().setDefaultButton(jbtAdd);
-		
-					jbtCancel = new JButton("Cancel");
-					panel.add(jbtCancel);
-					
-					jbtCancel.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							setVisible(false);
-							jtfName.setText("");
-						}
-					});
-		contentPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Material", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+		jbtCancel = new JButton("Cancel");
+		panel.add(jbtCancel);
+
+		jbtCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
+				jtfName.setText("");
+			}
+		});
+		contentPanel.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "Material",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		GridBagLayout gbl_contentPanel = new GridBagLayout();
-		gbl_contentPanel.columnWidths = new int[]{65, 175, 0};
-		gbl_contentPanel.rowHeights = new int[]{20, 20, 0, 0};
-		gbl_contentPanel.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPanel.columnWidths = new int[] { 65, 175, 0 };
+		gbl_contentPanel.rowHeights = new int[] { 20, 20, 0, 0 };
+		gbl_contentPanel.columnWeights = new double[] { 0.0, 0.0,
+				Double.MIN_VALUE };
+		gbl_contentPanel.rowWeights = new double[] { 0.0, 0.0, 0.0,
+				Double.MIN_VALUE };
 		contentPanel.setLayout(gbl_contentPanel);
-																							
-																										JLabel lblCategory = new JLabel("Category:");
-																										lblCategory.setHorizontalAlignment(SwingConstants.RIGHT);
-																										GridBagConstraints gbc_lblCategory = new GridBagConstraints();
-																										gbc_lblCategory.fill = GridBagConstraints.HORIZONTAL;
-																										gbc_lblCategory.insets = new Insets(0, 0, 5, 5);
-																										gbc_lblCategory.gridx = 0;
-																										gbc_lblCategory.gridy = 0;
-																										contentPanel.add(lblCategory, gbc_lblCategory);
-																				
-																							comboBox = new JComboBox(categories);
-																							GridBagConstraints gbc_comboBox = new GridBagConstraints();
-																							gbc_comboBox.anchor = GridBagConstraints.NORTH;
-																							gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
-																							gbc_comboBox.insets = new Insets(0, 0, 5, 0);
-																							gbc_comboBox.gridx = 1;
-																							gbc_comboBox.gridy = 0;
-																							contentPanel.add(comboBox, gbc_comboBox);
-																							comboBox.setSelectedItem(null);
-																	
-																				jlblName = new JLabel("Material: ");
-																				GridBagConstraints gbc_jlblName = new GridBagConstraints();
-																				gbc_jlblName.fill = GridBagConstraints.HORIZONTAL;
-																				gbc_jlblName.insets = new Insets(0, 0, 0, 5);
-																				gbc_jlblName.gridx = 0;
-																				gbc_jlblName.gridy = 2;
-																				contentPanel.add(jlblName, gbc_jlblName);
-																				jlblName.setHorizontalAlignment(SwingConstants.RIGHT);
-														
-																	jtfName = new JTextField();
-																	GridBagConstraints gbc_jtfName = new GridBagConstraints();
-																	gbc_jtfName.anchor = GridBagConstraints.NORTH;
-																	gbc_jtfName.fill = GridBagConstraints.HORIZONTAL;
-																	gbc_jtfName.gridx = 1;
-																	gbc_jtfName.gridy = 2;
-																	contentPanel.add(jtfName, gbc_jtfName);
-																	jtfName.setColumns(10);
+
+		JLabel lblCategory = new JLabel("Category:");
+		lblCategory.setHorizontalAlignment(SwingConstants.RIGHT);
+		GridBagConstraints gbc_lblCategory = new GridBagConstraints();
+		gbc_lblCategory.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblCategory.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCategory.gridx = 0;
+		gbc_lblCategory.gridy = 0;
+		contentPanel.add(lblCategory, gbc_lblCategory);
+
+		comboBox = new JComboBox(categories);
+		GridBagConstraints gbc_comboBox = new GridBagConstraints();
+		gbc_comboBox.anchor = GridBagConstraints.NORTH;
+		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_comboBox.insets = new Insets(0, 0, 5, 0);
+		gbc_comboBox.gridx = 1;
+		gbc_comboBox.gridy = 0;
+		contentPanel.add(comboBox, gbc_comboBox);
+		comboBox.setSelectedItem(null);
+
+		jlblName = new JLabel("Material: ");
+		GridBagConstraints gbc_jlblName = new GridBagConstraints();
+		gbc_jlblName.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jlblName.insets = new Insets(0, 0, 0, 5);
+		gbc_jlblName.gridx = 0;
+		gbc_jlblName.gridy = 2;
+		contentPanel.add(jlblName, gbc_jlblName);
+		jlblName.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		jtfName = new JTextField();
+		GridBagConstraints gbc_jtfName = new GridBagConstraints();
+		gbc_jtfName.anchor = GridBagConstraints.NORTH;
+		gbc_jtfName.fill = GridBagConstraints.HORIZONTAL;
+		gbc_jtfName.gridx = 1;
+		gbc_jtfName.gridy = 2;
+		contentPanel.add(jtfName, gbc_jtfName);
+		jtfName.setColumns(10);
 
 		setResizable(false);
 		setTitle("Add Material");

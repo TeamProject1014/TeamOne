@@ -19,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 
@@ -50,18 +49,16 @@ public class MainScreen extends JFrame {
 	private JMenuItem viewEngineer;
 	private JMenuItem viewBuilder;
 	
-	private JMenuItem logIn;
-	private JMenuItem logOut;
 
 	private JMenuItem about;
 
-	private static String pageTitle;
+	public static String pageTitle;
+	protected static boolean newProjectInstanceFlag;
 	protected static boolean openProjectInstanceFlag;
 	private static boolean editCharacterInstanceFlag;
 	public static boolean addCategoryInstanceFlag;
 	private static boolean addMaterialInstanceFlag;
 	private static boolean addUserInstanceFlag;
-	private static boolean loginInstanceFlag;
 
 	protected static NewJob newJob;
 	protected static OpenProject openProject;
@@ -71,14 +68,12 @@ public class MainScreen extends JFrame {
 	public static AddCategory addCategory;
 	protected static AddMaterial addMaterial;
 	protected static AddUser addUser;
-	protected static LogIn userLogIn;
+
 	
 	private static int categoryToDisplay;
 	private static int userLoggedIn;
 	
 	public MainScreen() {
-		
-		userLoggedIn = -1;
 
 		getContentPane().setLayout(new BorderLayout());
 
@@ -104,7 +99,7 @@ public class MainScreen extends JFrame {
 		desk.setLayout(null);
 
 		newJob = new NewJob();
-		newJob.setBounds(615, 413, 450, 225);
+//		newJob.setBounds(615, 413, 450, 225);
 		desk.add(newJob);
 		newJob.setVisible(false);
 
@@ -115,7 +110,17 @@ public class MainScreen extends JFrame {
 
 		Action newAction = new AbstractAction("New", new ImageIcon(
 				"Images/new.png")) {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
+				NewJob.setClientComboContents();
+				NewJob.setArchComboContents();
+				NewJob.setEngComboContents();
+				NewJob.setBuildComboContents();
+				NewJob.jcboClient.setModel(NewJob.getClientComboModel());
+				NewJob.jcboArch.setModel(NewJob.getArchComboModel());
+				NewJob.jcboEng.setModel(NewJob.getEngComboModel());
+				NewJob.jcboBuild.setModel(NewJob.getBuildComboModel());
+
 				newJob.setVisible(true);
 				newJob.toFront();
 			}
@@ -138,39 +143,17 @@ public class MainScreen extends JFrame {
 		Action openAction = new AbstractAction("Open", new ImageIcon(
 				"Images/open.png")) {
 			public void actionPerformed(ActionEvent e) {
-				try {
-				if (userLoggedIn > -1) {
-					if (!openProjectInstanceFlag) {
-						
-						openProject = new OpenProject();
-						desk.add(openProject);
-						openProjectInstanceFlag = true;
-					}
-					OpenProject.clientModel.data = OpenProject.updateClientJobTable(); 
-					OpenProject.updateClientJobTable();
-					OpenProject.table.repaint();
-					OpenProject.table.revalidate();
-					if (openProject.isVisible() == false) {
-						openProject.setVisible(true);
-					}
-					
-					
-					openProject.toFront();
+				if (!openProjectInstanceFlag) {
+					openProject = new OpenProject();
+					desk.add(openProject);
+					openProjectInstanceFlag = true;
 				}
-				else {
-					JOptionPane.showMessageDialog(null, "You must log in to open a Job", "No User Logged in", JOptionPane.OK_OPTION);
-//					.showConfirmDialog(null,
-//							"You must log in to open a Job", "Not User Logged in",
-//							JOptionPane.OK_OPTION,
-//							JOptionPane.INFORMATION_MESSAGE);
-				}
-				} catch (Exception ex) {
-					// TODO Auto-generated catch block
-					JOptionPane.showConfirmDialog(null,
-							"Problem with login page", "No User Logged in",
-							JOptionPane.OK_CANCEL_OPTION,
-							JOptionPane.WARNING_MESSAGE);
-				}
+				openProject.clientModel.data = openProject.updateClientJobTable(); 
+				openProject.updateClientJobTable();
+				openProject.table.repaint();
+				openProject.table.revalidate();
+				openProject.setVisible(true);
+				openProject.toFront();
 			}
 		};
 		openAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_O));
@@ -197,24 +180,15 @@ public class MainScreen extends JFrame {
 					desk.add(addUser);
 					addUserInstanceFlag = true;
 				}
+				addUser.jtxtUser.setText("");
+				addUser.jtxtPass.setText("");
+				addUser.jtxtConfirm.setText("");
 				addUser.setVisible(true);
 				addUser.toFront();
 			}
 		};
 		addUserAction.putValue(Action.SHORT_DESCRIPTION, "Log a user into program");
 		
-		Action newLogIn = new AbstractAction("Log In", new ImageIcon(
-				"")) {
-			public void actionPerformed(ActionEvent e) {
-				if (!loginInstanceFlag) {
-					userLogIn = new LogIn();
-					desk.add(userLogIn);
-					loginInstanceFlag = true;
-				}
-				userLogIn.setVisible(true);
-				userLogIn.toFront();
-			}
-		};		
 		
 		Action addCategoryAction = new AbstractAction("Category", new ImageIcon(
 				"")) {
@@ -224,6 +198,7 @@ public class MainScreen extends JFrame {
 					desk.add(addCategory);
 					addCategoryInstanceFlag = true;
 				}
+				addCategory.jtxtDesc.setText("");
 				addCategory.setVisible(true);
 				addCategory.toFront();
 			}
@@ -238,6 +213,7 @@ public class MainScreen extends JFrame {
 					desk.add(addMaterial);
 					addMaterialInstanceFlag = true;
 				}
+				addMaterial.jtfName.setText("");
 				addMaterial.setVisible(true);
 				addMaterial.toFront();
 			}
@@ -412,9 +388,6 @@ public class MainScreen extends JFrame {
 		fileMenu.add(openAction);
 		fileMenu.add(pdfAction);
 		fileMenu.addSeparator();
-		fileMenu.add(newLogIn);
-		fileMenu.add(logOutAction);
-		fileMenu.addSeparator();
 		fileMenu.add(exitAction);
 
 		// Edit Menu
@@ -517,9 +490,5 @@ public class MainScreen extends JFrame {
 	public static void setPageTitle(String titleIn) {
 		pageTitle = titleIn;
 	}
-
-	@SuppressWarnings("unused")
-	public static void main(String[] args) {
-		MainScreen init = new MainScreen();
-	}
+	
 }

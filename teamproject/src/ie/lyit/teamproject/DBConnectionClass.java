@@ -77,7 +77,34 @@ public class DBConnectionClass {
 	 * @param username
 	 * @return
 	 */
-	public int checkUser(String username)
+	public int checkUser(String username, String password)
+	{
+		boolean result = false;
+		int count = 0;
+		try {
+			// String gdta = "select * from USER";
+			String gdta = "Select name FROM user WHERE name = '"
+					+ username + "' AND password = '"+ password + "'";
+			rs = stmt.executeQuery(gdta);
+
+			while (rs.next()) {
+				++count;
+				// Get data from the current row and use it
+			}
+
+		} catch (SQLException ex) {
+			System.err.println("Retrieve Data: " + ex.getMessage());
+		}
+
+		return count;
+	}
+	
+	/**
+	 * Checks if a user exits when creating a new one
+	 * @param username
+	 * @return
+	 */
+	public int checkUserifUserExists(String username)
 	{
 		boolean result = false;
 		int count = 0;
@@ -294,7 +321,7 @@ public class DBConnectionClass {
 			while (rs.next()) {
 				// Get data from the current row and use it
 				userID = Integer.parseInt(rs.getString(1));
-				System.out.print("User ID: "+ userID);
+				//System.out.print("User ID: "+ userID);
 			}
 
 		} catch (SQLException ex) {
@@ -327,7 +354,7 @@ public class DBConnectionClass {
 		} catch (SQLException ex) {
 			System.err.println("Retrieve Data: " + ex.getMessage());
 		}
-		System.out.print("Material : "+ mat);
+		//System.out.print("Material : "+ mat);
 		return mat;
 	}
 

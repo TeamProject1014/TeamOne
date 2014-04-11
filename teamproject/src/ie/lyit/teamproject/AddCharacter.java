@@ -11,13 +11,16 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 
@@ -88,31 +91,77 @@ public class AddCharacter extends JInternalFrame {
 		jbtSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
-				String name = jtfName.getText();
-				String address = jtfAddr.getText();
-				String address2 = jtfAddr2.getText();
-				String town = jtfTown.getText();
-				String county = (String) jcboCounty.getSelectedItem();
-				int phone = (Integer.parseInt(jtfPhone.getText()));
-				String email = jtfEmail.getText();
-				setVisible(false);
+//				String name = jtfName.getText();
+//				String address = jtfAddr.getText();
+//				String address2 = jtfAddr2.getText();
+//				String town = jtfTown.getText();
+//				String county = (String) jcboCounty.getSelectedItem();
+				
+				int phone = -1;
+				
+				if (phone == -1) {
+					try {
+						String name = jtfName.getText();
+						String address = jtfAddr.getText();
+						String address2 = jtfAddr2.getText();
+						String town = jtfTown.getText();
+						String county = (String) jcboCounty.getSelectedItem();
+						phone = (Integer.parseInt(jtfPhone.getText()));
+						String email = jtfEmail.getText();
+						setVisible(false);
 
-				String characterString = MainScreen.getPageTitle();
+						String characterString = MainScreen.getPageTitle();
 
-				if (characterString == "Client") {
-					dbc.createClient(name, address, address2, town, county,
-							phone, email);
-				} else if (characterString == "Engineer") {
-					dbc.createEngineer(name, address, address2, town, county,
-							phone, email);
-				} else if (characterString == "Architect") {
-					dbc.createArchitect(name, address, address2, town, county,
-							phone, email);
-				} else if (characterString == "Builder") {
-					dbc.createBuilder(name, address, address2, town, county,
-							phone, email);
+						if (characterString == "Client") {
+							dbc.createClient(name, address, address2, town, county,
+									phone, email);
+							NewJob.setClientComboContents();
+							NewJob.jcboClient.setModel(NewJob.getClientComboModel());
+						} else if (characterString == "Engineer") {
+							dbc.createEngineer(name, address, address2, town, county,
+									phone, email);
+							NewJob.setEngComboContents();
+							NewJob.jcboEng.setModel(NewJob.getEngComboModel());
+						} else if (characterString == "Architect") {
+							dbc.createArchitect(name, address, address2, town, county,
+									phone, email);
+							NewJob.setArchComboContents();
+							NewJob.jcboArch.setModel(NewJob.getArchComboModel());
+						} else if (characterString == "Builder") {
+							dbc.createBuilder(name, address, address2, town, county,
+									phone, email);
+							NewJob.setBuildComboContents();
+							NewJob.jcboBuild.setModel(NewJob.getBuildComboModel());
+						}
+						resetValues();
+					} catch (NumberFormatException e) {
+						//e.printStackTrace();
+						JOptionPane.showMessageDialog(new JInternalFrame(),
+								"Please Enter a Phone Number");
+						jtfPhone.selectAll();
+						phone = -1;
+					}
 				}
-				resetValues();
+				
+//				String email = jtfEmail.getText();
+//				setVisible(false);
+//
+//				String characterString = MainScreen.getPageTitle();
+//
+//				if (characterString == "Client") {
+//					dbc.createClient(name, address, address2, town, county,
+//							phone, email);
+//				} else if (characterString == "Engineer") {
+//					dbc.createEngineer(name, address, address2, town, county,
+//							phone, email);
+//				} else if (characterString == "Architect") {
+//					dbc.createArchitect(name, address, address2, town, county,
+//							phone, email);
+//				} else if (characterString == "Builder") {
+//					dbc.createBuilder(name, address, address2, town, county,
+//							phone, email);
+//				}
+//				resetValues();
 			}
 		});
 		contentPanel.setBorder(new TitledBorder(new EtchedBorder(
