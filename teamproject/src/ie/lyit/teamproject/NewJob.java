@@ -31,17 +31,15 @@ public class NewJob extends JInternalFrame {
 	private static DBConnectionClass dbc;
 	private static ResultSet rs;
 	private static Object[][] clientArray;
-	private static String[] clientName;
+//	private static String[] clientName;
 	private static Object[][] archArray;
-	private String[] archName;
+//	private String[] archName;
 	private static Object[][] engArray;
-	private String[] engName;
+//	private String[] engName;
 	private static Object[][] buildArray;
-	private String[] buildName;
+//	private String[] buildName;
 	public OpenProject openProject;
 	public static boolean tracker = false;
-	// protected static AddCharacter addCharacter;
-	// protected static JobScreen jobScreen;
 
 	@SuppressWarnings("rawtypes")
 	public static JComboBox jcboBuild;
@@ -69,8 +67,6 @@ public class NewJob extends JInternalFrame {
 		getContentPane().setLayout(new BorderLayout(0, 0));
 
 		dbc = new DBConnectionClass();
-
-		// int count = 0;
 
 		JPanel detailPanel = new JPanel();
 		detailPanel.setBorder(new TitledBorder(new EtchedBorder(
@@ -220,19 +216,16 @@ public class NewJob extends JInternalFrame {
 
 				int client_id = 0;
 				for (int i = 0; i < clientComboModel.getSize(); i++)
-					// if (jcboClient.getSelectedItem().equals(clientName[i]))
 					if (jcboClient.getSelectedItem().equals(clientComboModel.getElementAt(i)))
 						client_id = (Integer) clientArray[i][0];
 
 				int arch_id = 0;
 				for (int i = 0; i < archComboModel.getSize(); i++)
-//					if (jcboArch.getSelectedItem().equals(archName[i]))
 					if (jcboArch.getSelectedItem().equals(archComboModel.getElementAt(i)))
 						arch_id = (Integer) archArray[i][0];
 
 				int eng_id = 0;
 				for (int i = 0; i < engComboModel.getSize(); i++)
-//					if (jcboEng.getSelectedItem().equals(engName[i]))
 					if (jcboEng.getSelectedItem().equals(engComboModel.getElementAt(i)))
 						eng_id = (Integer) engArray[i][0];
 
@@ -295,7 +288,6 @@ public class NewJob extends JInternalFrame {
 		int xPos = (int) ((screenX / 2) - (ownX / 2));
 		int yPos = (int) ((screenY / 2) - (ownY / 2));
 
-		//this.setSize(453, 225);
 		this.setLocation(xPos, yPos);
 
 		this.setSize(ownX, ownY);
@@ -306,37 +298,6 @@ public class NewJob extends JInternalFrame {
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
 	}
-
-	// public static String[] updateClientNames() {
-	// int count = 0;
-	// try {
-	// count = 0;
-	// rs = dbc.retrieveClientInfo();
-	//
-	// while (rs.next()) {
-	// count++;
-	// }
-	// } catch (SQLException ex) {
-	// System.out.println(ex.getMessage());
-	// }
-	// clientArray = new Object[count][2];
-	// clientName = new String[count];
-	//
-	// try {
-	// rs = dbc.retrieveClientInfo();
-	// count = 0;
-	//
-	// while (rs.next()) {
-	// clientArray[count][0] = rs.getInt(1);
-	// clientArray[count][1] = clientName[count] = rs.getString(2);
-	// count++;
-	// }
-	// } catch (SQLException ex) {
-	// System.out.println(ex.getMessage());
-	// }
-	//
-	// return clientName;
-	// }
 
 	public String getPageTitle() {
 		return MainScreen.pageTitle;
@@ -456,73 +417,6 @@ public class NewJob extends JInternalFrame {
 			System.out.println(ex.getMessage());
 		}
 	}
-
-	// @SuppressWarnings({ "unchecked", "rawtypes" })
-	// public static void setComboContents(String character) {
-	// archComboModel = new DefaultComboBoxModel();
-	// engComboModel = new DefaultComboBoxModel();
-	// buildComboModel = new DefaultComboBoxModel();
-	//
-	// try {
-	// int count = 0;
-	// if (character.equals("Architect")) {
-	// count = 0;
-	// // ARCHITECT
-	// rs = dbc.retrieveArchitectDetails();
-	// while (rs.next()) {
-	// count++;
-	// }
-	// archArray = new Object[count][8];
-	// rs = dbc.retrieveArchitectDetails();
-	//
-	// count = 0;
-	// while (rs.next()) {
-	// archArray[count][0] = rs.getInt(1);
-	// archArray[count][1] = rs.getString(2);
-	//
-	// archComboModel.addElement(archArray[count][1]);
-	// count++;
-	// }
-	// // ENGINEER
-	// } else if (character.equals("Engineer")) {
-	// count = 0;
-	// rs = dbc.retrieveEngineerDetails();
-	// while (rs.next()) {
-	// count++;
-	// }
-	// engArray = new Object[count][8];
-	// rs = dbc.retrieveEngineerDetails();
-	//
-	// count = 0;
-	// while (rs.next()) {
-	// engArray[count][0] = rs.getInt(1);
-	// engArray[count][1] = rs.getString(2);
-	//
-	// engComboModel.addElement(engArray[count][1]);
-	// count++;
-	// }
-	// } else if (character.equals("Builder")) {
-	// count = 0;
-	// rs = dbc.retrieveBuilderDetails();
-	// while (rs.next()) {
-	// count++;
-	// }
-	// buildArray = new Object[count][8];
-	// rs = dbc.retrieveBuilderDetails();
-	//
-	// count = 0;
-	// while (rs.next()) {
-	// buildArray[count][0] = rs.getInt(1);
-	// buildArray[count][1] = rs.getString(2);
-	//
-	// buildComboModel.addElement(buildArray[count][1]);
-	// count++;
-	// }
-	// }
-	// } catch (SQLException ex) {
-	// System.out.println(ex.getMessage());
-	// }
-	// }
 
 	@SuppressWarnings("rawtypes")
 	public static DefaultComboBoxModel getClientComboModel() {

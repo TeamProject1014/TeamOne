@@ -62,7 +62,7 @@ public class MainScreen extends JFrame {
 
 	protected static NewJob newJob;
 	protected static OpenProject openProject;
-	protected static AddClient addClient;
+	//protected static AddClient addClient;
 	protected static AddCharacter addCharacter;
 	protected static EditCharacter editCharacter;
 	public static AddCategory addCategory;
