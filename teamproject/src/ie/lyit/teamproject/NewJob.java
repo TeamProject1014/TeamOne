@@ -3,6 +3,7 @@ package ie.lyit.teamproject;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
@@ -60,6 +61,9 @@ public class NewJob extends JInternalFrame {
 	private static DefaultComboBoxModel buildComboModel;
 
 	public static JTextArea txtAreaDescription;
+
+	protected static boolean addCharacterInstanceFlag;
+	private AddCharacter addCharacter;
 
 	@SuppressWarnings("rawtypes")
 	public NewJob() {
@@ -137,13 +141,13 @@ public class NewJob extends JInternalFrame {
 			public void actionPerformed(ActionEvent arg0) {
 
 				MainScreen.setPageTitle("Architect");
-				AddCharacter addCharacter = new AddCharacter();
-				addCharacter.setBounds(670, 368, 340, 315);
+				if (!addCharacterInstanceFlag) {
+					addCharacter = new AddCharacter();
+					MainScreen.desk.add(addCharacter);
+					addCharacterInstanceFlag = true;
+				}
 				addCharacter.setTitle("Add Architect");
-				MainScreen.desk.add(addCharacter);
 				addCharacter.setVisible(true);
-				tracker = true;
-
 			}
 		});
 
@@ -153,15 +157,15 @@ public class NewJob extends JInternalFrame {
 		detailPanel.add(btnAddBuilder);
 		btnAddBuilder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				// //////////////////////////
 				MainScreen.setPageTitle("Builder");
-				AddCharacter addCharacter = new AddCharacter();
-				addCharacter.setBounds(670, 368, 340, 315);
+				if (!addCharacterInstanceFlag) {
+					addCharacter = new AddCharacter();
+					MainScreen.desk.add(addCharacter);
+					addCharacterInstanceFlag = true;
+				}
 				addCharacter.setTitle("Add Builder");
-				MainScreen.desk.add(addCharacter);
 				addCharacter.setVisible(true);
-				tracker = true;
-
 			}
 		});
 
@@ -173,13 +177,13 @@ public class NewJob extends JInternalFrame {
 			public void actionPerformed(ActionEvent arg0) {
 
 				MainScreen.setPageTitle("Engineer");
-				AddCharacter addCharacter = new AddCharacter();
-				addCharacter.setBounds(670, 368, 340, 315);
+				if (!addCharacterInstanceFlag) {
+					addCharacter = new AddCharacter();
+					MainScreen.desk.add(addCharacter);
+					addCharacterInstanceFlag = true;
+				}
 				addCharacter.setTitle("Add Engineer");
-				MainScreen.desk.add(addCharacter);
 				addCharacter.setVisible(true);
-				tracker = true;
-
 			}
 		});
 
@@ -191,13 +195,13 @@ public class NewJob extends JInternalFrame {
 			public void actionPerformed(ActionEvent arg0) {
 
 				MainScreen.setPageTitle("Client");
-				AddCharacter addCharacter = new AddCharacter();
-				addCharacter.setBounds(670, 368, 340, 315);
+				if (!addCharacterInstanceFlag) {
+					addCharacter = new AddCharacter();
+					MainScreen.desk.add(addCharacter);
+					addCharacterInstanceFlag = true;
+				}
 				addCharacter.setTitle("Add Client");
-				MainScreen.desk.add(addCharacter);
 				addCharacter.setVisible(true);
-				tracker = true;
-
 			}
 		});
 
@@ -216,17 +220,20 @@ public class NewJob extends JInternalFrame {
 
 				int client_id = 0;
 				for (int i = 0; i < clientComboModel.getSize(); i++)
-					if (jcboClient.getSelectedItem().equals(clientComboModel.getElementAt(i)))
+					if (jcboClient.getSelectedItem().equals(
+							clientComboModel.getElementAt(i)))
 						client_id = (Integer) clientArray[i][0];
 
 				int arch_id = 0;
 				for (int i = 0; i < archComboModel.getSize(); i++)
-					if (jcboArch.getSelectedItem().equals(archComboModel.getElementAt(i)))
+					if (jcboArch.getSelectedItem().equals(
+							archComboModel.getElementAt(i)))
 						arch_id = (Integer) archArray[i][0];
 
 				int eng_id = 0;
 				for (int i = 0; i < engComboModel.getSize(); i++)
-					if (jcboEng.getSelectedItem().equals(engComboModel.getElementAt(i)))
+					if (jcboEng.getSelectedItem().equals(
+							engComboModel.getElementAt(i)))
 						eng_id = (Integer) engArray[i][0];
 
 				int build_id = 0;
@@ -236,37 +243,51 @@ public class NewJob extends JInternalFrame {
 						build_id = (Integer) buildArray[i][0];
 
 				String description = txtAreaDescription.getText();
-				dbc.createNewJob(client_id, arch_id, eng_id, build_id,
-						description);
-				resetValues();
-				OpenProject.updateClientJobTable();
-				setVisible(false);
 
-				int getLastJobCreated = dbc.getLastJobCreated();
+				if (description.equals("")) {
+					JOptionPane.showMessageDialog(new JPanel(),
+							"Please Enter a Description",
+							"Description Required",
+							JOptionPane.INFORMATION_MESSAGE);
+				} else {
+					dbc.createNewJob(client_id, arch_id, eng_id, build_id,
+							description);
+					resetValues();
+					OpenProject.updateClientJobTable();
+					setVisible(false);
+					// }
 
-				OpenProject.setProjectToOpen(getLastJobCreated);
+					int getLastJobCreated = dbc.getLastJobCreated();
 
-				if (!OpenProject.instanceFlag) {
-					OpenProject.jobScreen = new JobScreen(OpenProject
-							.getProjectToOpen());
-					MainScreen.desk.add(OpenProject.jobScreen);
-					OpenProject.instanceFlag = true;
+					OpenProject.setProjectToOpen(getLastJobCreated);
+
+					if (!OpenProject.instanceFlag) {
+						OpenProject.jobScreen = new JobScreen(OpenProject
+								.getProjectToOpen());
+						MainScreen.desk.add(OpenProject.jobScreen);
+						OpenProject.instanceFlag = true;
+					}
+
+					JobScreen.setHeaderDetails(getLastJobCreated);
+
+					JobScreen.jobModel.data = JobScreen
+							.updateJobTable(OpenProject.getProjectToOpen());
+					JobScreen.table.repaint();
+					JobScreen.table.revalidate();
+
+					try {
+						openProject.clientModel.data = openProject
+								.updateClientJobTable();
+						openProject.updateClientJobTable();
+						openProject.table.repaint();
+						openProject.table.revalidate();
+						OpenProject.jobScreen.setVisible(true);
+						OpenProject.jobScreen.toFront();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						// e.printStackTrace();
+					}
 				}
-
-				JobScreen.setHeaderDetails(getLastJobCreated);
-
-				JobScreen.jobModel.data = JobScreen.updateJobTable(OpenProject
-						.getProjectToOpen());
-				JobScreen.table.repaint();
-				JobScreen.table.revalidate();
-
-				openProject.clientModel.data = openProject
-						.updateClientJobTable();
-				openProject.updateClientJobTable();
-				openProject.table.repaint();
-				openProject.table.revalidate();
-				OpenProject.jobScreen.setVisible(true);
-				OpenProject.jobScreen.toFront();
 			}
 		});
 		optionsPanel.add(jbtAdd);

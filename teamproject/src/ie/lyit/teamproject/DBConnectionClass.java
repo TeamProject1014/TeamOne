@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.JOptionPane;
+
 /**
  * Reference class to store all SQL methods that are required for the entire
  * application
@@ -714,9 +716,7 @@ public class DBConnectionClass {
 			addMatToJob.executeUpdate();
 
 		} catch (SQLException ex) {
-			System.err
-					.println("There was an error when inserting new job Data: "
-							+ ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Item already added for this job." );
 		}
 	}
 	
@@ -742,6 +742,22 @@ public class DBConnectionClass {
 		int material_id = 0;
 		try {
 			String gdta = "SELECT MAX(material_id) FROM material";
+			rs = stmt.executeQuery(gdta);
+			while (rs.next()) {
+				material_id = rs.getInt(1);
+			}
+			return material_id;
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve material_id : "
+					+ ex.getMessage());
+			return material_id;
+		}
+	}	
+	
+	public int retrieveMaterialByName(String matName) {
+		int material_id = 0;
+		try {
+			String gdta = "SELECT material_id FROM material WHERE description = '" + matName + "'";
 			rs = stmt.executeQuery(gdta);
 			while (rs.next()) {
 				material_id = rs.getInt(1);

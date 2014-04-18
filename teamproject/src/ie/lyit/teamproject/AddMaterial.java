@@ -102,6 +102,9 @@ public class AddMaterial extends JInternalFrame {
 					} else {
 						dbc.addMaterialToDB(cat_id, description);
 						jtfName.setText("");
+						JOptionPane.showMessageDialog(new JPanel(),
+								"Material added", "Confirmation",
+								JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			});

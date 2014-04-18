@@ -89,6 +89,7 @@ public class AddCategory extends JInternalFrame {
 				if (dbc.checkCategory(description) >= 1) {
 					JOptionPane.showMessageDialog(new JFrame(),
 							"Category already exists");
+					jtxtDesc.selectAll();
 				} else if (description.equals("")) {
 					JOptionPane.showMessageDialog(new JFrame(),
 							"Enter a description");
@@ -96,6 +97,9 @@ public class AddCategory extends JInternalFrame {
 					dbc.createCategory(id, description);
 					// setVisible(false);
 					jtxtDesc.setText("");
+					JOptionPane.showMessageDialog(new JPanel(),
+							"Category added", "Confirmation",
+							JOptionPane.INFORMATION_MESSAGE);
 				}
 
 			}

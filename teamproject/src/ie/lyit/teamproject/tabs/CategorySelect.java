@@ -65,7 +65,7 @@ public class CategorySelect extends JPanel {
 		 * Instantiate variables
 		 */
 		dbc = new DBConnectionClass();
-		//int count = 0;
+		// int count = 0;
 		category_id = JobScreen.getCategoryToOpen();
 
 		/**
@@ -97,19 +97,21 @@ public class CategorySelect extends JPanel {
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setPreferredSize(new Dimension(250, 150));
 		tablePanel.add(scrollPane);
-		
+
 		table.addMouseListener(new MouseAdapter() {
-		public void mousePressed(MouseEvent me) {
-			table = (JTable) me.getSource();
-			Point p = me.getPoint();
-			int rowSelected = table.rowAtPoint(p);
-			if (me.getClickCount() == 2) {
-				rowSelected = table.getSelectedRow();
-				MainScreen.setCategoryToDisplay((int) categoryArray[rowSelected][0]);
-				MaterialSelect.clientModel.data = MaterialSelect.updateMaterialTable((int) categoryArray[rowSelected][0]);
-				MaterialSelect.table.repaint();
-				MaterialSelect.table.revalidate();
-			}
+			public void mousePressed(MouseEvent me) {
+				table = (JTable) me.getSource();
+				Point p = me.getPoint();
+				int rowSelected = table.rowAtPoint(p);
+				if (me.getClickCount() == 2) {
+					rowSelected = table.getSelectedRow();
+					MainScreen
+							.setCategoryToDisplay((int) categoryArray[rowSelected][0]);
+					MaterialSelect.clientModel.data = MaterialSelect
+							.updateMaterialTable((int) categoryArray[rowSelected][0]);
+					MaterialSelect.table.repaint();
+					MaterialSelect.table.revalidate();
+				}
 			}
 		});
 
@@ -125,14 +127,16 @@ public class CategorySelect extends JPanel {
 		jbtSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int rowSelected = table.getSelectedRow();
-				MainScreen.setCategoryToDisplay((int) categoryArray[rowSelected][0]);
-				MaterialSelect.clientModel.data = MaterialSelect.updateMaterialTable((int) categoryArray[rowSelected][0]);
+				MainScreen
+						.setCategoryToDisplay((int) categoryArray[rowSelected][0]);
+				MaterialSelect.clientModel.data = MaterialSelect
+						.updateMaterialTable((int) categoryArray[rowSelected][0]);
 				MaterialSelect.table.repaint();
 				MaterialSelect.table.revalidate();
 			}
 		});
 
-		JButton jbtAdd = new JButton("Add New");
+		JButton jbtAdd = new JButton("New Category");
 		jbtAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!MainScreen.addCategoryInstanceFlag) {

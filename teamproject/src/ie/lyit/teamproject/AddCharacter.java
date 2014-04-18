@@ -20,6 +20,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
@@ -99,41 +101,77 @@ public class AddCharacter extends JInternalFrame {
 				
 				int phone = -1;
 				
-				if (phone == -1) {
+				//if (phone == -1) {
 					try {
 						String name = jtfName.getText();
 						String address = jtfAddr.getText();
 						String address2 = jtfAddr2.getText();
 						String town = jtfTown.getText();
-						String county = (String) jcboCounty.getSelectedItem();
+						String county = (String) jcboCounty.getSelectedItem();						
 						phone = (Integer.parseInt(jtfPhone.getText()));
+						
+						
+						
 						String email = jtfEmail.getText();
-						setVisible(false);
+						
+						Pattern pattern;
+						Matcher matcher;
+						final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+								+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+						
+						pattern = Pattern.compile(EMAIL_PATTERN);
+						matcher = pattern.matcher(email);						
 
 						String characterString = MainScreen.getPageTitle();
+						
+						//Try to retrieve phone number. If String - throw exception
+						int phoneNumber = (Integer.parseInt(jtfPhone.getText()));
+						
+						String tempnumber = (jtfPhone.getText());
+						//Check if number is greater than or equal to 6 digits
 
-						if (characterString == "Client") {
-							dbc.createClient(name, address, address2, town, county,
-									phone, email);
-							NewJob.setClientComboContents();
-							NewJob.jcboClient.setModel(NewJob.getClientComboModel());
-						} else if (characterString == "Engineer") {
-							dbc.createEngineer(name, address, address2, town, county,
-									phone, email);
-							NewJob.setEngComboContents();
-							NewJob.jcboEng.setModel(NewJob.getEngComboModel());
-						} else if (characterString == "Architect") {
-							dbc.createArchitect(name, address, address2, town, county,
-									phone, email);
-							NewJob.setArchComboContents();
-							NewJob.jcboArch.setModel(NewJob.getArchComboModel());
-						} else if (characterString == "Builder") {
-							dbc.createBuilder(name, address, address2, town, county,
-									phone, email);
-							NewJob.setBuildComboContents();
-							NewJob.jcboBuild.setModel(NewJob.getBuildComboModel());
+						if (matcher.matches()) {
+							
+							if (tempnumber.length() >= 6 && tempnumber.length() <= 15) {
+								if (characterString == "Client") {
+									dbc.createClient(name, address, address2,
+											town, county, phone, email);
+									NewJob.setClientComboContents();
+									NewJob.jcboClient.setModel(NewJob
+											.getClientComboModel());
+								} else if (characterString == "Engineer") {
+									dbc.createEngineer(name, address, address2,
+											town, county, phone, email);
+									NewJob.setEngComboContents();
+									NewJob.jcboEng.setModel(NewJob
+											.getEngComboModel());
+								} else if (characterString == "Architect") {
+									dbc.createArchitect(name, address,
+											address2, town, county, phone,
+											email);
+									NewJob.setArchComboContents();
+									NewJob.jcboArch.setModel(NewJob
+											.getArchComboModel());
+								} else if (characterString == "Builder") {
+									dbc.createBuilder(name, address, address2,
+											town, county, phone, email);
+									NewJob.setBuildComboContents();
+									NewJob.jcboBuild.setModel(NewJob
+											.getBuildComboModel());
+								}
+								setVisible(false);
+								resetValues();
+							} else {
+								JOptionPane.showMessageDialog(new JPanel(), "Phone number must be greater than or equal to 6 digits", "Information",
+										JOptionPane.INFORMATION_MESSAGE);
+							}
+							
+							
+						} else {
+							JOptionPane.showMessageDialog(new JPanel(), "Not a valid email address \n - Must have an @ symbol \n - Must have a valid domain e.g @lyit.ie", "Information",
+							        JOptionPane.INFORMATION_MESSAGE);
 						}
-						resetValues();
+						
 					} catch (NumberFormatException e) {
 						//e.printStackTrace();
 						JOptionPane.showMessageDialog(new JInternalFrame(),
@@ -141,7 +179,7 @@ public class AddCharacter extends JInternalFrame {
 						jtfPhone.selectAll();
 						phone = -1;
 					}
-				}
+				//}
 				
 //				String email = jtfEmail.getText();
 //				setVisible(false);

@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `quantities` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `quantities`;
--- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.6.11, for Win64 (x86_64)
 --
 -- Host: localhost    Database: quantities
 -- ------------------------------------------------------
--- Server version	5.6.16
+-- Server version	5.6.11
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -124,7 +124,7 @@ CREATE TABLE `category_material` (
 
 LOCK TABLES `category_material` WRITE;
 /*!40000 ALTER TABLE `category_material` DISABLE KEYS */;
-INSERT INTO `category_material` VALUES (1,1),(1,2),(1,3),(1,4),(1,6),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,18),(1,19),(1,20),(1,21),(2,22),(2,23),(2,24),(2,25),(2,26),(2,27),(3,28),(5,29),(2,30);
+INSERT INTO `category_material` VALUES (1,1),(1,2),(1,3),(1,4),(1,6),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,18),(1,19),(1,20),(1,21),(2,22),(2,23),(2,24),(2,25),(2,26),(2,27),(3,28),(5,29),(2,30),(3,31),(8,32);
 /*!40000 ALTER TABLE `category_material` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -221,7 +221,7 @@ CREATE TABLE `job` (
 
 LOCK TABLES `job` WRITE;
 /*!40000 ALTER TABLE `job` DISABLE KEYS */;
-INSERT INTO `job` VALUES (1,'Approved',41979.01,1,3,2,'Proposed Health Centre in downtown Ramelton',1),(2,'Open',14694.00,2,2,3,'Proposed development in uptown Ballyshannon',2),(8,'Open',10935.00,4,5,4,'Proposed Dwelling at Ballybofey',3),(9,'Open',15153.00,4,2,3,'Propsed Shed at Laghey',4),(11,'Open',10859.00,2,1,3,'Proposed Health Centre at Port Road, Letterkenny',1),(27,'Open',0.00,5,2,3,'',NULL);
+INSERT INTO `job` VALUES (1,'Approved',38814.01,1,3,2,'Proposed Health Centre in downtown Ramelton',1),(2,'Open',14694.00,2,2,3,'Proposed development in uptown Ballyshannon',2),(8,'Open',10935.00,4,5,4,'Proposed Dwelling at Ballybofey',3),(9,'Open',15153.00,4,2,3,'Propsed Shed at Laghey',4),(11,'Open',10859.00,2,1,3,'Proposed Health Centre at Port Road, Letterkenny',1),(27,'Open',NULL,5,2,3,'',NULL);
 /*!40000 ALTER TABLE `job` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -278,7 +278,7 @@ CREATE TABLE `job_material` (
 
 LOCK TABLES `job_material` WRITE;
 /*!40000 ALTER TABLE `job_material` DISABLE KEYS */;
-INSERT INTO `job_material` VALUES (1,1,8900,1.00,8900.00),(1,2,15,40.00,600.00),(1,3,61,17.00,1037.00),(1,4,10,30.00,300.00),(1,10,6,32.00,192.00),(1,12,85,36.00,3060.00),(1,13,57,38.00,2166.00),(1,14,6,95.00,570.00),(1,15,30,15.00,450.00),(1,16,200,8.00,1600.00),(1,22,320,42.00,13440.00),(1,23,5123,1.87,9580.01),(1,24,3,28.00,84.00),(2,2,41,40.00,1640.00),(2,3,61,17.00,1037.00),(2,4,77,13.00,1001.00),(2,5,50,95.00,4750.00),(2,6,2,200.00,400.00),(2,10,6,32.00,192.00),(2,12,115,36.00,4140.00),(2,14,6,95.00,570.00),(2,16,44,6.00,264.00),(2,18,2,200.00,400.00),(2,19,1,300.00,300.00),(8,21,243,45.00,10935.00),(9,1,1,8900.00,8900.00),(9,2,21,40.00,840.00),(9,14,6,95.00,570.00),(9,16,644,6.00,3864.00),(9,25,23,23.00,529.00),(9,27,25,18.00,450.00),(11,1,1,6500.00,6500.00),(11,2,35,45.00,1575.00),(11,3,45,38.00,1710.00),(11,14,58,13.00,754.00),(11,19,4,80.00,320.00);
+INSERT INTO `job_material` VALUES (1,1,8900,1.00,8900.00),(1,2,15,40.00,600.00),(1,3,61,17.00,1037.00),(1,4,10,30.00,300.00),(1,10,6,32.00,192.00),(1,12,85,36.00,3060.00),(1,13,57,38.00,2166.00),(1,14,6,95.00,570.00),(1,15,30,15.00,450.00),(1,16,200,8.00,1600.00),(1,22,75,65.00,4875.00),(1,23,5123,1.87,9580.01),(1,24,3,28.00,84.00),(1,31,75,45.00,3375.00),(1,32,75,27.00,2025.00),(2,2,41,40.00,1640.00),(2,3,61,17.00,1037.00),(2,4,77,13.00,1001.00),(2,5,50,95.00,4750.00),(2,6,2,200.00,400.00),(2,10,6,32.00,192.00),(2,12,115,36.00,4140.00),(2,14,6,95.00,570.00),(2,16,44,6.00,264.00),(2,18,2,200.00,400.00),(2,19,1,300.00,300.00),(8,21,243,45.00,10935.00),(9,1,1,8900.00,8900.00),(9,2,21,40.00,840.00),(9,14,6,95.00,570.00),(9,16,644,6.00,3864.00),(9,25,23,23.00,529.00),(9,27,25,18.00,450.00),(11,1,1,6500.00,6500.00),(11,2,35,45.00,1575.00),(11,3,45,38.00,1710.00),(11,14,58,13.00,754.00),(11,19,4,80.00,320.00);
 /*!40000 ALTER TABLE `job_material` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -411,7 +411,7 @@ CREATE TABLE `material` (
   `Material_ID` int(11) NOT NULL AUTO_INCREMENT,
   `Description` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`Material_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -420,7 +420,7 @@ CREATE TABLE `material` (
 
 LOCK TABLES `material` WRITE;
 /*!40000 ALTER TABLE `material` DISABLE KEYS */;
-INSERT INTO `material` VALUES (1,'PC sum for driven piles'),(2,'Cutting top of piles'),(3,'Hardcore over site for piling, 250th'),(4,'exec trenches & disposal'),(5,'Reinforced Concrete Ground Beam'),(6,'Ditto Pads'),(8,'prov r\'ment'),(9,'r\'ment @ 42kg/m3'),(10,'blinding'),(11,'Working Space'),(12,'300 Rising Cavity Blockwork'),(13,'215 Rising Blockwork'),(14,'Cavity Fill'),(15,'H\'core b\'fill'),(16,'DPC\'s'),(17,'Radon Barrier'),(18,'Sumps'),(19,'Sump Pipes'),(20,'250 thick h\'core to make up levels'),(21,'200 PCC Slabs on 60 Ins on Blinding'),(22,'Cavity Wall'),(23,'Blocks'),(24,'Cement'),(25,'Sand'),(26,'Wall Ties'),(27,'Insulation'),(28,'100mm Thick Walls'),(29,'Grabrail'),(30,'Colinwell FCG Quoins');
+INSERT INTO `material` VALUES (1,'PC sum for driven piles'),(2,'Cutting top of piles'),(3,'Hardcore over site for piling, 250th'),(4,'exec trenches & disposal'),(5,'Reinforced Concrete Ground Beam'),(6,'Ditto Pads'),(8,'prov r\'ment'),(9,'r\'ment @ 42kg/m3'),(10,'blinding'),(11,'Working Space'),(12,'300 Rising Cavity Blockwork'),(13,'215 Rising Blockwork'),(14,'Cavity Fill'),(15,'H\'core b\'fill'),(16,'DPC\'s'),(17,'Radon Barrier'),(18,'Sumps'),(19,'Sump Pipes'),(20,'250 thick h\'core to make up levels'),(21,'200 PCC Slabs on 60 Ins on Blinding'),(22,'Cavity Wall'),(23,'Blocks'),(24,'Cement'),(25,'Sand'),(26,'Wall Ties'),(27,'Insulation'),(28,'100mm Thick Walls'),(29,'Grabrail'),(30,'Colinwell FCG Quoins'),(31,'Stud Walls'),(32,'Plaster');
 /*!40000 ALTER TABLE `material` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -450,10 +450,6 @@ INSERT INTO `user` VALUES (1,'Liam','password'),(2,'Cathal','password'),(3,'Eamo
 UNLOCK TABLES;
 
 --
--- Dumping events for database 'quantities'
---
-
---
 -- Final view structure for view `job_view`
 --
 
@@ -481,4 +477,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-11  3:47:48
+-- Dump completed on 2014-04-11 17:27:24

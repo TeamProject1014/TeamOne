@@ -31,6 +31,8 @@ public class WallCalc extends JPanel {
 	private JTextField jtfSand;
 	private JTextField jtfWallTies;
 	private JTextField jtfTotal;
+	
+	private DBConnectionClass dbc;
 
 	@SuppressWarnings("unused")
 	private int innerLeaf, outerleaf, ties, cement, sand;
@@ -45,6 +47,8 @@ public class WallCalc extends JPanel {
 	 */
 	public WallCalc() {
 		setLayout(new BorderLayout(0, 0));
+		
+		dbc = new DBConnectionClass();
 
 		JPanel dimensionPanel = new JPanel();
 		dimensionPanel.setPreferredSize(new Dimension(148, 100));
@@ -268,14 +272,41 @@ public class WallCalc extends JPanel {
 		add(totalPanel, BorderLayout.SOUTH);
 		totalPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 
-		JLabel jlblTotalPrice = new JLabel("TotalPrice:");
+		JLabel jlblTotalPrice = new JLabel("Enter Price: \u20AC");
 		jlblTotalPrice.setHorizontalAlignment(SwingConstants.RIGHT);
 		totalPanel.add(jlblTotalPrice);
 
 		jtfTotal = new JTextField();
-		jtfTotal.setEditable(false);
 		totalPanel.add(jtfTotal);
 		jtfTotal.setColumns(10);
+		
+		JButton jbtAdd = new JButton("Add");
+		jbtAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				double price = Double.parseDouble(jtfTotal.getText());
+				double totalPrice = price * area;
+				int job_id = OpenProject.getProjectToOpen();
+				int quant = (int) area;
+
+				int mat_id = dbc.retrieveMaterialByName("Cavity Wall");
+				dbc.addMaterialToJob(job_id, mat_id, quant, price, totalPrice);
+				JobScreen.jobModel.data = JobScreen.updateJobTable(job_id);
+				JobScreen.table.repaint();
+				JobScreen.table.revalidate();
+				JobScreen.setHeaderDetails(OpenProject.getProjectToOpen());
+				jtfTotal.setText("");
+				jtfBlocksInner.setText("");
+				jtfBlocksOuter.setText("");
+				jtfCement.setText("");
+				jtfHeight.setText("");
+				jtfLength.setText("");
+				jtfSand.setText("");
+				jtfSqM.setText("");
+				jtfWallTies.setText("");
+
+			}
+		});
+		totalPanel.add(jbtAdd);
 		
 		setPreferredSize(new Dimension(317, 200));
 	}

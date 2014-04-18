@@ -277,7 +277,7 @@ public class OpenProject extends JInternalFrame {
 				if (rowSelected == -1) {
 					JOptionPane.showConfirmDialog(null,
 							"Please Select a Job to Open", "No Job Selected",
-							JOptionPane.OK_CANCEL_OPTION,
+							JOptionPane.OK_OPTION,
 							JOptionPane.WARNING_MESSAGE);
 				} else {
 					setVisible(false);

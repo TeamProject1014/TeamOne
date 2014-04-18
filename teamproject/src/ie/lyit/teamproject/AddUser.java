@@ -200,8 +200,8 @@ public class AddUser extends JInternalFrame {
 					setVisible(false);
 				} else {
 					JOptionPane.showMessageDialog(new JPanel(),
-							"Password must equals confirm password", "Info",
-							JOptionPane.INFORMATION_MESSAGE);
+							"Passwords do not Match", "Incorrect Password Details",
+							JOptionPane.WARNING_MESSAGE);
 				}
 				// else
 				// {
