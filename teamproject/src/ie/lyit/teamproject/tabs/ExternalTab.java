@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -47,7 +48,7 @@ public class ExternalTab extends JPanel {
 		JButton btnNewButton = new JButton("Select");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 			}
 		});
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
@@ -115,6 +116,8 @@ public class ExternalTab extends JPanel {
 		gbc_btnNewButton_3.gridx = 1;
 		gbc_btnNewButton_3.gridy = 3;
 		externalPanel.add(btnNewButton_3, gbc_btnNewButton_3);
+
+		setPreferredSize(new Dimension(320, 200));
 
 	}
 }

@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -38,9 +39,9 @@ public class BlockBrickMortarCalc extends JPanel {
 		TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(panel, BorderLayout.WEST);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 0, 0, 0 };
+		gbl_panel.columnWidths = new int[] { 10 };
 		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panel.columnWeights = new double[] { 0.0, 1.0 };
 		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
 				0.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
@@ -50,16 +51,16 @@ public class BlockBrickMortarCalc extends JPanel {
 		gbc_label.anchor = GridBagConstraints.EAST;
 		gbc_label.insets = new Insets(0, 0, 5, 5);
 		gbc_label.gridx = 0;
-		gbc_label.gridy = 0;
+		gbc_label.gridy = 1;
 		panel.add(label, gbc_label);
 
 		txtLength = new JTextField();
-		txtLength.setColumns(10);
+		txtLength.setColumns(8);
 		GridBagConstraints gbc_txtLength = new GridBagConstraints();
 		gbc_txtLength.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtLength.insets = new Insets(0, 0, 5, 0);
 		gbc_txtLength.gridx = 1;
-		gbc_txtLength.gridy = 0;
+		gbc_txtLength.gridy = 1;
 		panel.add(txtLength, gbc_txtLength);
 
 		JLabel label_1 = new JLabel("Height:");
@@ -67,7 +68,7 @@ public class BlockBrickMortarCalc extends JPanel {
 		gbc_label_1.anchor = GridBagConstraints.EAST;
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 0;
-		gbc_label_1.gridy = 1;
+		gbc_label_1.gridy = 2;
 		panel.add(label_1, gbc_label_1);
 
 		txtHeight = new JTextField();
@@ -77,16 +78,16 @@ public class BlockBrickMortarCalc extends JPanel {
 		gbc_txtHeight.anchor = GridBagConstraints.NORTH;
 		gbc_txtHeight.insets = new Insets(0, 0, 5, 0);
 		gbc_txtHeight.gridx = 1;
-		gbc_txtHeight.gridy = 1;
+		gbc_txtHeight.gridy = 2;
 		panel.add(txtHeight, gbc_txtHeight);
 
-		JLabel label_2 = new JLabel("Total Size m2:");
-		GridBagConstraints gbc_label_2 = new GridBagConstraints();
-		gbc_label_2.anchor = GridBagConstraints.EAST;
-		gbc_label_2.insets = new Insets(0, 0, 5, 5);
-		gbc_label_2.gridx = 0;
-		gbc_label_2.gridy = 2;
-		panel.add(label_2, gbc_label_2);
+		JLabel lblTotalM = new JLabel("Total m2:");
+		GridBagConstraints gbc_lblTotalM = new GridBagConstraints();
+		gbc_lblTotalM.anchor = GridBagConstraints.EAST;
+		gbc_lblTotalM.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTotalM.gridx = 0;
+		gbc_lblTotalM.gridy = 3;
+		panel.add(lblTotalM, gbc_lblTotalM);
 
 		txtTotalSize = new JTextField();
 		txtTotalSize.setEditable(false);
@@ -96,15 +97,8 @@ public class BlockBrickMortarCalc extends JPanel {
 		gbc_txtTotalSize.anchor = GridBagConstraints.NORTH;
 		gbc_txtTotalSize.insets = new Insets(0, 0, 5, 0);
 		gbc_txtTotalSize.gridx = 1;
-		gbc_txtTotalSize.gridy = 2;
+		gbc_txtTotalSize.gridy = 3;
 		panel.add(txtTotalSize, gbc_txtTotalSize);
-
-		JButton button = new JButton("Calculate");
-		GridBagConstraints gbc_button = new GridBagConstraints();
-		gbc_button.anchor = GridBagConstraints.WEST;
-		gbc_button.gridx = 1;
-		gbc_button.gridy = 6;
-		panel.add(button, gbc_button);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(
@@ -240,6 +234,22 @@ public class BlockBrickMortarCalc extends JPanel {
 		txtTotalPrice.setEditable(false);
 		txtTotalPrice.setColumns(10);
 		panel_2.add(txtTotalPrice);
+
+		setPreferredSize(new Dimension(320, 200));
+
+		panel.setPreferredSize(new Dimension(150, 100));
+
+		JButton button = new JButton("Calculate");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		GridBagConstraints gbc_button = new GridBagConstraints();
+		gbc_button.insets = new Insets(0, 0, 5, 0);
+		gbc_button.anchor = GridBagConstraints.WEST;
+		gbc_button.gridx = 1;
+		gbc_button.gridy = 5;
+		panel.add(button, gbc_button);
 
 		JButton jbtCalculate = new JButton("Calculate");
 		jbtCalculate.addActionListener(new ActionListener() {

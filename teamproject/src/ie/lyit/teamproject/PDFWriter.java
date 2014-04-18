@@ -4,7 +4,11 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.sql.ResultSet;
 import java.text.DecimalFormat;
+
+import javax.swing.ImageIcon;
 
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
@@ -14,23 +18,27 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.List;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Section;
+import com.itextpdf.text.log.SysoCounter;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class PDFWriter {
-	private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
+	private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 24,
 			Font.BOLD);
+	private static Font underlineTitle = new Font(Font.FontFamily.TIMES_ROMAN, 19,
+			Font.BOLD | Font.UNDERLINE);
 	private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
 			Font.NORMAL, BaseColor.RED);
 	private static Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
 			Font.BOLD);
-	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
+	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 16,
 			Font.BOLD);
 	private static Font tableText = new Font(Font.FontFamily.TIMES_ROMAN, 10);
 	private static String[] headerDetails;
@@ -38,6 +46,8 @@ public class PDFWriter {
 	private static String fileNameToSave;
 	private static DecimalFormat df = new DecimalFormat("###,###.00");
 	private static DecimalFormat intf = new DecimalFormat("###,###");
+	private static 	double grandTotal;
+	static ResultSet rs;
 
 	public static void writeFile() {
 		try {
@@ -104,27 +114,34 @@ public class PDFWriter {
 	}
 
 	private static void addTitlePage(Document document)
-			throws DocumentException {
+			throws DocumentException, MalformedURLException, IOException {
 		Paragraph preface = new Paragraph();
 		// We add one empty line
-		addEmptyLine(preface, 1);
+		
 		// Lets write a big header
-		preface.add(new Paragraph(
-				("Schedule of costs for \n" + headerDetails[1]), catFont));
+		
 
 		addEmptyLine(preface, 1);
-
-		preface.add(new Paragraph("Client:      " + headerDetails[0], smallBold));
-		preface.add(new Paragraph("Architect: " + headerDetails[2], smallBold));
-		preface.add(new Paragraph("Engineer:  " + headerDetails[3], smallBold));
-		preface.add(new Paragraph("Builder:    " + headerDetails[4], smallBold));
-		addEmptyLine(preface, 3);
-
+		Image image1 = Image.getInstance("Images/logo.jpg");
+		preface.add(image1);
+		image1.setAbsolutePosition(300f, 650f);
 		addEmptyLine(preface, 8);
-
 		preface.add(new Paragraph(
-				"This document is a preliminary version and not subject to your license agreement or any other agreement with buildCalc.com.",
-				redFont));
+				("Proposed Quantity and Pricing Lists"), catFont));
+		addEmptyLine(preface, 8);
+		preface.add(new Paragraph("Project Details", underlineTitle));
+		addEmptyLine(preface, 1);
+		preface.add(new Paragraph("Job:               " +headerDetails[1], smallBold));
+		addEmptyLine(preface, 1);
+		preface.add(new Paragraph("Client:          " + headerDetails[0], smallBold));
+		addEmptyLine(preface, 1);
+		preface.add(new Paragraph("Architect:    " + headerDetails[2], smallBold));
+		addEmptyLine(preface, 1);
+		preface.add(new Paragraph("Engineer:     " + headerDetails[3], smallBold));
+		addEmptyLine(preface, 1);
+		preface.add(new Paragraph("Builder:        " + headerDetails[4], smallBold));
+		
+		
 
 		document.add(preface);
 		// Start a new page
@@ -132,44 +149,89 @@ public class PDFWriter {
 	}
 
 	private static void addContent(Document document) throws DocumentException {
-		Anchor anchor = new Anchor("First Chapter", catFont);
-		anchor.setName("First Chapter");
+		Anchor anchor = new Anchor("Main", catFont);
+		anchor.setName("Main");
 
 		// Second parameter is the number of the chapter
 		Chapter catPart = new Chapter(new Paragraph(anchor), 1);
 
-		Paragraph subPara = new Paragraph("Subcategory 1", subFont);
+		Paragraph subPara = new Paragraph("Table", underlineTitle);
 		Section subCatPart = catPart.addSection(subPara);
-		subCatPart.add(new Paragraph("Hello"));
-
-		subPara = new Paragraph("Subcategory 2", subFont);
-		subCatPart = catPart.addSection(subPara);
-		subCatPart.add(new Paragraph("Paragraph 1"));
-		subCatPart.add(new Paragraph("Paragraph 2"));
-		subCatPart.add(new Paragraph("Paragraph 3"));
+		subCatPart.add(new Paragraph("Pricing and Quantity Breakdown", underlineTitle));
+		
+		subPara.setIndentationLeft(25);
+		subCatPart.setIndentationLeft(25);
 
 		// add a list
 		createList(subCatPart);
 		Paragraph paragraph = new Paragraph();
-		addEmptyLine(paragraph, 5);
+		addEmptyLine(paragraph, 3);
 		subCatPart.add(paragraph);
 
 		// add a table
 		createTable(subCatPart);
+		
+		Paragraph totalPara = new Paragraph("Total", underlineTitle);
+		Section totalSubPara = catPart.addSection(totalPara);
+		totalSubPara.add(new Paragraph("Price", underlineTitle));
+		
+		totalSubPara.add(new Paragraph("Grand Total:        €" + headerDetails[5], smallBold));
+		
+		totalSubPara.setIndentationLeft(25);
 
 		// now add all this to the document
 		document.add(catPart);
 
 		// Next section
-		anchor = new Anchor("Second Chapter", catFont);
+		anchor = new Anchor("Terms and Conditions", catFont);
 		anchor.setName("Second Chapter");
 
 		// Second parameter is the number of the chapter
 		catPart = new Chapter(new Paragraph(anchor), 1);
 
-		subPara = new Paragraph("Subcategory", subFont);
-		subCatPart = catPart.addSection(subPara);
-		subCatPart.add(new Paragraph("This is a very important message"));
+		Paragraph disclaimer = new Paragraph("Disclaimer", underlineTitle);
+		Section subDisclaimer = catPart.addSection(disclaimer);
+		addEmptyLine(disclaimer, 1);
+		subDisclaimer.add(new Paragraph("The prices produced in this document are by no means final, these prices are"
+				+ " estimates.The prices can fluxuate on quantities bought and demand of products."
+				+ " Also the produced price does not contain fees charged by work that is out sourced from this company i.e. Architects and Engineers."
+				+ " Also the produced price does not factor in the cost of labor charged by Builders."));
+		disclaimer.setIndentationLeft(25);
+		subDisclaimer.setIndentationLeft(25);
+		
+		
+		Paragraph contactPara = new Paragraph("Administrators and Contact Info", underlineTitle);
+		Section sectionContactPara = catPart.addSection(contactPara);
+		addEmptyLine(contactPara, 1);
+		sectionContactPara.add(new Paragraph(""
+				+ "    Name:                  Cathal Diver \n"
+				+ "    Telephone No.:    0862546095 \n"
+				+ "    Email:                   L00096309@student.lyit.ie \n \n"
+				+ "    Name:                  Liam Waugh \n"
+				+ "    Telephone No.:    087695112 \n"
+				+ "    Email:                   L00097721@student.lyit.ie \n \n"
+				+ "    Name:                  Eamon McSharry \n"
+				+ "    Telephone No.:    0872853739 \n"
+				+ "    Email:                   L00094341@student.lyit.ie \n \n"
+				+ "    Name:                  Luke Toland \n"
+				+ "    Telephone No.:    0872853739 \n"
+				+ "    Email:                   L00097070@student.lyit.ie"));
+		
+		contactPara.setIndentationLeft(25);
+		sectionContactPara.setIndentationLeft(25);
+		
+		Paragraph legalPara = new Paragraph("Legal", underlineTitle);
+		Section sectionLegalPara = catPart.addSection(legalPara);
+		addEmptyLine(legalPara, 1);
+		sectionLegalPara.add(new Paragraph("The java code used to run this building materials calculater is the intelectual property"
+				+ " of Mr. Cathal Diver"
+				+ ", Mr. Liam Waugh"
+				+ ", Mr. Eamon McSharry"
+				+ " and Mr. Luke Toland"
+				+ ". Any infringments of said intelectual property will be met with legal action. Layouts and algorithms are also trademarked."));
+		
+		legalPara.setIndentationLeft(25);
+		sectionLegalPara.setIndentationLeft(25);
 
 		// now add all this to the document
 		document.add(catPart);
@@ -209,11 +271,14 @@ public class PDFWriter {
 		c1 = new PdfPCell(new Phrase("Total", tableText));
 		c1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(c1);
+		
 		table.setHeaderRows(1);
 
 		PdfPCell nCell = new PdfPCell();
 
 		for (int i = 0; i < displayArray.length; i++) {
+			
+			
 			nCell = new PdfPCell(new Phrase("" + displayArray[i][0], tableText));
 			table.addCell(nCell);
 			nCell = new PdfPCell(new Phrase("" + displayArray[i][1], tableText));
@@ -229,6 +294,7 @@ public class PDFWriter {
 			nCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			table.addCell(nCell);
 			// jtfTotal.setText("" + df.format(rs.getDouble(4)));
+			
 		}
 
 		subCatPart.add(table);
@@ -237,9 +303,9 @@ public class PDFWriter {
 
 	private static void createList(Section subCatPart) {
 		List list = new List(true, false, 10);
-		list.add(new ListItem("First point"));
-		list.add(new ListItem("Second point"));
-		list.add(new ListItem("Third point"));
+		list.add(new ListItem(""));
+		list.add(new ListItem(""));
+		list.add(new ListItem(""));
 		subCatPart.add(list);
 	}
 

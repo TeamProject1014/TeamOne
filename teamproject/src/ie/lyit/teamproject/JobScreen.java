@@ -79,13 +79,13 @@ public class JobScreen extends JInternalFrame {
 	private JPanel calcPanel;
 	private JPanel calcTopPanel;
 	private JPanel calcLowerPanel;
-	
+
 	private JScrollPane scrollPane;
 	public static JTable table;
 	public static JobTableModel jobModel;
-	
+
 	private JTabbedPane tabbedPane;
-	
+
 	private final JLabel jlblTotal = new JLabel("SubTotal: \u20AC");
 	private JLabel jlblEditStatus;
 	private JLabel jlblCliDescr;
@@ -94,17 +94,17 @@ public class JobScreen extends JInternalFrame {
 	private JLabel jlblEngDescr;
 	private JLabel jlblStatusDescr;
 	private JLabel jlblBuildDescr;
-	
+
 	private static JTextField jtfClientName;
 	private static JTextField jtfTotal;
-	private static JTextField jtfArchitect;	
+	private static JTextField jtfArchitect;
 	private static JTextField jtfEngineer;
 	protected static JTextField jtfJobStatus;
 	private static JTextField jtfBuilder;
 	private JTextField newMaterial;
 	private JTextField newPrice;
 	private JTextField newQuantity;
-	private static JTextArea jtaJobDescription;	
+	private static JTextArea jtaJobDescription;
 	private JButton jbtEdit;
 	private JButton jbtDelete;
 	private JButton jbtPDF;
@@ -167,16 +167,16 @@ public class JobScreen extends JInternalFrame {
 		TableColumn col5 = table.getColumnModel().getColumn(4);
 		col1.setPreferredWidth(150);
 		col2.setPreferredWidth(250);
-		col3.setPreferredWidth(100);
-		col4.setPreferredWidth(100);
-		col5.setPreferredWidth(100);
+		col3.setPreferredWidth(85);
+		col4.setPreferredWidth(85);
+		col5.setPreferredWidth(85);
 
 		tablePanel.setLayout(new BorderLayout(0, 0));
 
 		scrollPane = new JScrollPane(table);
 		scrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setPreferredSize(new Dimension(675, 330));
+		scrollPane.setPreferredSize(new Dimension(630, 330));
 		tablePanel.add(scrollPane, BorderLayout.CENTER);
 		table.addMouseListener(new MouseAdapter() {
 
@@ -197,13 +197,23 @@ public class JobScreen extends JInternalFrame {
 		totalPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 
 		jbtEdit = new JButton("Edit");
+		jbtEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				if (table.getSelectedRow() > -1) {
+					runEdit();
+				}
+			}
+		});
 		totalPanel.add(jbtEdit);
 
 		jbtDelete = new JButton("Delete");
 		totalPanel.add(jbtDelete);
 		jbtDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				deleteFromTable();
+				if (table.getSelectedRow() > -1) {
+					deleteFromTable();
+				}
 			}
 		});
 		totalPanel.add(jlblTotal);
@@ -420,7 +430,7 @@ public class JobScreen extends JInternalFrame {
 
 		roofTab = new RoofTab();
 		tabbedPane.add(roofTab, "Roof");
-		
+
 		categoryTab = new CategorySelect();
 		tabbedPane.add(categoryTab, "Category");
 		tabbedPane.addChangeListener(new ChangeListener() {
@@ -430,26 +440,26 @@ public class JobScreen extends JInternalFrame {
 					JobScreen.resetLowerPanes();
 					JobScreen.selectMaterial.setVisible(true);
 				}
-			}			
+			}
 		});
 
 		calcLowerPanel = new JPanel();
 		calcPanel.add(calcLowerPanel, BorderLayout.SOUTH);
 		calcLowerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
+
 		subBase = new SubBase();
 		calcLowerPanel.add(subBase);
 		subBase.setVisible(false);
-		
+
 		pavingBedCalc = new PavingBedCalc();
 		calcLowerPanel.add(pavingBedCalc);
 		pavingBedCalc.setVisible(false);
-		
+
 		selectMaterial = new MaterialSelect();
 		calcLowerPanel.add(selectMaterial);
 		selectMaterial.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		selectMaterial.setVisible(false);
-		
+
 		brickBlockMortar = new BlockBrickMortarCalc();
 		calcLowerPanel.add(brickBlockMortar);
 		brickBlockMortar.setVisible(false);
@@ -457,23 +467,23 @@ public class JobScreen extends JInternalFrame {
 		wallCalc = new WallCalc();
 		calcLowerPanel.add(wallCalc);
 		wallCalc.setVisible(false);
-		
+
 		mortarCalc = new MortarCalculator();
 		calcLowerPanel.add(mortarCalc);
 		mortarCalc.setVisible(false);
-		
+
 		floorCalc = new Floor();
 		calcLowerPanel.add(floorCalc);
 		floorCalc.setVisible(false);
-		
+
 		roofCalc = new Roof();
 		calcLowerPanel.add(roofCalc);
 		roofCalc.setVisible(false);
-		
+
 		studWallCalc = new StudWallCalc();
 		calcLowerPanel.add(studWallCalc);
 		studWallCalc.setVisible(false);
-		
+
 		plastQuantCalc = new PlasteringQuantitiesCalc();
 		calcLowerPanel.add(plastQuantCalc);
 		plastQuantCalc.setVisible(false);
@@ -504,7 +514,6 @@ public class JobScreen extends JInternalFrame {
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
 
-		
 	}
 
 	public void sendToPDF() {
@@ -530,30 +539,29 @@ public class JobScreen extends JInternalFrame {
 		}
 	}
 
-	//Edit a table row
-	public void runEdit()
-	{
-		//Create a dialog box to edit a selected row in the table
-		JPanel main = new JPanel(new BorderLayout(5,5));
+	// Edit a table row
+	public void runEdit() {
+		// Create a dialog box to edit a selected row in the table
+		JPanel main = new JPanel(new BorderLayout(5, 5));
 
-		JPanel labels = new JPanel(new GridLayout(0,1,2,2));
+		JPanel labels = new JPanel(new GridLayout(0, 1, 2, 2));
 		labels.add(new JLabel("Description", SwingConstants.RIGHT));
 		labels.add(new JLabel("Price", SwingConstants.RIGHT));
 		labels.add(new JLabel("Quantity", SwingConstants.RIGHT));
 		main.add(labels, BorderLayout.WEST);
 
-		//Get data from table
-		System.out.println(table.getSelectedRow());
+		// Get data from table
+		// System.out.println(table.getSelectedRow());
 		int mat_id = (int) jobArray[table.getSelectedRow()][1];
 		int job_id = OpenProject.getProjectToOpen();
-		System.out.println("Editing entry with material_id: " + mat_id 
-							+ "\nFrom job no: " + job_id);
-		
-		//Get material
+		// System.out.println("Editing entry with material_id: " + mat_id
+		// + "\nFrom job no: " + job_id);
+
+		// Get material
 		String material = dbc.getMaterial(mat_id);
-		
-		//Show dialog
-		JPanel controls = new JPanel(new GridLayout(0,1,2,2));
+
+		// Show dialog
+		JPanel controls = new JPanel(new GridLayout(0, 1, 2, 2));
 		controls.add(newMaterial = new JTextField());
 		controls.add(newPrice = new JTextField());
 		controls.add(newQuantity = new JTextField());
@@ -561,27 +569,28 @@ public class JobScreen extends JInternalFrame {
 
 		newMaterial.setEditable(false);
 		newMaterial.setText(material);
-		
-		int option = JOptionPane.showConfirmDialog(
-				new JFrame(), main, "Edit Material", JOptionPane.DEFAULT_OPTION);
 
-		//If ok is pressed
-		if (option == JOptionPane.OK_OPTION){
-			try{
-				//Get user input
+		int option = JOptionPane.showConfirmDialog(new JFrame(), main,
+				"Edit Material", JOptionPane.DEFAULT_OPTION);
+
+		// If ok is pressed
+		if (option == JOptionPane.OK_OPTION) {
+			try {
+				// Get user input
 				double inputPrice = Double.parseDouble(newPrice.getText());
-				double inputQuantity = Double.parseDouble(newQuantity.getText());
+				double inputQuantity = Double
+						.parseDouble(newQuantity.getText());
 
-				//Edit row
+				// Edit row
 				dbc.editItemFromJob(job_id, mat_id, inputQuantity, inputPrice);
 				jobModel.data = JobScreen.updateJobTable(job_id);
 				table.repaint();
 				table.revalidate();
 				setHeaderDetails(OpenProject.getProjectToOpen());
-			}catch(NumberFormatException e)
-			{
+			} catch (NumberFormatException e) {
 				e.getMessage();
-				JOptionPane.showMessageDialog(new JFrame(), "Enter price AND quantity");
+				JOptionPane.showMessageDialog(new JFrame(),
+						"Enter price AND quantity");
 			}
 		}
 	}
@@ -601,14 +610,7 @@ public class JobScreen extends JInternalFrame {
 			System.out.println(ex.getMessage());
 		}
 
-		// =====================================//
-		// Check if table populates correctly with the second value below set to
-		// 5
-		// =====================================//
-		displayArray = new Object[count][5];// [6]; // Check if can just use
-											// job_id associated with jobScreen
-											// instead of retrieving this job_id
-		
+		displayArray = new Object[count][5];
 		jobArray = new Object[count][7]; // Also includes job_id and material_id
 		try {
 			rs = dbc.retrieveAllJobDetails(job_id);
@@ -648,13 +650,14 @@ public class JobScreen extends JInternalFrame {
 	}
 
 	public void deleteFromTable() {
-		System.out.println(table.getSelectedRow());
+		// System.out.println(table.getSelectedRow());
 		int mat_id = (int) jobArray[table.getSelectedRow()][1];
 		int job_id = OpenProject.getProjectToOpen();
-		System.out.println("deleting material with material_id: " + mat_id
-				+ "\nFrom job no: " + job_id);
+		// System.out.println("deleting material with material_id: " + mat_id
+		// + "\nFrom job no: " + job_id);
 		dbc.deleteItemFromJob(job_id, mat_id);
 		jobModel.data = JobScreen.updateJobTable(job_id);
+		setHeaderDetails(OpenProject.getProjectToOpen());
 		table.repaint();
 		table.revalidate();
 	}
@@ -718,12 +721,12 @@ public class JobScreen extends JInternalFrame {
 	 * 
 	 */
 
-	class JobTableModel extends AbstractTableModel {
+	public class JobTableModel extends AbstractTableModel {
 
 		private String[] columnNames = { "Category", "Description", "Price",
 				"Quantity", "Total" };
 
-		Object[][] data;
+		public Object[][] data;
 
 		@Override
 		public int getColumnCount() {
@@ -753,11 +756,15 @@ public class JobScreen extends JInternalFrame {
 
 		@Override
 		public boolean isCellEditable(int row, int col) {
+			return false;
+			/**
+			 * The columns below were set to allow editing to be carried out
+			 * within the table
+			 */
+			// if (col < 2 || col == 4)
 			// return false;
-			if (col < 2 || col == 4)
-				return false;
-			else
-				return true;
+			// else
+			// return true;
 		}
 
 		@Override
@@ -768,9 +775,9 @@ public class JobScreen extends JInternalFrame {
 	}
 }
 
-@SuppressWarnings("serial")
-class CurrencyTableCellRenderer extends DefaultTableCellRenderer {
-	public CurrencyTableCellRenderer() {
-		setHorizontalAlignment(JLabel.RIGHT);
-	}
-}
+// @SuppressWarnings("serial")
+// class CurrencyTableCellRenderer extends DefaultTableCellRenderer {
+// public CurrencyTableCellRenderer() {
+// setHorizontalAlignment(JLabel.RIGHT);
+// }
+// }

@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.swing.JOptionPane;
+
 /**
  * Reference class to store all SQL methods that are required for the entire
  * application
@@ -77,7 +79,34 @@ public class DBConnectionClass {
 	 * @param username
 	 * @return
 	 */
-	public int checkUser(String username)
+	public int checkUser(String username, String password)
+	{
+		boolean result = false;
+		int count = 0;
+		try {
+			// String gdta = "select * from USER";
+			String gdta = "Select name FROM user WHERE name = '"
+					+ username + "' AND password = '"+ password + "'";
+			rs = stmt.executeQuery(gdta);
+
+			while (rs.next()) {
+				++count;
+				// Get data from the current row and use it
+			}
+
+		} catch (SQLException ex) {
+			System.err.println("Retrieve Data: " + ex.getMessage());
+		}
+
+		return count;
+	}
+	
+	/**
+	 * Checks if a user exits when creating a new one
+	 * @param username
+	 * @return
+	 */
+	public int checkUserifUserExists(String username)
 	{
 		boolean result = false;
 		int count = 0;
@@ -294,7 +323,7 @@ public class DBConnectionClass {
 			while (rs.next()) {
 				// Get data from the current row and use it
 				userID = Integer.parseInt(rs.getString(1));
-				System.out.print("User ID: "+ userID);
+				//System.out.print("User ID: "+ userID);
 			}
 
 		} catch (SQLException ex) {
@@ -327,7 +356,7 @@ public class DBConnectionClass {
 		} catch (SQLException ex) {
 			System.err.println("Retrieve Data: " + ex.getMessage());
 		}
-		System.out.print("Material : "+ mat);
+		//System.out.print("Material : "+ mat);
 		return mat;
 	}
 
@@ -687,9 +716,7 @@ public class DBConnectionClass {
 			addMatToJob.executeUpdate();
 
 		} catch (SQLException ex) {
-			System.err
-					.println("There was an error when inserting new job Data: "
-							+ ex.getMessage());
+			JOptionPane.showMessageDialog(null, "Item already added for this job." );
 		}
 	}
 	
@@ -715,6 +742,22 @@ public class DBConnectionClass {
 		int material_id = 0;
 		try {
 			String gdta = "SELECT MAX(material_id) FROM material";
+			rs = stmt.executeQuery(gdta);
+			while (rs.next()) {
+				material_id = rs.getInt(1);
+			}
+			return material_id;
+		} catch (SQLException ex) {
+			System.err.println("Error attempting to retrieve material_id : "
+					+ ex.getMessage());
+			return material_id;
+		}
+	}	
+	
+	public int retrieveMaterialByName(String matName) {
+		int material_id = 0;
+		try {
+			String gdta = "SELECT material_id FROM material WHERE description = '" + matName + "'";
 			rs = stmt.executeQuery(gdta);
 			while (rs.next()) {
 				material_id = rs.getInt(1);

@@ -5,6 +5,7 @@ import ie.lyit.teamproject.JobScreen;
 import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
@@ -36,17 +37,18 @@ public class WallsTab extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 
 		JPanel wallPanel = new JPanel();
-		wallPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Walls Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		wallPanel.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "Walls Options",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		add(wallPanel, BorderLayout.WEST);
 		GridBagLayout gbl_wallPanel = new GridBagLayout();
 		gbl_wallPanel.columnWidths = new int[] { 200, 100, 0 };
 		gbl_wallPanel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-		gbl_wallPanel.columnWeights = new double[] { 0.0, 0.0,
-				Double.MIN_VALUE };
-		gbl_wallPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0,
-				0.0, 0.0, Double.MIN_VALUE };
+		gbl_wallPanel.columnWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		gbl_wallPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, Double.MIN_VALUE };
 		wallPanel.setLayout(gbl_wallPanel);
-		
+
 		JLabel lblNewLabel = new JLabel("Mortar Calculator");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
@@ -54,7 +56,7 @@ public class WallsTab extends JPanel {
 		gbc_lblNewLabel.gridx = 0;
 		gbc_lblNewLabel.gridy = 1;
 		wallPanel.add(lblNewLabel, gbc_lblNewLabel);
-		
+
 		JButton btnNewButton = new JButton("Select");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -68,7 +70,7 @@ public class WallsTab extends JPanel {
 		gbc_btnNewButton.gridx = 1;
 		gbc_btnNewButton.gridy = 1;
 		wallPanel.add(btnNewButton, gbc_btnNewButton);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Brick, Block & Mortar Quantities");
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.WEST;
@@ -76,7 +78,7 @@ public class WallsTab extends JPanel {
 		gbc_lblNewLabel_1.gridx = 0;
 		gbc_lblNewLabel_1.gridy = 2;
 		wallPanel.add(lblNewLabel_1, gbc_lblNewLabel_1);
-		
+
 		JButton btnNewButton_1 = new JButton("Select");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -90,7 +92,7 @@ public class WallsTab extends JPanel {
 		gbc_btnNewButton_1.gridx = 1;
 		gbc_btnNewButton_1.gridy = 2;
 		wallPanel.add(btnNewButton_1, gbc_btnNewButton_1);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("Cavity Wall Calculator");
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.anchor = GridBagConstraints.WEST;
@@ -98,7 +100,7 @@ public class WallsTab extends JPanel {
 		gbc_lblNewLabel_2.gridx = 0;
 		gbc_lblNewLabel_2.gridy = 3;
 		wallPanel.add(lblNewLabel_2, gbc_lblNewLabel_2);
-		
+
 		JButton btnNewButton_2 = new JButton("Select");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -112,7 +114,7 @@ public class WallsTab extends JPanel {
 		gbc_btnNewButton_2.gridx = 1;
 		gbc_btnNewButton_2.gridy = 3;
 		wallPanel.add(btnNewButton_2, gbc_btnNewButton_2);
-		
+
 		JLabel lblRenderQuantities = new JLabel("Render Quantities");
 		GridBagConstraints gbc_lblRenderQuantities = new GridBagConstraints();
 		gbc_lblRenderQuantities.anchor = GridBagConstraints.WEST;
@@ -120,7 +122,7 @@ public class WallsTab extends JPanel {
 		gbc_lblRenderQuantities.gridx = 0;
 		gbc_lblRenderQuantities.gridy = 4;
 		wallPanel.add(lblRenderQuantities, gbc_lblRenderQuantities);
-		
+
 		JButton btnNewButton_3 = new JButton("Select");
 		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
 		gbc_btnNewButton_3.anchor = GridBagConstraints.WEST;
@@ -128,6 +130,8 @@ public class WallsTab extends JPanel {
 		gbc_btnNewButton_3.gridx = 1;
 		gbc_btnNewButton_3.gridy = 4;
 		wallPanel.add(btnNewButton_3, gbc_btnNewButton_3);
+		
+		setPreferredSize(new Dimension(320, 200));
 
 	}
 }
