@@ -37,39 +37,38 @@ public class MainScreen extends JFrame {
 	private JMenu viewMenu;
 	private JMenu helpMenu;
 
-	private JMenuItem editUser;
-	private JMenuItem editMaterial;
-	private JMenuItem editCategory;
+//	private JMenuItem editUser;
+//	private JMenuItem editMaterial;
+//	private JMenuItem editCategory;
 
-	private JMenuItem viewUser;
-	private JMenuItem viewClient;
-	private JMenuItem viewMaterial;
-	private JMenuItem viewCategory;
-	private JMenuItem viewArchitect;
-	private JMenuItem viewEngineer;
-	private JMenuItem viewBuilder;
+//	private JMenuItem viewUser;
+//	private JMenuItem viewClient;
+//	private JMenuItem viewMaterial;
+//	private JMenuItem viewCategory;
+//	private JMenuItem viewArchitect;
+//	private JMenuItem viewEngineer;
+//	private JMenuItem viewBuilder;
 	
-	private JMenuItem logIn;
-	private JMenuItem logOut;
 
 	private JMenuItem about;
 
-	private static String pageTitle;
+	public static String pageTitle;
+	protected static boolean newProjectInstanceFlag;
 	protected static boolean openProjectInstanceFlag;
 	private static boolean editCharacterInstanceFlag;
 	public static boolean addCategoryInstanceFlag;
-	private static boolean addMaterialInstanceFlag;
+	static boolean addMaterialInstanceFlag;
 	private static boolean addUserInstanceFlag;
 
 	protected static NewJob newJob;
 	protected static OpenProject openProject;
-	protected static AddClient addClient;
+	//protected static AddClient addClient;
 	protected static AddCharacter addCharacter;
 	protected static EditCharacter editCharacter;
 	public static AddCategory addCategory;
 	protected static AddMaterial addMaterial;
 	protected static AddUser addUser;
-	protected static LogIn userLogIn;
+
 	
 	private static int categoryToDisplay;
 	private static int userLoggedIn;
@@ -100,7 +99,7 @@ public class MainScreen extends JFrame {
 		desk.setLayout(null);
 
 		newJob = new NewJob();
-		newJob.setBounds(615, 413, 450, 225);
+//		newJob.setBounds(615, 413, 450, 225);
 		desk.add(newJob);
 		newJob.setVisible(false);
 
@@ -111,7 +110,17 @@ public class MainScreen extends JFrame {
 
 		Action newAction = new AbstractAction("New", new ImageIcon(
 				"Images/new.png")) {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
+				NewJob.setClientComboContents();
+				NewJob.setArchComboContents();
+				NewJob.setEngComboContents();
+				NewJob.setBuildComboContents();
+				NewJob.jcboClient.setModel(NewJob.getClientComboModel());
+				NewJob.jcboArch.setModel(NewJob.getArchComboModel());
+				NewJob.jcboEng.setModel(NewJob.getEngComboModel());
+				NewJob.jcboBuild.setModel(NewJob.getBuildComboModel());
+
 				newJob.setVisible(true);
 				newJob.toFront();
 			}
@@ -152,16 +161,16 @@ public class MainScreen extends JFrame {
 				KeyStroke.getKeyStroke("control O"));
 		openAction.putValue(Action.SHORT_DESCRIPTION, "Open an Existing Job");
 
-		Action pdfAction = new AbstractAction("Send to PDF", new ImageIcon(
-				"Images/pdf.png")) {
-			public void actionPerformed(ActionEvent e) {
-				// TODO
-			}
-		};
-		pdfAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_P));
-		pdfAction.putValue(Action.ACCELERATOR_KEY,
-				KeyStroke.getKeyStroke("control P"));
-		pdfAction.putValue(Action.SHORT_DESCRIPTION, "Send job to PDF");
+//		Action pdfAction = new AbstractAction("Send to PDF", new ImageIcon(
+//				"Images/pdf.png")) {
+//			public void actionPerformed(ActionEvent e) {
+//				// TODO
+//			}
+//		};
+//		pdfAction.putValue(Action.MNEMONIC_KEY, new Integer(KeyEvent.VK_P));
+//		pdfAction.putValue(Action.ACCELERATOR_KEY,
+//				KeyStroke.getKeyStroke("control P"));
+//		pdfAction.putValue(Action.SHORT_DESCRIPTION, "Send job to PDF");
 		
 		Action addUserAction = new AbstractAction("User", new ImageIcon(
 				"")) {
@@ -171,24 +180,15 @@ public class MainScreen extends JFrame {
 					desk.add(addUser);
 					addUserInstanceFlag = true;
 				}
+				addUser.jtxtUser.setText("");
+				addUser.jtxtPass.setText("");
+				addUser.jtxtConfirm.setText("");
 				addUser.setVisible(true);
 				addUser.toFront();
 			}
 		};
 		addUserAction.putValue(Action.SHORT_DESCRIPTION, "Log a user into program");
 		
-		Action newLogIn = new AbstractAction("Log In", new ImageIcon(
-				"")) {
-			public void actionPerformed(ActionEvent e) {
-				if (!addUserInstanceFlag) {
-					userLogIn = new LogIn();
-					desk.add(userLogIn);
-					addUserInstanceFlag = true;
-				}
-				userLogIn.setVisible(true);
-				userLogIn.toFront();
-			}
-		};		
 		
 		Action addCategoryAction = new AbstractAction("Category", new ImageIcon(
 				"")) {
@@ -198,6 +198,7 @@ public class MainScreen extends JFrame {
 					desk.add(addCategory);
 					addCategoryInstanceFlag = true;
 				}
+				addCategory.jtxtDesc.setText("");
 				addCategory.setVisible(true);
 				addCategory.toFront();
 			}
@@ -212,6 +213,7 @@ public class MainScreen extends JFrame {
 					desk.add(addMaterial);
 					addMaterialInstanceFlag = true;
 				}
+				addMaterial.jtfName.setText("");
 				addMaterial.setVisible(true);
 				addMaterial.toFront();
 			}
@@ -384,10 +386,7 @@ public class MainScreen extends JFrame {
 		// File Menu
 		fileMenu.add(newAction);
 		fileMenu.add(openAction);
-		fileMenu.add(pdfAction);
-		fileMenu.addSeparator();
-		fileMenu.add(newLogIn);
-		fileMenu.add(logOutAction);
+		//fileMenu.add(pdfAction);
 		fileMenu.addSeparator();
 		fileMenu.add(exitAction);
 
@@ -396,11 +395,11 @@ public class MainScreen extends JFrame {
 		editMenu.setMnemonic('E');
 		menubar.add(fileMenu);
 		menubar.add(editMenu);
-		editUser = new JMenuItem("User");
-		editMenu.add(editUser);
-		editMenu.add(editMaterial = new JMenuItem("Material"));
-		editMenu.add(editCategory = new JMenuItem("Category"));
-		editMenu.addSeparator();
+//		editUser = new JMenuItem("User");
+//		editMenu.add(editUser);
+//		editMenu.add(editMaterial = new JMenuItem("Material"));
+//		editMenu.add(editCategory = new JMenuItem("Category"));
+//		editMenu.addSeparator();
 		editMenu.add(editClientAction);
 		editMenu.add(editArchAction);
 		editMenu.add(editEngAction);
@@ -419,18 +418,18 @@ public class MainScreen extends JFrame {
 		addMenu.add(addEngAction);
 		addMenu.add(addBuildAction);
 
-		// View Menu
-		viewMenu = new JMenu("View");
-		viewMenu.setMnemonic('V');
-		menubar.add(viewMenu);
-		viewMenu.add(viewUser = new JMenuItem("User"));
-		viewMenu.add(viewMaterial = new JMenuItem("Material"));
-		viewMenu.add(viewCategory = new JMenuItem("Category"));
-		viewMenu.addSeparator();
-		viewMenu.add(viewClient = new JMenuItem("Client"));
-		viewMenu.add(viewArchitect = new JMenuItem("Architect"));
-		viewMenu.add(viewEngineer = new JMenuItem("Engineer"));
-		viewMenu.add(viewBuilder = new JMenuItem("Builder"));
+//		// View Menu
+//		viewMenu = new JMenu("View");
+//		viewMenu.setMnemonic('V');
+//		menubar.add(viewMenu);
+//		viewMenu.add(viewUser = new JMenuItem("User"));
+//		viewMenu.add(viewMaterial = new JMenuItem("Material"));
+//		viewMenu.add(viewCategory = new JMenuItem("Category"));
+//		viewMenu.addSeparator();
+//		viewMenu.add(viewClient = new JMenuItem("Client"));
+//		viewMenu.add(viewArchitect = new JMenuItem("Architect"));
+//		viewMenu.add(viewEngineer = new JMenuItem("Engineer"));
+//		viewMenu.add(viewBuilder = new JMenuItem("Builder"));
 
 		helpMenu = new JMenu("Help");
 		helpMenu.setMnemonic('H');
@@ -446,7 +445,7 @@ public class MainScreen extends JFrame {
 		toolbar.setFloatable(false);
 		toolbar.add(newAction);
 		toolbar.add(openAction);
-		toolbar.add(pdfAction);
+		//toolbar.add(pdfAction);
 		toolbar.addSeparator();
 		toolbar.add(addClientAction);
 		toolbar.add(addArchAction);
@@ -491,9 +490,5 @@ public class MainScreen extends JFrame {
 	public static void setPageTitle(String titleIn) {
 		pageTitle = titleIn;
 	}
-
-	@SuppressWarnings("unused")
-	public static void main(String[] args) {
-		MainScreen init = new MainScreen();
-	}
+	
 }

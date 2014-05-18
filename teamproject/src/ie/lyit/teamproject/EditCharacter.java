@@ -2,6 +2,7 @@ package ie.lyit.teamproject;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +10,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -16,15 +19,18 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 
@@ -63,7 +69,6 @@ public class EditCharacter extends JInternalFrame {
 	private static Dimension screenSize = Toolkit.getDefaultToolkit()
 			.getScreenSize();
 	private JPanel panel;
-
 
 	/**
 	 * 
@@ -194,9 +199,11 @@ public class EditCharacter extends JInternalFrame {
 		contentPanel.add(jlblCounty, gbc_jlblCounty);
 
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Edit", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		contentPanel.setBorder(new TitledBorder(new EtchedBorder(
+				EtchedBorder.LOWERED, null, null), "Edit",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		
+
 		String[] county = { "Antrim", "Armagh", "Carlow", "Cavan", "Clare",
 				"Cork", "Derry", "Donegal", "Down", "Dublin", "Fermanagh",
 				"Galway", "Kerry", "Kildare", "Kilkenny", "Laois", "Leitrim",
@@ -252,53 +259,53 @@ public class EditCharacter extends JInternalFrame {
 		gbc_jlblEmail.gridy = 6;
 		contentPanel.add(jlblEmail, gbc_jlblEmail);
 
-		//jbtUpdate = new JButton("Update");
-//		jbtUpdate.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//
-//				String address = jtfAddr.getText();
-//				String address2 = jtfAddr2.getText();
-//				String town = jtfTown.getText();
-//				String county = (String) jcboCounty.getSelectedItem();
-//				String phone = jtfPhone.getText();
-//				String email = jtfEmail.getText();
-//				setVisible(false);
-//
-//				String tempName = (String) characterComboBox.getSelectedItem();
-//
-//				/**
-//				 * Set the characterId that will determine which entity is
-//				 * updated by the SQL statement
-//				 */
-//				for (int i = 0; i < comboModel.getSize(); i++) {
-//					if (charArray[i][1] == tempName) {
-//						characterId = (int) charArray[i][0];
-//					}
-//				}
-//
-//				String characterString = MainScreen.getPageTitle();
-//
-//				if (characterString.equals("Engineer")) {
-//					dbc.editEngineer(address, address2, town, county, phone,
-//							email);
-//				}
-//
-//				else if (characterString.equals("Architect")) {
-//					dbc.editArchitect(address, address2, town, county, phone,
-//							email);
-//				}
-//
-//				else if (characterString.equals("Client")) {
-//					dbc.editClient(address, address2, town, county, phone,
-//							email);
-//				}
-//
-//				else if (characterString.equals("Builder")) {
-//					dbc.editBuilder(address, address2, town, county, phone,
-//							email);
-//				}
-//			}
-//		});
+		// jbtUpdate = new JButton("Update");
+		// jbtUpdate.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent arg0) {
+		//
+		// String address = jtfAddr.getText();
+		// String address2 = jtfAddr2.getText();
+		// String town = jtfTown.getText();
+		// String county = (String) jcboCounty.getSelectedItem();
+		// String phone = jtfPhone.getText();
+		// String email = jtfEmail.getText();
+		// setVisible(false);
+		//
+		// String tempName = (String) characterComboBox.getSelectedItem();
+		//
+		// /**
+		// * Set the characterId that will determine which entity is
+		// * updated by the SQL statement
+		// */
+		// for (int i = 0; i < comboModel.getSize(); i++) {
+		// if (charArray[i][1] == tempName) {
+		// characterId = (int) charArray[i][0];
+		// }
+		// }
+		//
+		// String characterString = MainScreen.getPageTitle();
+		//
+		// if (characterString.equals("Engineer")) {
+		// dbc.editEngineer(address, address2, town, county, phone,
+		// email);
+		// }
+		//
+		// else if (characterString.equals("Architect")) {
+		// dbc.editArchitect(address, address2, town, county, phone,
+		// email);
+		// }
+		//
+		// else if (characterString.equals("Client")) {
+		// dbc.editClient(address, address2, town, county, phone,
+		// email);
+		// }
+		//
+		// else if (characterString.equals("Builder")) {
+		// dbc.editBuilder(address, address2, town, county, phone,
+		// email);
+		// }
+		// }
+		// });
 
 		jtfEmail = new JTextField();
 		jtfEmail.addFocusListener(new FocusAdapter() {
@@ -323,7 +330,6 @@ public class EditCharacter extends JInternalFrame {
 		gbc_jbtUpdate.gridwidth = 2;
 		gbc_jbtUpdate.gridx = 0;
 		gbc_jbtUpdate.gridy = 7;
-		
 
 		panel = new JPanel();
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED,
@@ -341,7 +347,6 @@ public class EditCharacter extends JInternalFrame {
 				String county = (String) jcboCounty.getSelectedItem();
 				String phone = jtfPhone.getText();
 				String email = jtfEmail.getText();
-				setVisible(false);
 
 				String tempName = (String) characterComboBox.getSelectedItem();
 
@@ -357,30 +362,71 @@ public class EditCharacter extends JInternalFrame {
 
 				String characterString = MainScreen.getPageTitle();
 
-				if (characterString.equals("Engineer")) {
-					dbc.editEngineer(address, address2, town, county, phone,
-							email);
-				}
+				// Email validation
+				Pattern pattern;
+				Matcher matcher;
+				final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+						+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
-				else if (characterString.equals("Architect")) {
-					dbc.editArchitect(address, address2, town, county, phone,
-							email);
-				}
+				pattern = Pattern.compile(EMAIL_PATTERN);
+				matcher = pattern.matcher(email);
 
-				else if (characterString.equals("Client")) {
-					dbc.editClient(address, address2, town, county, phone,
-							email);
-				}
+				try {
+					if (matcher.matches()) {
+						// Try to retrieve phone number. If String - throw
+						// exception
+						int phoneNumber = (Integer.parseInt(jtfPhone.getText()));
 
-				else if (characterString.equals("Builder")) {
-					dbc.editBuilder(address, address2, town, county, phone,
-							email);
+						String tempnumber = (jtfPhone.getText());
+						// Check if number is greater than or equal to 6 digits
+						if (tempnumber.length() >= 6
+								&& tempnumber.length() <= 15) {
+							if (characterString.equals("Engineer")) {
+								dbc.editEngineer(address, address2, town,
+										county, phone, email);
+							}
+
+							else if (characterString.equals("Architect")) {
+								dbc.editArchitect(address, address2, town,
+										county, phone, email);
+							}
+
+							else if (characterString.equals("Client")) {
+								dbc.editClient(address, address2, town, county,
+										phone, email);
+							}
+
+							else if (characterString.equals("Builder")) {
+								dbc.editBuilder(address, address2, town,
+										county, phone, email);
+							}
+							setVisible(false);
+						} else {
+							JOptionPane
+									.showMessageDialog(
+											new JPanel(),
+											"Phone number must be greater than or equal to 6 digits",
+											"Information",
+											JOptionPane.INFORMATION_MESSAGE);
+						}
+					} else {
+						JOptionPane
+								.showMessageDialog(
+										new JPanel(),
+										"Not a valid email address \n - Must have an @ symbol \n - Must have a valid domain e.g @lyit.ie",
+										"Information",
+										JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(new JPanel(),
+							"Enter a valid phone number, e.g 0861129023 ",
+							"Information", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		});
-		//contentPanel.add(jbtUpdate, gbc_jbtUpdate);
+		// contentPanel.add(jbtUpdate, gbc_jbtUpdate);
 		panel.add(jbtUpdate);
-		
+
 		jbtCancel = new JButton("Cancel");
 		jbtCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -405,6 +451,7 @@ public class EditCharacter extends JInternalFrame {
 		setResizable(false);
 		this.setDefaultCloseOperation(JInternalFrame.HIDE_ON_CLOSE);
 		this.setFrameIcon(new ImageIcon("Images/measure.png"));
+		getRootPane().setDefaultButton(jbtUpdate);
 	}
 
 	/**

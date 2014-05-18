@@ -98,9 +98,9 @@ public class MaterialSelect extends JPanel {
 		optionsPanel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Options", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		entirePanel.add(optionsPanel, BorderLayout.SOUTH);
 		GridBagLayout gbl_optionsPanel = new GridBagLayout();
-		gbl_optionsPanel.columnWidths = new int[] { 0, 74, 0 };
+		gbl_optionsPanel.columnWidths = new int[] { 0, 74, 0, 0, 0 };
 		gbl_optionsPanel.rowHeights = new int[] { 0, 0, 0, 0 };
-		gbl_optionsPanel.columnWeights = new double[] { 0.0, 0.0,
+		gbl_optionsPanel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
 		gbl_optionsPanel.rowWeights = new double[] { 0.0, 0.0, 0.0,
 				Double.MIN_VALUE };
@@ -122,7 +122,7 @@ public class MaterialSelect extends JPanel {
 			}
 		});
 		GridBagConstraints gbc_jtfQuantity = new GridBagConstraints();
-		gbc_jtfQuantity.insets = new Insets(0, 0, 5, 0);
+		gbc_jtfQuantity.insets = new Insets(0, 0, 5, 5);
 		gbc_jtfQuantity.fill = GridBagConstraints.HORIZONTAL;
 		gbc_jtfQuantity.gridx = 1;
 		gbc_jtfQuantity.gridy = 0;
@@ -145,7 +145,7 @@ public class MaterialSelect extends JPanel {
 			}
 		});
 		GridBagConstraints gbc_jtfPrice = new GridBagConstraints();
-		gbc_jtfPrice.insets = new Insets(0, 0, 5, 0);
+		gbc_jtfPrice.insets = new Insets(0, 0, 5, 5);
 		gbc_jtfPrice.fill = GridBagConstraints.HORIZONTAL;
 		gbc_jtfPrice.gridx = 1;
 		gbc_jtfPrice.gridy = 1;
@@ -176,7 +176,26 @@ public class MaterialSelect extends JPanel {
 				jtfPrice.setText("");
 			}
 		});
+		
+		JButton btnNewButton_1 = new JButton("New Material");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (!MainScreen.addMaterialInstanceFlag) {
+					MainScreen.addMaterial = new AddMaterial();
+					MainScreen.desk.add(MainScreen.addMaterial);
+					MainScreen.addMaterialInstanceFlag = true;
+				}
+				MainScreen.addMaterial.setVisible(true);
+				MainScreen.addMaterial.toFront();
+			}
+		});
+		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
+		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton_1.gridx = 3;
+		gbc_btnNewButton_1.gridy = 1;
+		optionsPanel.add(btnNewButton_1, gbc_btnNewButton_1);
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
 		gbc_btnNewButton.gridx = 1;
 		gbc_btnNewButton.gridy = 2;
 		optionsPanel.add(btnNewButton, gbc_btnNewButton);
